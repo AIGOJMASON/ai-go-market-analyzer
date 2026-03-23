@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment files (DO NOT COMMIT SECRETS)
+.env
+
+# Logs
+AI_GO/logs/*.jsonl
+
+# OS junk
+.DS_Store
+Thumbs.db

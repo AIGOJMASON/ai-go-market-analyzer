@@ -1,0 +1,39 @@
+{
+  "status": "child_core_activated",
+  "core_id": "contractor_proposals_core",
+  "activated_at": "2026-03-17T00:00:00+00:00",
+  "template_version": "stage12.v1",
+  "core_path": "AI_GO/child_cores/contractor_proposals_core",
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "warnings": [],
+    "details": {
+      "structural": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "details": {
+          "missing_directories": [],
+          "missing_files": [],
+          "json_parse_errors": []
+        }
+      },
+      "semantic": {
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "details": {
+          "domain_registry_checks": {
+            "missing_keys": [],
+            "core_id": "contractor_proposals_core",
+            "domain_focus": "contractor_proposals",
+            "allowed_actions_count": 4,
+            "forbidden_actions_count": 5,
+            "research_themes_count": 3
+          }
+        }
+      }
+    }
+  }
+}

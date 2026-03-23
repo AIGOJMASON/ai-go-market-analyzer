@@ -1,0 +1,10 @@
+{
+  "core_id": "{{CORE_ID}}",
+  "display_name": "{{DISPLAY_NAME}}",
+  "domain_focus": "{{DOMAIN_FOCUS}}",
+  "template_version": "v1_validated",
+  "allowed_actions": [],
+  "forbidden_actions": [],
+  "required_artifacts": [],
+  "approval_gate": "{{APPROVAL_RECORD_TYPE}}"
+}

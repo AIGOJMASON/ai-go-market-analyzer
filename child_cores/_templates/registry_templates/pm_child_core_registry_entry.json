@@ -1,0 +1,6 @@
+{
+  "core_id": "{{CORE_ID}}",
+  "pm_access": true,
+  "routing_enabled": false,
+  "status": "validated"
+}

@@ -1,0 +1,47 @@
+{
+  "layer_id": "REFINEMENT_ARBITRATOR",
+  "stage": 16,
+  "status": "defined",
+  "authority_class": "refinement_governance",
+  "canonical_path": "AI_GO/engines/refinement_arbitrator/",
+  "description": "Upstream propagation-governance layer that evaluates screened RESEARCH_CORE packets for refinement worth, child-core conditioning value, and downstream PM readiness.",
+  "allowed_inputs": [
+    "screened_research_packet"
+  ],
+  "allowed_outputs": [
+    "arbitration_decision_packet",
+    "arbitration_receipt"
+  ],
+  "allowed_decisions": [
+    "discard",
+    "hold",
+    "condition_for_child_core",
+    "send_to_curved_mirror",
+    "send_to_rosetta",
+    "pass_to_pm"
+  ],
+  "allowed_engine_dependencies": [
+    "curved_mirror",
+    "rosetta"
+  ],
+  "disallowed_authorities": [
+    "research_truth_mutation",
+    "pm_routing_execution",
+    "child_core_activation",
+    "pm_continuity_memory_authority",
+    "registry_truth_mutation"
+  ],
+  "required_contracts": [
+    "_REFINEMENT_ARBITRATOR_LAYER.md",
+    "INPUT_OUTPUT_CONTRACT.md",
+    "WEIGHTING_MODEL.md",
+    "CHILD_CORE_PROFILE_SCHEMA.md",
+    "DECISION_POLICY.md"
+  ],
+  "default_engine_order": [
+    "curved_mirror",
+    "rosetta"
+  ],
+  "receipt_required": true,
+  "notes": "REFINEMENT_ARBITRATOR is a propagation-governance layer, not a memory layer and not a routing executor."
+}

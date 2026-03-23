@@ -1,0 +1,6 @@
+{
+  "execution_mode": "analysis_only",
+  "approval_required": true,
+  "allow_narrative": false,
+  "require_receipt_trace": true
+}

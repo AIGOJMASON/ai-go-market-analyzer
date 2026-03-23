@@ -1,0 +1,80 @@
+# ENGINE GATE CONTRACT
+
+## What it is
+
+Governed contract for PM-side refinement engine activation.
+
+## Why it is there
+
+Defines how PM_CORE may invoke bounded refinement engines without granting them
+authority over routing, lifecycle, registry state, or continuity truth.
+
+## Core Rule
+
+Engines may refine representation.
+They may not redefine authority truth.
+
+## Lawful Invocation Conditions
+
+PM_CORE may invoke an engine only when:
+
+- a PM artifact already exists
+- invocation reason is explicit
+- allowed transformation scope is declared
+- forbidden transformation scope is declared
+- engine selection is written to a persisted receipt
+- engine output is stored as a separate artifact
+- PM retains authority over final routing and handoff
+
+## Allowed Engine Roles
+
+### Curved Mirror
+Reasoning refinement only.
+
+May help with:
+- interpretive clarity
+- structured analytical framing
+- bounded candidate reasoning notes
+- advisory decomposition of PM summary
+
+May not:
+- activate routing on its own
+- override domain alignment
+- mutate registry truth
+- mutate lifecycle state
+
+### Rosetta
+Narrative and presentation refinement only.
+
+May help with:
+- language shaping
+- output polish
+- bounded presentation framing
+- structured expressive clarity
+
+May not:
+- activate routing on its own
+- override domain alignment
+- mutate registry truth
+- mutate lifecycle state
+
+## Required Refinement Receipt Fields
+
+A lawful refinement receipt must include:
+
+- `packet_id`
+- `engine_id`
+- `invocation_reason`
+- `allowed_scope`
+- `forbidden_scope`
+- `input_artifact_path`
+- `output_artifact_path`
+- `invoked_at`
+
+## Failure Rule
+
+If refinement fails:
+
+- PM must continue without engine authority transfer
+- failure must be persisted truthfully
+- routing may continue only from PM-owned truth

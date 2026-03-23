@@ -1,0 +1,36 @@
+{
+  "status": "child_core_created",
+  "core_id": "contractor_proposals_core",
+  "display_name": "Contractor Proposals Core",
+  "domain_focus": "contractor_proposals",
+  "template_version": "stage12.v1",
+  "created_at": "2026-03-17T00:00:00+00:00",
+  "core_path": "AI_GO/child_cores/contractor_proposals_core",
+  "required_directories": [
+    "inheritance_state",
+    "execution",
+    "outputs",
+    "watcher",
+    "smi",
+    "research",
+    "state/current",
+    "constraints",
+    "domains"
+  ],
+  "required_files": [
+    "CORE_IDENTITY.md",
+    "INHERITANCE_CONTRACT.md",
+    "RESEARCH_INTERFACE.md",
+    "SMI_INTERFACE.md",
+    "WATCHER_INTERFACE.md",
+    "OUTPUT_POLICY.md",
+    "DOMAIN_POLICY.md",
+    "DOMAIN_REGISTRY.json",
+    "execution/ingress_processor.py",
+    "outputs/output_builder.py",
+    "watcher/core_watcher.py",
+    "smi/core_smi.py",
+    "research/research_interface.py",
+    "domains/_DOMAIN_LAYER.md"
+  ]
+}

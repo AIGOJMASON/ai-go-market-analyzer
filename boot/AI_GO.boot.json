@@ -1,0 +1,21 @@
+{
+  "system_id": "AI_GO",
+  "boot_id": "AI_GO.boot.v1",
+  "boot_version": "v1",
+  "status": "draft",
+  "boot_order": [
+    "system_identity",
+    "root_authority_map",
+    "naming_canon",
+    "implementation_mapping",
+    "state_artifact_boundaries",
+    "boot_registry",
+    "boot_registry_lock",
+    "plugin_map",
+    "runtime_loader",
+    "session_lifecycle"
+  ],
+  "session_required": true,
+  "single_loader_law": true,
+  "startup_authority_reader": "core/runtime/loader.py"
+}

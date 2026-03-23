@@ -1,0 +1,37 @@
+{
+  "engine": "rosetta",
+  "classification": "narrative_refinement_engine",
+  "status": "active",
+  "governing_documents": [
+    "_ROSETTA_LAYER.md",
+    "NARRATIVE_REFINEMENT_POLICY.md",
+    "INPUT_OUTPUT_CONTRACT.md"
+  ],
+  "runtime_modules": [
+    "engine.py",
+    "prompts.py",
+    "policies.py"
+  ],
+  "declared_outputs": [
+    "narrative_refinement_bundle"
+  ],
+  "authority_boundaries": {
+    "allowed": [
+      "governed_input_processing",
+      "narrative_refinement",
+      "provenance_preservation",
+      "bounded_bundle_emission"
+    ],
+    "disallowed": [
+      "raw_research_intake",
+      "research_screening",
+      "research_trust_classification",
+      "pm_strategy_ownership",
+      "direct_child_core_execution",
+      "canon_authorship"
+    ]
+  },
+  "upstream_contract": "REFINEMENT_GATE_CONTRACT.md",
+  "local_contract": "INPUT_OUTPUT_CONTRACT.md",
+  "local_policy": "NARRATIVE_REFINEMENT_POLICY.md"
+}

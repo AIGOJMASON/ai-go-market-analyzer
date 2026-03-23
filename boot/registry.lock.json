@@ -1,0 +1,11 @@
+{
+  "lock_id": "AI_GO.boot.lock.v1",
+  "system_id": "AI_GO",
+  "enforced_rules": [
+    "single_loader_law",
+    "declared_authority_only",
+    "no_boot_bypass",
+    "registry_mismatch_terminates_boot",
+    "lock_mismatch_terminates_boot"
+  ]
+}

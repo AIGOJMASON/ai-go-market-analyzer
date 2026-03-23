@@ -1,0 +1,36 @@
+CASE_CLOSEOUT_REGISTRY = {
+    "stage_id": 56,
+    "stage_name": "case_closeout_record",
+    "authority_class": "runtime_final_lifecycle_archive",
+    "module": "AI_GO.core.runtime.closeout.case_closeout_record",
+    "entrypoint": "build_case_closeout_record",
+    "accepted_inputs": [
+        "case_resolution",
+        "child_core_dispatch_packet",
+        "child_core_intake_receipt",
+    ],
+    "required_inputs": [
+        "case_resolution",
+        "child_core_dispatch_packet",
+        "child_core_intake_receipt",
+    ],
+    "optional_inputs": [],
+    "emitted_artifact": "case_closeout_record",
+    "forbidden_behaviors": [
+        "truth_re_resolution",
+        "dispatch_re_routing",
+        "intake_mutation",
+        "child_core_execution",
+        "implicit_closeout",
+        "source_artifact_mutation",
+    ],
+    "invariants": [
+        "all three artifacts are required",
+        "all artifacts must be sealed",
+        "all artifacts must share one case_id",
+        "dispatch packet must reference the same case_resolution",
+        "intake receipt must reference the same dispatch packet and case_resolution",
+        "one case_closeout_record is emitted",
+        "output is archival closeout only",
+    ],
+}

@@ -1,0 +1,43 @@
+{
+  "layer_id": "ENGINES",
+  "status": "active",
+  "engines": {
+    "curved_mirror": {
+      "authority_class": "reasoning_refinement",
+      "entrypoint": "AI_GO/engines/curved_mirror/engine.py",
+      "accepted_artifacts": [
+        "screened_research_packet",
+        "refinement_request"
+      ],
+      "emitted_artifacts": [
+        "reasoning_refinement_result"
+      ]
+    },
+    "rosetta": {
+      "authority_class": "narrative_refinement",
+      "entrypoint": "AI_GO/engines/rosetta/engine.py",
+      "accepted_artifacts": [
+        "screened_research_packet",
+        "refinement_request"
+      ],
+      "emitted_artifacts": [
+        "narrative_refinement_result"
+      ]
+    },
+    "refinement_arbitrator": {
+      "authority_class": "refinement_governance",
+      "entrypoint": "AI_GO/engines/refinement_arbitrator/engine.py:run_arbitration",
+      "accepted_artifacts": [
+        "screened_research_packet"
+      ],
+      "emitted_artifacts": [
+        "arbitration_decision_packet",
+        "arbitration_receipt"
+      ],
+      "persistence_surfaces": [
+        "AI_GO/state/refinement_arbitrator/current",
+        "AI_GO/state/refinement_arbitrator/receipts"
+      ]
+    }
+  }
+}

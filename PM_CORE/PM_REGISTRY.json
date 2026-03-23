@@ -1,0 +1,44 @@
+{
+  "layer": "PM_CORE",
+  "classification": "root_strategic_planning_authority",
+  "status": "active",
+  "governing_documents": [
+    "_PM_CORE_LAYER.md",
+    "PM_CORE_IDENTITY.md",
+    "CHILD_CORE_INHERITANCE_CONTRACT.md",
+    "STRATEGIC_INTERPRETATION_POLICY.md"
+  ],
+  "declared_outputs": [
+    "strategic_signal",
+    "child_core_inheritance_handoff"
+  ],
+  "authority_boundaries": {
+    "allowed": [
+      "pm_refinement",
+      "strategic_interpretation",
+      "propagation_planning",
+      "child_core_inheritance",
+      "pm_state_management"
+    ],
+    "disallowed": [
+      "raw_research_intake",
+      "research_screening",
+      "research_trust_classification",
+      "runtime_boot_control",
+      "continuity_ownership",
+      "monitoring_ownership",
+      "direct_child_core_execution",
+      "canon_authorship"
+    ]
+  },
+  "upstream_interfaces": [
+    "RESEARCH_CORE",
+    "refinement"
+  ],
+  "downstream_interfaces": [
+    "child_cores",
+    "lib"
+  ],
+  "inheritance_contract": "CHILD_CORE_INHERITANCE_CONTRACT.md",
+  "strategic_policy": "STRATEGIC_INTERPRETATION_POLICY.md"
+}

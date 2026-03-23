@@ -1,0 +1,130 @@
+{
+  "core_id": "market_analyzer_v1",
+  "constraint_version": "1.0",
+  "authority": "PM_CORE",
+
+  "execution_constraints": {
+    "autonomous_execution_allowed": false,
+    "requires_human_trade_approval": true,
+    "approval_record_required": "human_trade_approval_record",
+    "execution_without_approval": "hard_block"
+  },
+
+  "data_constraints": {
+    "allow_unsealed_inputs": false,
+    "require_receipt": true,
+    "require_artifact_type": true,
+    "require_provenance": true,
+    "reject_sources": [
+      "raw_research_core_output",
+      "user_direct_input",
+      "unverified_external_feed"
+    ]
+  },
+
+  "inheritance_constraints": {
+    "allow_reweighting": false,
+    "allow_learning": false,
+    "allow_mutation_of_inputs": false,
+    "allow_persistent_state_learning": false,
+    "refinement_mode": "read_only"
+  },
+
+  "domain_constraints": {
+    "strategy_type": "necessity_rebound_only",
+    "allowed_sectors": [
+      "energy",
+      "agriculture",
+      "fertilizer",
+      "infrastructure",
+      "critical_technology"
+    ],
+    "disallowed_sectors_behavior": "reject_candidate",
+
+    "requires_shock_event": true,
+    "requires_rebound_validation": true,
+    "requires_stabilization_phase": true,
+    "requires_reclaim_phase": true,
+    "requires_confirmation_phase": true
+  },
+
+  "market_regime_constraints": {
+    "allowed_regimes": [
+      "normal",
+      "volatile",
+      "crisis"
+    ],
+    "trade_permission_matrix": {
+      "normal": "allowed",
+      "volatile": "restricted",
+      "crisis": "conditional"
+    },
+    "crisis_override_rule": "require_strict_validation_and_liquidity"
+  },
+
+  "propagation_constraints": {
+    "allowed_speeds": [
+      "fast",
+      "medium",
+      "slow"
+    ],
+    "allowed_depths": [
+      "primary",
+      "secondary",
+      "tertiary"
+    ],
+    "invalid_propagation_behavior": "reject_event"
+  },
+
+  "rebound_validation_constraints": {
+    "require_stabilization": true,
+    "require_reclaim": true,
+    "require_confirmation": true,
+    "require_liquidity_check": true,
+    "failure_behavior": "reject_candidate"
+  },
+
+  "recommendation_constraints": {
+    "require_structured_output": true,
+    "require_receipt_trace_packet": true,
+    "require_approval_request_packet": true,
+    "allow_narrative": false,
+    "allow_speculation": false,
+    "max_time_horizon_hours": 48,
+    "position_style": "short_duration"
+  },
+
+  "risk_constraints": {
+    "allow_averaging_down": false,
+    "allow_long_term_hold": false,
+    "require_defined_exit": true,
+    "max_exposure_rule": "small_repeatable_gain_model"
+  },
+
+  "output_constraints": {
+    "must_include_artifacts": [
+      "market_regime_record",
+      "event_propagation_record",
+      "necessity_filtered_candidate_set",
+      "rebound_validation_record",
+      "trade_recommendation_packet",
+      "receipt_trace_packet",
+      "approval_request_packet"
+    ],
+    "missing_artifact_behavior": "invalidate_output"
+  },
+
+  "runtime_constraints": {
+    "allow_direct_research_ingest": false,
+    "allow_pm_bypass": false,
+    "allow_self_dispatch": false,
+    "allow_cross_core_communication": false
+  },
+
+  "termination_constraints": {
+    "terminate_if_no_valid_candidates": true,
+    "terminate_if_invalid_inputs": true,
+    "terminate_if_entropy_high_and_grace_low": true,
+    "terminate_if_missing_required_validation": true
+  }
+}

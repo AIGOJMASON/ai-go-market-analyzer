@@ -1,0 +1,25 @@
+{
+  "core_id": "contractor_proposals_core",
+  "display_name": "Contractor Proposals Core",
+  "domain_focus": "contractor_proposals",
+  "allowed_actions": [
+    "bounded_domain_execution",
+    "domain_output_generation",
+    "child_core_artifact_verification",
+    "local_continuity_recording_after_verification"
+  ],
+  "forbidden_actions": [
+    "direct_research_ingress",
+    "cross_domain_authority_override",
+    "self_activation",
+    "engine_as_authority",
+    "unverified_output_persistence"
+  ],
+  "research_themes": [
+    "contractor_proposals",
+    "contractor_proposals bounded execution",
+    "contractor_proposals output generation"
+  ],
+  "status": "active",
+  "template_version": "stage12.v1"
+}

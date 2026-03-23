@@ -1,0 +1,17 @@
+{
+  "lifecycle_index": {
+    "_LIB_LAYER.md": "canonical",
+    "DOCUMENT_LIFECYCLE_POLICY.md": "canonical",
+    "CANON_INDEX.md": "canonical",
+    "DOCUMENT_REGISTRY.json": "canonical",
+    "LIFECYCLE_INDEX.json": "canonical"
+  },
+  "lifecycle_states": [
+    "draft",
+    "registered",
+    "canonical",
+    "deprecated",
+    "archived"
+  ],
+  "last_updated": "system_generated"
+}
