@@ -5,8 +5,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from AI_GO.api.config import AppConfig, validate_startup_config
-from AI_GO.api.market_analyzer_api import router as market_analyzer_router
+from api.config import AppConfig, validate_startup_config
+from api.market_analyzer_api import router as market_analyzer_router
 
 
 APP_CONFIG: AppConfig | None = None
@@ -59,8 +59,6 @@ def healthz() -> dict:
 
 
 if APP_CONFIG is None:
-    # TrustedHostMiddleware must be added at import time, so load a best-effort
-    # config snapshot for startup. Lifespan still validates again on boot.
     try:
         _startup_config = validate_startup_config()
         app.add_middleware(
@@ -68,10 +66,10 @@ if APP_CONFIG is None:
             allowed_hosts=_startup_config.allowed_hosts,
         )
     except Exception:
-        # Let lifespan surface the real startup error if config is invalid.
         pass
 else:
     app.add_middleware(
         TrustedHostMiddleware,
         allowed_hosts=APP_CONFIG.allowed_hosts,
     )
+  
