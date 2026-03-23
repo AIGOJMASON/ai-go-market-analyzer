@@ -9,7 +9,7 @@ from typing import Deque, Dict, Tuple
 
 from fastapi import Header, HTTPException, Request, status
 
-from AI_GO.api.request_logging import append_request_log, build_request_log_entry
+from api.request_logging import append_request_log, build_request_log_entry
 
 
 _BUCKETS: Dict[Tuple[str, str, str], Deque[float]] = {}
