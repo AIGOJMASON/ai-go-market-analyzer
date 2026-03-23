@@ -13,7 +13,7 @@ class LiveDataRunnerError(RuntimeError):
 
 
 def _resolve_pm_route_callable() -> Optional[Callable[[Dict[str, Any]], Dict[str, Any]]]:
-    module_name = "AI_GO.core.strategy.pm_market_analyzer_route"
+    module_name = "core.strategy.pm_market_analyzer_route"
     candidate_function_names = (
         "route_market_analyzer_request",
         "route_market_analyzer_packet",
