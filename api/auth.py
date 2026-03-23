@@ -4,7 +4,7 @@ import os
 
 from fastapi import Header, HTTPException, Request, status
 
-from AI_GO.api.request_logging import append_request_log, build_request_log_entry
+from api.request_logging import append_request_log, build_request_log_entry
 
 
 def _get_expected_api_key() -> str:
