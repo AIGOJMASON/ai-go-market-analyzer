@@ -3,15 +3,15 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 
-from AI_GO.api.auth import require_api_key
-from AI_GO.api.rate_limit import enforce_rate_limit
-from AI_GO.api.request_logging import append_request_log, build_request_log_entry
-from AI_GO.api.schemas.market_analyzer_request import MarketAnalyzerRequest
-from AI_GO.api.schemas.market_analyzer_response import (
+from api.auth import require_api_key
+from api.rate_limit import enforce_rate_limit
+from api.request_logging import append_request_log, build_request_log_entry
+from api.schemas.market_analyzer_request import MarketAnalyzerRequest
+from api.schemas.market_analyzer_response import (
     MarketAnalyzerResponse,
     build_market_analyzer_response,
 )
-from AI_GO.child_cores.market_analyzer_v1.ui.operator_dashboard_runner import (
+from child_cores.market_analyzer_v1.ui.operator_dashboard_runner import (
     run_operator_dashboard,
 )
 
@@ -163,3 +163,4 @@ def run_market_analyzer_raw(request: MarketAnalyzerRequest) -> JSONResponse:
             status_code=500,
             detail=f"market_analyzer_raw_run_failed: {exc}",
         ) from exc
+       
