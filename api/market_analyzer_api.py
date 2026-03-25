@@ -169,6 +169,10 @@ def _run_market_analyzer_logic(
     route_mode: str,
     operator_id: str | None = None,
 ) -> Dict[str, Any]:
+    """
+    Placeholder for the governed runtime path.
+    Keeps advisory-only posture and stable outward response shape.
+    """
     governed_payload = dict(payload)
     governed_payload.setdefault("route_mode", route_mode)
     governed_payload.setdefault("mode", "advisory")
