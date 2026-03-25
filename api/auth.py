@@ -7,7 +7,10 @@ from typing import Dict, Optional
 
 from fastapi import Header, HTTPException, Request, status
 
-from AI_GO.api.request_logging import append_request_log, build_base_log_payload
+try:
+    from AI_GO.api.request_logging import append_request_log, build_base_log_payload
+except ModuleNotFoundError:
+    from api.request_logging import append_request_log, build_base_log_payload
 
 
 @dataclass(frozen=True)
@@ -23,18 +26,6 @@ def _api_key_header_name() -> str:
 
 
 def _load_key_map() -> Dict[str, Dict[str, str]]:
-    """
-    Supported formats:
-
-    Preferred:
-    AI_GO_API_KEYS_JSON='{
-      "actual-secret-key-1": {"key_id":"local","operator_id":"local_operator","label":"Local"},
-      "actual-secret-key-2": {"key_id":"prod","operator_id":"render_operator","label":"Render"}
-    }'
-
-    Legacy fallback:
-    AI_GO_API_KEY=single-secret
-    """
     raw_json = os.getenv("AI_GO_API_KEYS_JSON", "").strip()
     single_key = os.getenv("AI_GO_API_KEY", "").strip()
 
