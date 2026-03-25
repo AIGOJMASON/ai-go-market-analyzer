@@ -5,8 +5,12 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from AI_GO.api.market_analyzer_api import router as market_analyzer_router
-from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
+try:
+    from AI_GO.api.market_analyzer_api import router as market_analyzer_router
+    from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
+except ModuleNotFoundError:
+    from api.market_analyzer_api import router as market_analyzer_router
+    from ui.operator_dashboard_ui import router as operator_ui_router
 
 
 def load_allowed_hosts() -> list[str]:
