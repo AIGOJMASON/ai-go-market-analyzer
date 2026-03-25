@@ -17,44 +17,37 @@ def case_01_operator_route_loads() -> None:
     response = client.get("/operator")
 
     _assert(response.status_code == 200, "/operator should return 200")
-    html = response.text
-
-    _assert("AI_GO Market Analyzer V1" in html, "operator title missing")
-    _assert("Operator Input" in html, "operator input section missing")
-    _assert("System View" in html, "system view heading missing")
+    _assert("AI_GO Operator Dashboard" in response.text, "operator title missing")
 
 
 def case_02_operator_route_has_unified_sections() -> None:
     client = TestClient(app)
     html = client.get("/operator").text
 
-    required_sections = [
+    for section in [
+        "Operator System View",
         "Case",
         "Runtime",
         "Recommendation",
         "Cognition",
         "PM Workflow",
         "Governance",
-    ]
-    for section in required_sections:
+    ]:
         _assert(section in html, f"missing operator section: {section}")
 
 
 def case_03_operator_route_uses_live_api_surface() -> None:
     client = TestClient(app)
     html = client.get("/operator").text
-
     _assert("/market-analyzer/run/live" in html, "operator route should reference live API endpoint")
 
 
 def case_04_root_points_to_operator_route() -> None:
     client = TestClient(app)
-    response = client.get("/")
+    body = client.get("/").json()
 
-    _assert(response.status_code == 200, "root should return 200")
-    body = response.json()
-
-    _assert(body["operator_route"] == "/operator", "root should advertise /operator as canonical UI route")
+    _assert("routes" in body, "root should expose routes object")
+    _assert(body["routes"]["operator"] == "/operator", "root should advertise /operator under routes.operator")
 
 
 TEST_CASES: List[tuple[str, Callable[[], None]]] = [
@@ -79,11 +72,7 @@ def run_probe() -> Dict[str, Any]:
             results.append({"case": case_name, "status": "failed", "error": str(exc)})
             failed += 1
 
-    return {
-        "passed": passed,
-        "failed": failed,
-        "results": results,
-    }
+    return {"passed": passed, "failed": failed, "results": results}
 
 
 if __name__ == "__main__":

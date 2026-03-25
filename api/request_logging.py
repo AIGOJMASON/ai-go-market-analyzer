@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -11,15 +13,50 @@ def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def append_request_log(event_type: str, payload: Dict[str, Any]) -> None:
+def append_request_log(*args: Any, **kwargs: Any) -> None:
+    """
+    Flexible logging entrypoint.
+
+    Supports:
+    1. append_request_log("event_type", payload_dict)
+    2. append_request_log(event_dict)
+
+    This ensures compatibility with:
+    - legacy logging calls
+    - new auth / rate limit logging
+    """
+
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    record = {
-        "timestamp": _utc_now_iso(),
-        "event_type": event_type,
-        **payload,
-    }
+    record: Dict[str, Any]
 
+    # --- NEW STYLE: append_request_log(event_dict) ---
+    if len(args) == 1 and isinstance(args[0], dict):
+        record = dict(args[0])
+
+        # ensure required fields
+        record.setdefault("event_type", "unknown_event")
+
+    # --- LEGACY STYLE: append_request_log(event_type, payload) ---
+    elif len(args) == 2 and isinstance(args[0], str) and isinstance(args[1], dict):
+        event_type = args[0]
+        payload = args[1]
+
+        record = {
+            "event_type": event_type,
+            **payload,
+        }
+
+    else:
+        raise RuntimeError(
+            "Invalid append_request_log usage. "
+            "Expected (event_type, payload) or (event_dict)."
+        )
+
+    # --- normalize timestamp ---
+    record.setdefault("timestamp", _utc_now_iso())
+
+    # --- write ---
     with LOG_PATH.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 

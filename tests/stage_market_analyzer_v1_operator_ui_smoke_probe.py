@@ -1,47 +1,87 @@
 from __future__ import annotations
 
+from typing import Any, Callable, Dict, List
+
 from fastapi.testclient import TestClient
 
-from app import app
+from AI_GO.app import app
 
 
-def run_probe():
+def _assert(condition: bool, message: str) -> None:
+    if not condition:
+        raise AssertionError(message)
+
+
+def case_01_operator_page_loads() -> None:
     client = TestClient(app)
+    response = client.get("/operator")
 
-    response = client.get("/market-analyzer/dashboard")
-    body = response.text
+    _assert(response.status_code == 200, "/operator should return 200")
+    _assert("AI_GO Operator Dashboard" in response.text, "operator page title missing")
 
-    results = [
-        {
-            "case": "case_01_dashboard_route_returns_200",
-            "status": "passed" if response.status_code == 200 else "failed",
-        },
-        {
-            "case": "case_02_dashboard_contains_title",
-            "status": "passed" if "AI_GO Market Analyzer V1" in body else "failed",
-        },
-        {
-            "case": "case_03_dashboard_contains_run_button",
-            "status": "passed" if "Run Market Analyzer" in body else "failed",
-        },
-        {
-            "case": "case_04_dashboard_calls_market_analyzer_run_endpoint",
-            "status": "passed" if "/market-analyzer/run" in body else "failed",
-        },
-        {
-            "case": "case_05_dashboard_contains_refinement_section",
-            "status": "passed" if "Refinement Insight" in body else "failed",
-        },
-    ]
 
-    passed = sum(1 for item in results if item["status"] == "passed")
-    failed = sum(1 for item in results if item["status"] == "failed")
+def case_02_operator_page_has_expected_sections() -> None:
+    client = TestClient(app)
+    html = client.get("/operator").text
 
-    return {
-        "passed": passed,
-        "failed": failed,
-        "results": results,
-    }
+    for section in [
+        "Operator System View",
+        "Case",
+        "Runtime",
+        "Recommendation",
+        "Cognition",
+        "PM Workflow",
+        "Governance",
+    ]:
+        _assert(section in html, f"missing section heading: {section}")
+
+
+def case_03_operator_page_references_live_route() -> None:
+    client = TestClient(app)
+    html = client.get("/operator").text
+
+    _assert("/market-analyzer/run/live" in html, "operator page should reference live API route")
+
+
+def case_04_operator_page_has_expected_controls() -> None:
+    client = TestClient(app)
+    html = client.get("/operator").text
+
+    for control in [
+        'id="request_id"',
+        'id="symbol"',
+        'id="headline"',
+        'id="price_change_pct"',
+        'id="sector"',
+        'id="confirmation"',
+        'id="run_live_btn"',
+    ]:
+        _assert(control in html, f"missing operator control: {control}")
+
+
+TEST_CASES: List[tuple[str, Callable[[], None]]] = [
+    ("case_01_operator_page_loads", case_01_operator_page_loads),
+    ("case_02_operator_page_has_expected_sections", case_02_operator_page_has_expected_sections),
+    ("case_03_operator_page_references_live_route", case_03_operator_page_references_live_route),
+    ("case_04_operator_page_has_expected_controls", case_04_operator_page_has_expected_controls),
+]
+
+
+def run_probe() -> Dict[str, Any]:
+    results: List[Dict[str, str]] = []
+    passed = 0
+    failed = 0
+
+    for case_name, case_fn in TEST_CASES:
+        try:
+            case_fn()
+            results.append({"case": case_name, "status": "passed"})
+            passed += 1
+        except Exception as exc:  # noqa: BLE001
+            results.append({"case": case_name, "status": "failed", "error": str(exc)})
+            failed += 1
+
+    return {"passed": passed, "failed": failed, "results": results}
 
 
 if __name__ == "__main__":
