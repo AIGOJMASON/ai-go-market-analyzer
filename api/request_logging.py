@@ -1,61 +1,51 @@
-from __future__ import annotations
-
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 
-_LOG_DIR = Path("AI_GO/logs")
-_LOG_FILE = _LOG_DIR / "market_analyzer_requests.jsonl"
+LOG_PATH = Path("logs/market_analyzer_requests.jsonl")
 
 
-def _utc_timestamp() -> str:
+def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _ensure_log_dir() -> None:
-    _LOG_DIR.mkdir(parents=True, exist_ok=True)
+def append_request_log(event_type: str, payload: Dict[str, Any]) -> None:
+    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-
-def _safe_text(value: Any) -> Optional[str]:
-    if value is None:
-        return None
-    text = str(value).strip()
-    return text if text else None
-
-
-def build_request_log_entry(
-    *,
-    endpoint: str,
-    request_id: Optional[str],
-    case_id: Optional[str],
-    auth_status: str,
-    response_status: int,
-    route_mode: Optional[str] = None,
-    receipt_id: Optional[str] = None,
-    detail: Optional[str] = None,
-    client_ip: Optional[str] = None,
-    core_id: str = "market_analyzer_v1",
-    service: str = "market_analyzer_api",
-) -> Dict[str, Any]:
-    return {
-        "timestamp": _utc_timestamp(),
-        "service": service,
-        "core_id": core_id,
-        "endpoint": endpoint,
-        "request_id": _safe_text(request_id),
-        "case_id": _safe_text(case_id),
-        "client_ip": _safe_text(client_ip),
-        "auth_status": auth_status,
-        "response_status": int(response_status),
-        "route_mode": _safe_text(route_mode),
-        "receipt_id": _safe_text(receipt_id),
-        "detail": _safe_text(detail),
+    record = {
+        "timestamp": _utc_now_iso(),
+        "event_type": event_type,
+        **payload,
     }
 
+    with LOG_PATH.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-def append_request_log(entry: Dict[str, Any]) -> None:
-    _ensure_log_dir()
-    with _LOG_FILE.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+def build_base_log_payload(
+    *,
+    request_id: Optional[str],
+    case_id: Optional[str],
+    auth_status: Optional[str],
+    response_status: Optional[int],
+    route_mode: Optional[str],
+    receipt_id: Optional[str],
+    client_ip: Optional[str],
+    api_key_id: Optional[str],
+    rate_limit_bucket_id: Optional[str] = None,
+    rate_limit_count: Optional[int] = None,
+) -> Dict[str, Any]:
+    return {
+        "request_id": request_id,
+        "case_id": case_id,
+        "auth_status": auth_status,
+        "response_status": response_status,
+        "route_mode": route_mode,
+        "receipt_id": receipt_id,
+        "client_ip": client_ip,
+        "api_key_id": api_key_id,
+        "rate_limit_bucket_id": rate_limit_bucket_id,
+        "rate_limit_count": rate_limit_count,
+    }

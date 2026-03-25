@@ -1,119 +1,120 @@
 from __future__ import annotations
 
 import os
-import threading
 import time
-from collections import deque
-from hashlib import sha256
-from typing import Deque, Dict, Tuple
+from collections import defaultdict, deque
+from dataclasses import dataclass
+from typing import DefaultDict, Deque
 
-from fastapi import Header, HTTPException, Request, status
+from fastapi import HTTPException, Request, status
 
-from api.request_logging import append_request_log, build_request_log_entry
-
-
-_BUCKETS: Dict[Tuple[str, str, str], Deque[float]] = {}
-_LOCK = threading.Lock()
+from AI_GO.api.request_logging import append_request_log, build_base_log_payload
 
 
-def _get_limit() -> int:
-    raw_value = os.getenv("AI_GO_RATE_LIMIT_REQUESTS", "10").strip()
+@dataclass(frozen=True)
+class RateLimitDecision:
+    bucket_id: str
+    count: int
+    limit: int
+    window_seconds: int
+
+
+_BUCKETS: DefaultDict[str, Deque[float]] = defaultdict(deque)
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return default
     try:
-        value = int(raw_value)
+        return int(raw)
     except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="server_rate_limit_not_configured",
-        ) from exc
-
-    if value <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="server_rate_limit_not_configured",
-        )
-
-    return value
+        raise RuntimeError(f"{name} must be an integer") from exc
 
 
-def _get_window_seconds() -> int:
-    raw_value = os.getenv("AI_GO_RATE_LIMIT_WINDOW_SECONDS", "60").strip()
-    try:
-        value = int(raw_value)
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="server_rate_limit_not_configured",
-        ) from exc
+def _resolve_limits() -> tuple[int, int]:
+    limit = _env_int("AI_GO_RATE_LIMIT_REQUESTS", 60)
+    window_seconds = _env_int("AI_GO_RATE_LIMIT_WINDOW_SECONDS", 60)
 
-    if value <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="server_rate_limit_not_configured",
-        )
+    if limit < 1:
+        raise RuntimeError("AI_GO_RATE_LIMIT_REQUESTS must be >= 1")
+    if window_seconds < 1:
+        raise RuntimeError("AI_GO_RATE_LIMIT_WINDOW_SECONDS must be >= 1")
 
-    return value
+    return limit, window_seconds
 
 
 def _client_ip(request: Request) -> str:
-    if request.client is None or request.client.host is None:
-        return "unknown"
-    return request.client.host
+    forwarded_for = request.headers.get("x-forwarded-for")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    if request.client:
+        return request.client.host
+    return "unknown"
 
 
-def _endpoint(request: Request) -> str:
-    return request.url.path
+def _bucket_id(request: Request) -> str:
+    api_key_id = getattr(request.state, "api_key_id", None)
+    path = request.url.path
 
-
-def _api_key_fingerprint(x_api_key: str | None) -> str:
-    if x_api_key is None or not x_api_key.strip():
-        return "anonymous"
-    return sha256(x_api_key.encode("utf-8")).hexdigest()[:16]
-
-
-def enforce_rate_limit(
-    request: Request,
-    x_api_key: str | None = Header(default=None),
-) -> bool:
-    limit = _get_limit()
-    window_seconds = _get_window_seconds()
+    if api_key_id:
+        return f"api_key:{api_key_id}:{path}"
 
     client_ip = _client_ip(request)
-    endpoint = _endpoint(request)
-    key_fingerprint = _api_key_fingerprint(x_api_key)
+    return f"ip:{client_ip}:{path}"
 
-    bucket_key = (client_ip, endpoint, key_fingerprint)
+
+async def enforce_rate_limit(request: Request) -> RateLimitDecision:
+    limit, window_seconds = _resolve_limits()
+
+    bucket_id = _bucket_id(request)
+    bucket = _BUCKETS[bucket_id]
+
     now = time.time()
-    window_start = now - window_seconds
+    cutoff = now - window_seconds
 
-    with _LOCK:
-        bucket = _BUCKETS.setdefault(bucket_key, deque())
+    while bucket and bucket[0] <= cutoff:
+        bucket.popleft()
 
-        while bucket and bucket[0] <= window_start:
-            bucket.popleft()
+    if len(bucket) >= limit:
+        request.state.rate_limit_bucket_id = bucket_id
+        request.state.rate_limit_count = len(bucket)
 
-        if len(bucket) >= limit:
-            entry = build_request_log_entry(
-                endpoint=endpoint,
-                request_id=request.headers.get("x-request-id"),
-                case_id=request.headers.get("x-case-id"),
-                client_ip=client_ip,
-                auth_status="passed",
+        append_request_log(
+            "rate_limit",
+            build_base_log_payload(
+                request_id=None,
+                case_id=None,
+                auth_status=getattr(request.state, "auth_status", None),
                 response_status=429,
-                detail=(
-                    f"rate_limited: limit={limit}, "
-                    f"window_seconds={window_seconds}"
-                ),
-            )
-            append_request_log(entry)
+                route_mode=None,
+                receipt_id=None,
+                client_ip=_client_ip(request),
+                api_key_id=getattr(request.state, "api_key_id", None),
+                rate_limit_bucket_id=bucket_id,
+                rate_limit_count=len(bucket),
+            ),
+        )
 
-            raise HTTPException(
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail=(
-                    f"rate_limit_exceeded: "
-                    f"{limit} requests per {window_seconds} seconds"
-                ),
-            )
+        oldest = bucket[0]
+        retry_after = max(1, int((oldest + window_seconds) - now))
 
-        bucket.append(now)
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Rate limit exceeded",
+            headers={"Retry-After": str(retry_after)},
+        )
 
-    return True
+    bucket.append(now)
+
+    decision = RateLimitDecision(
+        bucket_id=bucket_id,
+        count=len(bucket),
+        limit=limit,
+        window_seconds=window_seconds,
+    )
+
+    request.state.rate_limit_bucket_id = decision.bucket_id
+    request.state.rate_limit_count = decision.count
+
+    return decision

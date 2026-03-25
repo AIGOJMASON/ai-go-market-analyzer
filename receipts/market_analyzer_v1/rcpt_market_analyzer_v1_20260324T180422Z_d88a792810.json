@@ -1,0 +1,36 @@
+{
+  "receipt_id": "rcpt_market_analyzer_v1_20260324T180422Z_d88a792810",
+  "artifact_type": "market_analyzer_run_receipt",
+  "artifact_version": "v1",
+  "created_at": "2026-03-24T18:04:22.574226+00:00",
+  "core_id": "market_analyzer_v1",
+  "route_mode": "pm_route",
+  "endpoint": "/market-analyzer/run",
+  "request": {
+    "request_id": "ui-2026-03-24T17-45-10-680Z",
+    "case_id": "LIVE-DATA-001",
+    "raw_mode": false
+  },
+  "governance": {
+    "mode": "advisory",
+    "execution_allowed": false,
+    "approval_required": true
+  },
+  "auth_context": {
+    "auth_status": "authenticated",
+    "api_key_id": "default",
+    "client_ip": "127.0.0.1"
+  },
+  "rate_limit_context": {
+    "bucket_id": "api_key:default",
+    "count": 2,
+    "limit": 10,
+    "window_seconds": 60
+  },
+  "lineage": {
+    "source_surface": "market_analyzer_api",
+    "upstream_authority": "pm_route",
+    "watcher_status": "pending",
+    "watcher_ready": true
+  }
+}

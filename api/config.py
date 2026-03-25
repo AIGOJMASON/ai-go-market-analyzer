@@ -15,7 +15,7 @@ class ConfigError(ValueError):
 @dataclass(frozen=True)
 class AppConfig:
     environment: str
-    api_key: str
+    api_key_header: str
     rate_limit_requests: int
     rate_limit_window_seconds: int
     allowed_hosts: List[str]
@@ -56,7 +56,7 @@ def load_config() -> AppConfig:
             "ENVIRONMENT must be one of: development, staging, production"
         )
 
-    api_key = _get_required_str("AI_GO_API_KEY")
+    api_key_header = os.getenv("AI_GO_API_KEY_HEADER", "x-api-key").strip() or "x-api-key"
     rate_limit_requests = _get_required_int("AI_GO_RATE_LIMIT_REQUESTS")
     rate_limit_window_seconds = _get_required_int(
         "AI_GO_RATE_LIMIT_WINDOW_SECONDS"
@@ -69,7 +69,7 @@ def load_config() -> AppConfig:
 
     return AppConfig(
         environment=environment,
-        api_key=api_key,
+        api_key_header=api_key_header,
         rate_limit_requests=rate_limit_requests,
         rate_limit_window_seconds=rate_limit_window_seconds,
         allowed_hosts=allowed_hosts,

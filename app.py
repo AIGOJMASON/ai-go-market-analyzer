@@ -1,75 +1,65 @@
 from __future__ import annotations
 
-from contextlib import asynccontextmanager
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from api.config import AppConfig, validate_startup_config
-from api.market_analyzer_api import router as market_analyzer_router
+from AI_GO.api.market_analyzer_api import router as market_analyzer_router
+from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
 
 
-APP_CONFIG: AppConfig | None = None
+def load_allowed_hosts() -> list[str]:
+    """
+    Load allowed hosts from environment.
 
+    Env:
+      AI_GO_ALLOWED_HOSTS="example.com,api.example.com"
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    global APP_CONFIG
-    APP_CONFIG = validate_startup_config()
-    yield
+    Safe defaults:
+      - localhost
+      - 127.0.0.1
+      - testserver (for FastAPI TestClient)
+    """
+    raw = os.getenv("AI_GO_ALLOWED_HOSTS", "").strip()
+
+    if raw:
+        hosts = [host.strip() for host in raw.split(",") if host.strip()]
+        if hosts:
+            return hosts
+
+    return ["127.0.0.1", "localhost", "testserver"]
 
 
 app = FastAPI(
-    title="AI_GO Market Analyzer",
-    version="1.0",
-    lifespan=lifespan,
+    title="AI_GO Market Analyzer V1",
+    description="Governed advisory system with unified system_view delivery",
+    version="1.0.0",
+)
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=load_allowed_hosts(),
 )
 
 app.include_router(market_analyzer_router)
-
-
-@app.middleware("http")
-async def add_environment_header(request, call_next):
-    response = await call_next(request)
-    if APP_CONFIG is not None:
-        response.headers["x-ai-go-environment"] = APP_CONFIG.environment
-    return response
+app.include_router(operator_ui_router)
 
 
 @app.get("/")
-def root() -> dict:
-    environment = APP_CONFIG.environment if APP_CONFIG is not None else "unknown"
+def root() -> dict[str, object]:
     return {
         "status": "ok",
-        "service": "AI_GO",
-        "message": "Market Analyzer API is running",
-        "auth_required": True,
-        "environment": environment,
+        "service": "AI_GO Market Analyzer V1",
+        "routes": {
+            "operator": "/operator",
+            "run": "/market-analyzer/run",
+            "run_live": "/market-analyzer/run/live",
+            "health": "/healthz",
+        },
     }
 
 
 @app.get("/healthz")
-def healthz() -> dict:
-    environment = APP_CONFIG.environment if APP_CONFIG is not None else "unknown"
-    return {
-        "status": "ok",
-        "service": "AI_GO",
-        "environment": environment,
-    }
-
-
-if APP_CONFIG is None:
-    try:
-        _startup_config = validate_startup_config()
-        app.add_middleware(
-            TrustedHostMiddleware,
-            allowed_hosts=_startup_config.allowed_hosts,
-        )
-    except Exception:
-        pass
-else:
-    app.add_middleware(
-        TrustedHostMiddleware,
-        allowed_hosts=APP_CONFIG.allowed_hosts,
-    )
-  
+def health() -> dict[str, str]:
+    return {"status": "ok"}

@@ -1,0 +1,21 @@
+{
+  "child_core_id": "contractor_builder_v1",
+  "display_name": "Contractor Builder V1",
+  "lifecycle_state": "template_shell",
+  "operator_route": "/operator",
+  "health_route": "/healthz",
+  "service_root": "/",
+  "mode": "advisory",
+  "execution_allowed": false,
+  "approval_required": true,
+  "delivery_pattern": "single_surface_system_view",
+  "required_sections": [
+    "case",
+    "runtime",
+    "recommendation",
+    "cognition",
+    "pm_workflow",
+    "governance"
+  ],
+  "notes": "Second child-core inheritance case for the frozen delivery template."
+}

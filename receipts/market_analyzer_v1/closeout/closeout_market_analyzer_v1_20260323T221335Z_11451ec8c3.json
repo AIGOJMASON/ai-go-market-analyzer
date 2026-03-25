@@ -1,0 +1,26 @@
+{
+  "closeout_id": "closeout_market_analyzer_v1_20260323T221335Z_11451ec8c3",
+  "artifact_type": "market_analyzer_closeout",
+  "artifact_version": "v1",
+  "closed_at": "2026-03-23T22:13:35.914791+00:00",
+  "core_id": "market_analyzer_v1",
+  "receipt_id": "rcpt_market_analyzer_v1_20260323T221335Z_34675aa37d",
+  "watcher_validation_id": "watcher_market_analyzer_v1_20260323T221335Z_fe85577fce",
+  "watcher_status": "passed",
+  "closeout_status": "accepted",
+  "accepted": true,
+  "requires_review": false,
+  "issues": [],
+  "policy": {
+    "on_pass": "accepted",
+    "on_fail": "quarantined",
+    "execution_allowed": false,
+    "approval_required": true
+  },
+  "lineage": {
+    "source_receipt_id": "rcpt_market_analyzer_v1_20260323T221335Z_34675aa37d",
+    "source_validation_id": "watcher_market_analyzer_v1_20260323T221335Z_fe85577fce",
+    "source_artifact_type": "market_analyzer_run_receipt",
+    "validation_artifact_type": "market_analyzer_receipt_validation"
+  }
+}

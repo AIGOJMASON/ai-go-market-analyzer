@@ -1,0 +1,55 @@
+PM_QUEUE_INDEX_REGISTRY = {
+    "core_id": "pm_queue_index_v1",
+    "layer_status": "active",
+    "accepted_queue_artifact_type": "pm_queue_record",
+    "accepted_queue_artifact_version": "v1",
+    "emitted_index_artifact_type": "pm_queue_index",
+    "emitted_index_artifact_version": "v1",
+    "approved_filter_fields": [
+        "queue_lane",
+        "queue_status",
+        "queue_target",
+        "queue_priority",
+    ],
+    "approved_queue_lanes": [
+        "pm_hold_queue",
+        "pm_review_queue",
+        "pm_planning_queue",
+        "pm_escalation_queue",
+    ],
+    "approved_queue_status_values": [
+        "held",
+        "queued",
+    ],
+    "approved_queue_target_values": [
+        "observe",
+        "review",
+        "planning",
+        "escalation",
+    ],
+    "approved_queue_priority_values": [
+        "low",
+        "medium",
+        "high",
+    ],
+    "required_input_flags": {
+        "memory_only": True,
+        "runtime_mutation_allowed": False,
+        "execution_influence": False,
+        "recommendation_mutation_allowed": False,
+    },
+    "required_output_flags": {
+        "memory_only": True,
+        "runtime_mutation_allowed": False,
+        "execution_influence": False,
+        "recommendation_mutation_allowed": False,
+    },
+    "index_scope": "pm_queue_index_only",
+    "forbidden_internal_fields": [
+        "_internal",
+        "_debug",
+        "_trace",
+        "_raw_runtime_state",
+        "_unsealed_source",
+    ],
+}

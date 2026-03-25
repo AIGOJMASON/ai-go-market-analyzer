@@ -1,0 +1,17 @@
+{
+  "validation_id": "watcher_market_analyzer_v1_20260324T212528Z_586756faf7",
+  "artifact_type": "market_analyzer_receipt_validation",
+  "artifact_version": "v1",
+  "validator": "market_analyzer_receipt_watcher_v1",
+  "validated_at": "2026-03-24T21:25:28.667022+00:00",
+  "receipt_id": "rcpt_market_analyzer_v1_20260324T212528Z_b782363c6d",
+  "core_id": "market_analyzer_v1",
+  "watcher_status": "passed",
+  "passed": true,
+  "issues": [],
+  "lineage": {
+    "source_receipt_id": "rcpt_market_analyzer_v1_20260324T212528Z_b782363c6d",
+    "source_artifact_type": "market_analyzer_run_receipt",
+    "validation_target": "market_analyzer_run_receipt"
+  }
+}

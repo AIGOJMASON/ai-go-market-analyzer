@@ -1,113 +1,76 @@
-# REFINEMENT ARBITRATION LAYER
+# REFINEMENT ARBITRATOR LAYER
 
-## What it is
+## Purpose
 
-The Refinement Arbitration layer is the decision boundary of the refinement pipeline.
+The refinement arbitrator layer defines the lawful runtime boundary that converts sealed, already-governed evidence into one bounded `refinement_packet` for operator-facing use.
 
-It converts scored refinement candidates into governed decisions.
+This layer reintroduces Curved Mirror and Rosetta as constrained refinement consumers under a governed arbitration surface.
 
----
+## Position in Runtime
 
-## Core function
 
-Consumes:
-- refinement_scoring_record
+accepted + quarantined closeouts + historical analogs
+↓
+refinement_arbitrator
+↓
+refinement_packet
+↓
+refinement_panel (dashboard only)
+
+
+The runtime decision path remains fully separate and immutable.
+
+## Allowed Responsibilities
+
+- Analyze sealed artifacts only
+- Compare accepted vs quarantined outcomes
+- Evaluate analog alignment
+- Classify refinement posture:
+  - supportive
+  - neutral
+  - cautionary
+  - suppressed
+- Emit bounded refinement packet
+
+## Forbidden Responsibilities
+
+- Modify candidate selection
+- Modify recommendation generation
+- Modify execution behavior
+- Alter watcher validation
+- Alter closeout state
+- Inject unbounded reasoning
+- Perform hidden learning
+
+## Invariants
+
+
+execution_influence = false
+recommendation_mutation_allowed = false
+
+
+These must never change.
+
+## Output Contract
 
 Produces:
-- refinement_decision_record
 
----
+- `refinement_packet` (sealed)
+- Dashboard-compatible refinement panel
 
-## Why it exists
+## Integration Rule
 
-Upstream stages:
-- select candidates (Stage 61)
-- score candidates (Stage 62)
+This layer attaches ONLY to:
 
-But they do not decide outcomes.
+- closed artifacts (post-watcher, post-closeout)
+- dashboard rendering path
 
-This layer determines:
-- what is approved
-- what is deferred
-- what is rejected
+It must not connect upstream into decision logic.
 
----
+## Summary
 
-## Authority boundary
+This layer enables controlled intelligence:
 
-This layer:
-- does NOT learn
-- does NOT modify system behavior
-- does NOT reweight models
-- does NOT infer causality
-
-This layer ONLY:
-- applies deterministic thresholds
-- enforces caps
-- produces explicit decisions
-
----
-
-## Decision model
-
-Each candidate is assigned:
-- approved
-- deferred
-- rejected
-
----
-
-## Rules
-
-Score thresholds:
-- score >= 4 → approved
-- score == 3 → deferred
-- score <= 2 → rejected
-
-Approval cap:
-- max 3 approved per batch
-
-Tie-breaking:
-1. higher score
-2. candidate type priority
-3. lexical fallback
-
----
-
-## Candidate priority
-
-1. pattern_note
-2. target_child_core_count
-3. closeout_count
-4. intake_count
-
----
-
-## Output contract
-
-refinement_decision_record must:
-- preserve candidate identity
-- include score and decision
-- include decision reason
-- include counts
-- be sealed
-
----
-
-## Failure protection
-
-Reject:
-- unsealed inputs
-- invalid artifact types
-- malformed candidates
-- internal field leakage
-
----
-
-## System role
-
-This is the first lawful decision surface in refinement.
-
-Selection → Scoring → Decision
-
-This stage completes that chain.
+- deterministic system remains intact
+- refinement is visible but non-authoritative
+- operator gains context without system risk

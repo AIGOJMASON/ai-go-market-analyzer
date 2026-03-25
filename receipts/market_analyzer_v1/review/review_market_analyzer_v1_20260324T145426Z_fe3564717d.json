@@ -1,0 +1,22 @@
+{
+  "review_id": "review_market_analyzer_v1_20260324T145426Z_fe3564717d",
+  "artifact_type": "market_analyzer_review_decision",
+  "artifact_version": "v1",
+  "reviewed_at": "2026-03-24T14:54:26.355385+00:00",
+  "core_id": "market_analyzer_v1",
+  "closeout_id": "closeout_market_analyzer_v1_manual_quarantine_test_001",
+  "receipt_id": "rcpt_market_analyzer_v1_manual_quarantine_test_001",
+  "watcher_validation_id": "watcher_market_analyzer_v1_manual_quarantine_test_001",
+  "reviewer_id": "pm_lead",
+  "reviewer_role": "pm",
+  "authorized": true,
+  "decision": "reject_invalid",
+  "notes": "",
+  "requires_pm_review": false,
+  "lineage": {
+    "source_closeout_id": "closeout_market_analyzer_v1_manual_quarantine_test_001",
+    "source_receipt_id": "rcpt_market_analyzer_v1_manual_quarantine_test_001",
+    "source_validation_id": "watcher_market_analyzer_v1_manual_quarantine_test_001",
+    "source_artifact_type": "market_analyzer_closeout"
+  }
+}

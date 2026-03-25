@@ -1,88 +1,308 @@
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import Any, List, Literal, Optional
 
 from pydantic import BaseModel, Field
+
+
+ResponseStatus = Literal["ok", "rejected", "error"]
+RecommendationState = Literal["present", "none", "rejected"]
+NodeState = Literal["present", "none"]
+ConfidenceAdjustment = Literal["up", "down", "none"]
+InputMode = Literal["fixture", "live"]
+
+
+class RecommendationItem(BaseModel):
+    symbol: str
+    entry: Optional[str] = None
+    exit: Optional[str] = None
+    confidence: Optional[str] = None
 
 
 class CasePanel(BaseModel):
     case_id: str
     title: str
-    observed_at: str
+    observed_at: Optional[str] = None
+    input_mode: InputMode = "fixture"
 
 
-class MarketPanel(BaseModel):
-    market_regime: str
-    event_theme: str
-    macro_bias: str
-    headline: str
-
-
-class CandidatePanel(BaseModel):
-    candidate_count: int
-    symbols: List[str]
-
-
-class RecommendationItem(BaseModel):
-    symbol: str
-    entry: str
-    exit: str
-    confidence: str
+class RuntimePanel(BaseModel):
+    market_regime: Optional[str] = None
+    event_theme: Optional[str] = None
+    macro_bias: Optional[str] = None
+    headline: Optional[str] = None
+    candidate_count: int = 0
+    candidates: List[str] = Field(default_factory=list)
 
 
 class RecommendationPanel(BaseModel):
-    recommendation_count: int
-    recommendations: List[RecommendationItem]
+    state: RecommendationState = "none"
+    count: int = 0
+    items: List[RecommendationItem] = Field(default_factory=list)
+    summary: str = "No recommendation issued."
+
+
+class RefinementPanel(BaseModel):
+    state: NodeState = "none"
+    signal: Optional[str] = None
+    confidence_adjustment: Optional[ConfidenceAdjustment] = None
+    risk_flag: Optional[str] = None
+    insight: Optional[str] = None
+    narrative: Optional[str] = None
+
+
+class CognitionPanel(BaseModel):
+    refinement: RefinementPanel = Field(default_factory=RefinementPanel)
+
+
+class PMWorkflowStrategy(BaseModel):
+    class_name: Optional[str] = Field(default=None, alias="class")
+    strength: Optional[str] = None
+    trend: Optional[str] = None
+    posture: Optional[str] = None
+
+    model_config = {"populate_by_name": True}
+
+
+class PMWorkflowReview(BaseModel):
+    class_name: Optional[str] = Field(default=None, alias="class")
+    priority: Optional[str] = None
+
+    model_config = {"populate_by_name": True}
+
+
+class PMWorkflowPlan(BaseModel):
+    class_name: Optional[str] = Field(default=None, alias="class")
+    next_step: Optional[str] = None
+    priority: Optional[str] = None
+
+    model_config = {"populate_by_name": True}
+
+
+class PMWorkflowQueue(BaseModel):
+    lane: Optional[str] = None
+    status: Optional[str] = None
+    target: Optional[str] = None
+    priority: Optional[str] = None
+
+
+class PMWorkflowDispatch(BaseModel):
+    class_name: Optional[str] = Field(default=None, alias="class")
+    target: Optional[str] = None
+    status: Optional[str] = None
+    ready: bool = False
+
+    model_config = {"populate_by_name": True}
+
+
+class PMWorkflowPanel(BaseModel):
+    state: NodeState = "none"
+    strategy: PMWorkflowStrategy = Field(default_factory=PMWorkflowStrategy)
+    review: PMWorkflowReview = Field(default_factory=PMWorkflowReview)
+    plan: PMWorkflowPlan = Field(default_factory=PMWorkflowPlan)
+    queue: PMWorkflowQueue = Field(default_factory=PMWorkflowQueue)
+    dispatch: PMWorkflowDispatch = Field(default_factory=PMWorkflowDispatch)
 
 
 class GovernancePanel(BaseModel):
-    watcher_passed: bool
-    approval_required: bool
-    execution_allowed: bool
-    approval_gate: str
-    receipt_id: str
+    mode: str = "advisory"
+    route_mode: Optional[str] = None
+    execution_allowed: bool = False
+    approval_required: bool = True
+    watcher_passed: Optional[bool] = None
+    closeout_status: Optional[str] = None
+    receipt_id: Optional[str] = None
+    watcher_validation_id: Optional[str] = None
+    closeout_id: Optional[str] = None
+    requires_review: bool = False
 
 
-class RejectionPanel(BaseModel):
-    rejected: bool
-    reason: Optional[str] = None
+class SystemView(BaseModel):
+    case: CasePanel
+    runtime: RuntimePanel
+    recommendation: RecommendationPanel
+    cognition: CognitionPanel = Field(default_factory=CognitionPanel)
+    pm_workflow: PMWorkflowPanel = Field(default_factory=PMWorkflowPanel)
+    governance: GovernancePanel = Field(default_factory=GovernancePanel)
 
 
 class MarketAnalyzerResponse(BaseModel):
-    status: str = Field(description="API call status.")
-    request_id: Optional[str] = Field(
-        default=None,
-        description="Optional caller-supplied request identifier.",
-    )
-    core_id: str
-    dashboard_type: str
-    route_mode: str
-    mode: str
-    execution_allowed: bool
-    case_panel: CasePanel
-    market_panel: MarketPanel
-    candidate_panel: CandidatePanel
-    recommendation_panel: RecommendationPanel
-    governance_panel: GovernancePanel
-    rejection_panel: RejectionPanel
+    status: ResponseStatus
+    request_id: str
+    system_view: SystemView
 
 
-def build_market_analyzer_response(
-    dashboard: dict,
-    request_id: Optional[str] = None,
-) -> MarketAnalyzerResponse:
-    return MarketAnalyzerResponse(
-        status="ok",
-        request_id=request_id,
-        core_id=dashboard["core_id"],
-        dashboard_type=dashboard["dashboard_type"],
-        route_mode=dashboard["route_mode"],
-        mode="advisory",
-        execution_allowed=bool(dashboard["governance_panel"]["execution_allowed"]),
-        case_panel=CasePanel(**dashboard["case_panel"]),
-        market_panel=MarketPanel(**dashboard["market_panel"]),
-        candidate_panel=CandidatePanel(**dashboard["candidate_panel"]),
-        recommendation_panel=RecommendationPanel(**dashboard["recommendation_panel"]),
-        governance_panel=GovernancePanel(**dashboard["governance_panel"]),
-        rejection_panel=RejectionPanel(**dashboard["rejection_panel"]),
+def _safe_get(source: Optional[dict[str, Any]], key: str, default: Any = None) -> Any:
+    if not isinstance(source, dict):
+        return default
+    return source.get(key, default)
+
+
+def _resolve_input_mode(payload: dict[str, Any]) -> InputMode:
+    explicit_input_mode = str(payload.get("input_mode", "")).strip().lower()
+    route_mode = str(payload.get("route_mode", "")).strip().lower()
+
+    if explicit_input_mode == "live":
+        return "live"
+
+    if "live" in route_mode:
+        return "live"
+
+    return "fixture"
+
+
+def _build_recommendation_panel(payload: dict[str, Any]) -> RecommendationPanel:
+    recommendation_panel = _safe_get(payload, "recommendation_panel", {}) or {}
+    raw_items = recommendation_panel.get("recommendations", []) or []
+
+    items = [
+        RecommendationItem(
+            symbol=item.get("symbol", ""),
+            entry=item.get("entry"),
+            exit=item.get("exit"),
+            confidence=item.get("confidence"),
+        )
+        for item in raw_items
+        if isinstance(item, dict)
+    ]
+
+    if items:
+        state = "present"
+        summary = f"{len(items)} recommendation(s) issued."
+    else:
+        rejection_panel = _safe_get(payload, "rejection_panel", {}) or {}
+        state = "rejected" if rejection_panel else "none"
+        summary = rejection_panel.get("reason", "No recommendation issued.")
+
+    return RecommendationPanel(
+        state=state,
+        count=len(items),
+        items=items,
+        summary=summary,
     )
+
+
+def _build_refinement_panel(payload: dict[str, Any]) -> RefinementPanel:
+    refinement = (
+        _safe_get(payload, "refinement_panel")
+        or _safe_get(payload, "refinement")
+        or _safe_get(payload, "refinement_packet")
+        or {}
+    )
+
+    if not refinement:
+        return RefinementPanel(state="none")
+
+    confidence_adjustment = refinement.get("confidence_adjustment")
+    if confidence_adjustment not in {"up", "down", "none", None}:
+        confidence_adjustment = "none"
+
+    return RefinementPanel(
+        state="present",
+        signal=refinement.get("signal"),
+        confidence_adjustment=confidence_adjustment,
+        risk_flag=refinement.get("risk_flag"),
+        insight=refinement.get("insight"),
+        narrative=refinement.get("narrative"),
+    )
+
+
+def _build_pm_workflow_panel(payload: dict[str, Any]) -> PMWorkflowPanel:
+    strategy = _safe_get(payload, "pm_strategy_record", {}) or {}
+    review = _safe_get(payload, "pm_review_record", {}) or {}
+    plan = _safe_get(payload, "pm_planning_record", {}) or {}
+    queue = _safe_get(payload, "pm_queue_record", {}) or {}
+    dispatch = _safe_get(payload, "pm_workflow_dispatch_record", {}) or {}
+
+    has_any = any([strategy, review, plan, queue, dispatch])
+    if not has_any:
+        return PMWorkflowPanel(state="none")
+
+    return PMWorkflowPanel(
+        state="present",
+        strategy=PMWorkflowStrategy(
+            **{
+                "class": strategy.get("strategy_class") or strategy.get("class"),
+                "strength": strategy.get("continuity_strength") or strategy.get("strength"),
+                "trend": strategy.get("trend_direction") or strategy.get("trend"),
+                "posture": strategy.get("posture"),
+            }
+        ),
+        review=PMWorkflowReview(
+            **{
+                "class": review.get("review_class") or review.get("class"),
+                "priority": review.get("review_priority") or review.get("priority"),
+            }
+        ),
+        plan=PMWorkflowPlan(
+            **{
+                "class": plan.get("plan_class") or plan.get("class"),
+                "next_step": plan.get("next_step_class") or plan.get("next_step"),
+                "priority": plan.get("plan_priority") or plan.get("priority"),
+            }
+        ),
+        queue=PMWorkflowQueue(
+            lane=queue.get("queue_lane") or queue.get("lane"),
+            status=queue.get("queue_status") or queue.get("status"),
+            target=queue.get("queue_target") or queue.get("target"),
+            priority=queue.get("queue_priority") or queue.get("priority"),
+        ),
+        dispatch=PMWorkflowDispatch(
+            **{
+                "class": dispatch.get("dispatch_class") or dispatch.get("class"),
+                "target": dispatch.get("dispatch_target") or dispatch.get("target"),
+                "status": dispatch.get("dispatch_status") or dispatch.get("status"),
+                "ready": bool(
+                    dispatch.get("dispatch_ready")
+                    if "dispatch_ready" in dispatch
+                    else dispatch.get("ready", False)
+                ),
+            }
+        ),
+    )
+
+
+def build_market_analyzer_response(payload: dict[str, Any]) -> MarketAnalyzerResponse:
+    case_panel = _safe_get(payload, "case_panel", {}) or {}
+    market_panel = _safe_get(payload, "market_panel", {}) or {}
+    candidate_panel = _safe_get(payload, "candidate_panel", {}) or {}
+    governance_panel = _safe_get(payload, "governance_panel", {}) or {}
+
+    response = MarketAnalyzerResponse(
+        status=payload.get("status", "ok"),
+        request_id=payload.get("request_id", ""),
+        system_view=SystemView(
+            case=CasePanel(
+                case_id=case_panel.get("case_id", payload.get("request_id", "")),
+                title=case_panel.get("title", ""),
+                observed_at=case_panel.get("observed_at"),
+                input_mode=_resolve_input_mode(payload),
+            ),
+            runtime=RuntimePanel(
+                market_regime=market_panel.get("market_regime"),
+                event_theme=market_panel.get("event_theme"),
+                macro_bias=market_panel.get("macro_bias"),
+                headline=market_panel.get("headline"),
+                candidate_count=candidate_panel.get("candidate_count", 0),
+                candidates=candidate_panel.get("symbols", []) or candidate_panel.get("candidates", []) or [],
+            ),
+            recommendation=_build_recommendation_panel(payload),
+            cognition=CognitionPanel(
+                refinement=_build_refinement_panel(payload),
+            ),
+            pm_workflow=_build_pm_workflow_panel(payload),
+            governance=GovernancePanel(
+                mode=payload.get("mode", "advisory"),
+                route_mode=payload.get("route_mode"),
+                execution_allowed=bool(payload.get("execution_allowed", False)),
+                approval_required=bool(payload.get("approval_required", True)),
+                watcher_passed=governance_panel.get("watcher_passed", payload.get("watcher_passed")),
+                closeout_status=payload.get("closeout_status"),
+                receipt_id=payload.get("receipt_id"),
+                watcher_validation_id=payload.get("watcher_validation_id"),
+                closeout_id=payload.get("closeout_id"),
+                requires_review=bool(payload.get("requires_review", False)),
+            ),
+        ),
+    )
+    return response
