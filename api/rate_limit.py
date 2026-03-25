@@ -8,7 +8,10 @@ from typing import DefaultDict, Deque
 
 from fastapi import HTTPException, Request, status
 
-from AI_GO.api.request_logging import append_request_log, build_base_log_payload
+try:
+    from AI_GO.api.request_logging import append_request_log, build_base_log_payload
+except ModuleNotFoundError:
+    from api.request_logging import append_request_log, build_base_log_payload
 
 
 @dataclass(frozen=True)
