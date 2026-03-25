@@ -5,14 +5,24 @@ from typing import Any, Dict
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 
-from AI_GO.api.auth import require_api_key
-from AI_GO.api.rate_limit import enforce_rate_limit
-from AI_GO.api.request_logging import append_request_log, build_base_log_payload
-from AI_GO.api.schemas.market_analyzer_request import MarketAnalyzerRequest
-from AI_GO.api.schemas.market_analyzer_response import build_market_analyzer_response
-from AI_GO.child_cores.market_analyzer_v1.ui.operator_dashboard_runner import (
-    run_operator_dashboard,
-)
+try:
+    from AI_GO.api.auth import require_api_key
+    from AI_GO.api.rate_limit import enforce_rate_limit
+    from AI_GO.api.request_logging import append_request_log, build_base_log_payload
+    from AI_GO.api.schemas.market_analyzer_request import MarketAnalyzerRequest
+    from AI_GO.api.schemas.market_analyzer_response import build_market_analyzer_response
+    from AI_GO.child_cores.market_analyzer_v1.ui.operator_dashboard_runner import (
+        run_operator_dashboard,
+    )
+except ModuleNotFoundError:
+    from api.auth import require_api_key
+    from api.rate_limit import enforce_rate_limit
+    from api.request_logging import append_request_log, build_base_log_payload
+    from api.schemas.market_analyzer_request import MarketAnalyzerRequest
+    from api.schemas.market_analyzer_response import build_market_analyzer_response
+    from child_cores.market_analyzer_v1.ui.operator_dashboard_runner import (
+        run_operator_dashboard,
+    )
 
 router = APIRouter(prefix="/market-analyzer", tags=["market-analyzer"])
 
@@ -159,10 +169,6 @@ def _run_market_analyzer_logic(
     route_mode: str,
     operator_id: str | None = None,
 ) -> Dict[str, Any]:
-    """
-    Placeholder for the governed runtime path.
-    Keeps advisory-only posture and stable outward response shape.
-    """
     governed_payload = dict(payload)
     governed_payload.setdefault("route_mode", route_mode)
     governed_payload.setdefault("mode", "advisory")
