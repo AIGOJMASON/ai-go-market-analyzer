@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import traceback
+from datetime import datetime
 from typing import Any, Callable, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -30,54 +31,69 @@ def _safe_str(value: Any) -> str | None:
 
 
 # -----------------------------
-# LOGGING (FIXED)
+# LOGGING
 # -----------------------------
 
-def _build_log_payload(
-    request: Request,
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str | None,
-    response_status: int,
-) -> Dict[str, Any]:
+def _build_log_payload(request: Request, payload: Dict[str, Any], *, route_mode: str | None, status_code: int):
     return build_base_log_payload(
-        request_id=_safe_str(request_payload.get("request_id")),
-        case_id=_safe_str(request_payload.get("case_id")),
-        receipt_id=None,  # 🔥 FIX REQUIRED FIELD
+        request_id=_safe_str(payload.get("request_id")),
+        case_id=_safe_str(payload.get("case_id")),
+        receipt_id=None,  # required by signature
         auth_status=getattr(request.state, "auth_status", None),
-        response_status=response_status,
+        response_status=status_code,
         route_mode=route_mode,
         client_ip=getattr(request.state, "client_ip", None),
         api_key_id=getattr(request.state, "api_key_id", None),
     )
 
 
-def _log_success(request: Request, payload: Dict[str, Any], *, route_mode: str) -> None:
-    log = _build_log_payload(
-        request,
-        payload,
-        route_mode=route_mode,
-        response_status=status.HTTP_200_OK,
-    )
+def _log_success(request: Request, payload: Dict[str, Any], *, route_mode: str):
+    log = _build_log_payload(request, payload, route_mode=route_mode, status_code=200)
     log["status"] = "success"
     append_request_log("run_success", log)
 
 
-def _log_failure(request: Request, payload: Dict[str, Any], *, route_mode: str, exc: Exception) -> None:
-    log = _build_log_payload(
-        request,
-        payload,
-        route_mode=route_mode,
-        response_status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    )
-    log.update(
-        {
-            "status": "failure",
-            "error_type": exc.__class__.__name__,
-            "error_message": str(exc),
-        }
-    )
+def _log_failure(request: Request, payload: Dict[str, Any], *, route_mode: str, exc: Exception):
+    log = _build_log_payload(request, payload, route_mode=route_mode, status_code=500)
+    log.update({
+        "status": "failure",
+        "error_type": exc.__class__.__name__,
+        "error_message": str(exc),
+    })
     append_request_log("run_failure", log)
+
+
+# -----------------------------
+# PAYLOAD NORMALIZATION (FINAL FIX)
+# -----------------------------
+
+def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Convert UI payload → canonical adapter payload
+    """
+    p = dict(payload)
+
+    # REQUIRED
+    if "case_id" not in p:
+        p["case_id"] = p.get("request_id")
+
+    if "observed_at" not in p:
+        p["observed_at"] = datetime.utcnow().isoformat() + "Z"
+
+    # 🔥 NEW REQUIRED FIELD
+    if "event_signal" not in p:
+        sector = _safe_str(p.get("sector")) or "unknown"
+        confirmation = _safe_str(p.get("confirmation")) or "unknown"
+
+        # simple but valid signal mapping
+        if sector == "energy" and confirmation == "confirmed":
+            p["event_signal"] = "energy_rebound"
+        elif confirmation == "confirmed":
+            p["event_signal"] = "confirmed_move"
+        else:
+            p["event_signal"] = "speculative_move"
+
+    return p
 
 
 # -----------------------------
@@ -104,37 +120,22 @@ def _load_live_callable() -> Callable[..., Any]:
     raise RuntimeError("No live execution callable found")
 
 
-def _execute_live_callable(live_callable: Callable[..., Any], request_payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    🔥 CRITICAL FIX:
-    Inject required canonical fields before hitting adapter
-    """
-
-    request_payload = dict(request_payload)
-
-    # ✅ REQUIRED FIELD 1
-    if "case_id" not in request_payload:
-        request_payload["case_id"] = request_payload.get("request_id")
-
-    # ✅ REQUIRED FIELD 2 (NEW FIX)
-    if "observed_at" not in request_payload:
-        from datetime import datetime
-        request_payload["observed_at"] = datetime.utcnow().isoformat() + "Z"
-
-    return live_callable(request_payload)
+def _execute_live_callable(live_callable: Callable[..., Any], payload: Dict[str, Any]) -> Dict[str, Any]:
+    payload = _normalize_payload(payload)
+    return live_callable(payload)
 
 
 # -----------------------------
 # ROUTE
 # -----------------------------
 
-def _execute_route(request: Request, request_payload: Dict[str, Any], *, route_mode: str) -> Dict[str, Any]:
+def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str) -> Dict[str, Any]:
     try:
         live_callable = _load_live_callable()
 
-        response = _execute_live_callable(live_callable, request_payload)
+        response = _execute_live_callable(live_callable, payload)
 
-        _log_success(request, request_payload, route_mode=route_mode)
+        _log_success(request, payload, route_mode=route_mode)
 
         return response
 
@@ -143,7 +144,7 @@ def _execute_route(request: Request, request_payload: Dict[str, Any], *, route_m
         traceback.print_exc()
         print("🔥 END TRACEBACK 🔥\n")
 
-        _log_failure(request, request_payload, route_mode=route_mode, exc=exc)
+        _log_failure(request, payload, route_mode=route_mode, exc=exc)
 
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -152,19 +153,12 @@ def _execute_route(request: Request, request_payload: Dict[str, Any], *, route_m
 
 
 # -----------------------------
-# API ENDPOINT
+# ENDPOINT
 # -----------------------------
 
 @router.post(
     "/run/live",
     dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
 )
-def run_market_analyzer_live(
-    request: Request,
-    request_payload: Dict[str, Any],
-) -> Dict[str, Any]:
-    return _execute_route(
-        request,
-        request_payload,
-        route_mode="live_route",
-    )
+def run_market_analyzer_live(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
+    return _execute_route(request, request_payload, route_mode="live_route")
