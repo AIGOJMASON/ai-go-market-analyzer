@@ -12,8 +12,11 @@ class LiveDataRunnerError(RuntimeError):
     pass
 
 
-def _resolve_pm_route_callable() -> Optional[Callable[[Dict[str, Any]], Dict[str, Any]]]:
-    module_name = "core.strategy.pm_market_analyzer_route"
+def _resolve_pm_route_callable() -> Callable[[Dict[str, Any]], Dict[str, Any]]:
+    module_names = (
+        "AI_GO.core.strategy.pm_market_analyzer_route",
+        "core.strategy.pm_market_analyzer_route",
+    )
     candidate_function_names = (
         "route_market_analyzer_request",
         "route_market_analyzer_packet",
@@ -22,133 +25,181 @@ def _resolve_pm_route_callable() -> Optional[Callable[[Dict[str, Any]], Dict[str
         "run",
     )
 
-    try:
-        module = importlib.import_module(module_name)
-    except Exception:
-        return None
+    last_error: Exception | None = None
 
-    for function_name in candidate_function_names:
-        candidate = getattr(module, function_name, None)
-        if callable(candidate):
-            return candidate
-    return None
+    for module_name in module_names:
+        try:
+            module = importlib.import_module(module_name)
+        except Exception as exc:  # noqa: BLE001
+            last_error = exc
+            continue
+
+        for function_name in candidate_function_names:
+            candidate = getattr(module, function_name, None)
+            if callable(candidate):
+                return candidate
+
+    if last_error is not None:
+        raise LiveDataRunnerError(
+            "PM market analyzer route module could not be resolved."
+        ) from last_error
+
+    raise LiveDataRunnerError(
+        "PM market analyzer route callable could not be found."
+    )
 
 
-def _fallback_route(normalized_packet: Dict[str, Any]) -> Dict[str, Any]:
-    qualified_candidates = [
-        candidate
-        for candidate in normalized_packet["candidates"]
-        if candidate["necessity_qualified"] and candidate["rebound_confirmed"]
-    ]
+def _extract_bool(value: Any, default: bool = False) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return default
+    return bool(value)
 
-    if not normalized_packet["event_context"]["confirmed"]:
-        return {
-            "status": "rejected",
-            "reason": "event_not_confirmed",
-            "watcher": {"passed": False},
-            "approval_required": True,
-            "execution_allowed": False,
-            "recommendations": [],
-            "receipt_trace_packet": {
-                "receipt_id": f"{normalized_packet['case_id']}-REJECT-UNCONFIRMED",
-                "path": "live_data_runner.fallback_route",
-            },
-        }
 
-    if not qualified_candidates:
-        return {
-            "status": "rejected",
-            "reason": "no necessity-qualified candidates available",
-            "watcher": {"passed": False},
-            "approval_required": True,
-            "execution_allowed": False,
-            "recommendations": [],
-            "receipt_trace_packet": {
-                "receipt_id": f"{normalized_packet['case_id']}-REJECT-NONECESSITY",
-                "path": "live_data_runner.fallback_route",
-            },
-        }
+def _extract_recommendation_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
+    recommendation_packet = routed_result.get("trade_recommendation_packet", {})
+    recommendations = recommendation_packet.get("recommendations", [])
 
-    recommendations = []
-    for candidate in qualified_candidates:
-        recommendations.append(
-            {
-                "symbol": candidate["symbol"],
-                "entry": candidate["entry_signal"],
-                "exit": candidate["exit_signal"],
-                "confidence": candidate["confidence"],
-            }
-        )
+    if not isinstance(recommendation_packet, dict):
+        recommendation_packet = {}
+
+    if not isinstance(recommendations, list):
+        recommendations = []
 
     return {
-        "status": "ok",
-        "market_regime_record": {"regime": "normal"},
-        "event_propagation_record": {
-            "theme": normalized_packet["event_context"]["theme"],
-            "propagation": normalized_packet["event_context"]["propagation"],
-        },
-        "necessity_filtered_candidate_set": qualified_candidates,
-        "trade_recommendation_packet": {
-            "recommendation_count": len(recommendations),
-            "recommendations": recommendations,
-        },
-        "approval_request_packet": {
-            "approval_gate": "human_trade_approval_record",
-            "approval_required": True,
-        },
-        "watcher": {"passed": True},
-        "approval_required": True,
-        "execution_allowed": False,
-        "receipt_trace_packet": {
-            "receipt_id": f"{normalized_packet['case_id']}-OK-001",
-            "path": "live_data_runner.fallback_route",
-        },
+        "recommendation_count": recommendation_packet.get("recommendation_count", len(recommendations)),
+        "recommendations": recommendations,
     }
 
 
-# 🔥 NEW: payload-based entry (THIS FIXES YOUR 500)
-def run_live_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Accepts live UI payload and converts it into a normalized packet.
-    This is the correct entry point for /run/live.
-    """
-    if not isinstance(payload, dict):
-        raise LiveDataRunnerError("payload must be a dict")
-
-    normalized_packet = normalize_live_input(payload)
-
-    pm_route = _resolve_pm_route_callable()
-
-    if pm_route is None:
-        routed_result = _fallback_route(normalized_packet)
-        route_mode = "fallback_stub"
-    else:
-        routed_result = pm_route(normalized_packet)
-        route_mode = "pm_route"
+def _extract_governance_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
+    receipt_trace_packet = routed_result.get("receipt_trace_packet", {})
+    watcher = routed_result.get("watcher", {})
 
     return {
+        "watcher_passed": watcher.get("passed"),
+        "approval_required": routed_result.get("approval_required"),
+        "execution_allowed": routed_result.get("execution_allowed"),
+        "receipt_id": receipt_trace_packet.get("receipt_id"),
+    }
+
+
+def _extract_cognition_panel(normalized_packet: Dict[str, Any], routed_result: Dict[str, Any]) -> Dict[str, Any]:
+    event_context = normalized_packet.get("event_context", {})
+    rejection_reason = routed_result.get("reason")
+
+    if rejection_reason == "event_not_confirmed":
+        insight = "Event is not sufficiently confirmed for recommendation."
+        risk_flag = "missing_confirmation"
+        confidence_adjustment = "down"
+    elif rejection_reason == "no necessity-qualified candidates available":
+        insight = "No necessity-qualified rebound candidates are available."
+        risk_flag = "no_necessity_candidate"
+        confidence_adjustment = "down"
+    else:
+        insight = "Confirmed necessity rebound candidates support advisory recommendation."
+        risk_flag = None
+        confidence_adjustment = "none"
+
+    return {
+        "signal": event_context.get("theme"),
+        "confidence_adjustment": confidence_adjustment,
+        "risk_flag": risk_flag,
+        "insight": insight,
+        "narrative": "Governed output remains advisory and non-executing.",
+    }
+
+
+def _extract_pm_workflow_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
+    approval_packet = routed_result.get("approval_request_packet", {})
+    if not isinstance(approval_packet, dict):
+        approval_packet = {}
+
+    if not routed_result.get("status") == "ok":
+        return {}
+
+    return {
+        "planning": {
+            "plan_class": "await_human_review",
+            "next_step_class": approval_packet.get("approval_gate", "human_trade_approval_record"),
+        }
+    }
+
+
+def _build_live_response(normalized_packet: Dict[str, Any], routed_result: Dict[str, Any], route_mode: str) -> Dict[str, Any]:
+    event_context = normalized_packet.get("event_context", {})
+    market_regime_record = routed_result.get("market_regime_record", {})
+    event_propagation_record = routed_result.get("event_propagation_record", {})
+    recommendation_panel = _extract_recommendation_panel(routed_result)
+    governance_panel = _extract_governance_panel(routed_result)
+    cognition_panel = _extract_cognition_panel(normalized_packet, routed_result)
+    pm_workflow_panel = _extract_pm_workflow_panel(routed_result)
+
+    rejection_panel = None
+    if routed_result.get("status") != "ok":
+        rejection_panel = {
+            "reason": routed_result.get("reason", "live_route_rejected"),
+        }
+
+    return {
+        "status": "ok" if routed_result.get("status") == "ok" else "rejected",
+        "request_id": normalized_packet.get("case_id"),
+        "core_id": "market_analyzer_v1",
+        "route_mode": route_mode,
+        "mode": "advisory",
+        "execution_allowed": _extract_bool(routed_result.get("execution_allowed"), default=False),
         "case_panel": {
             "case_id": normalized_packet.get("case_id"),
             "title": normalized_packet.get("headline"),
             "observed_at": None,
         },
         "market_panel": {
-            "market_regime": "normal",
-            "event_theme": normalized_packet["event_context"]["theme"],
+            "market_regime": market_regime_record.get("regime", "normal"),
+            "event_theme": event_propagation_record.get("theme", event_context.get("theme")),
             "macro_bias": "mixed",
             "headline": normalized_packet.get("headline"),
         },
-        "recommendation_panel": routed_result.get("trade_recommendation_packet", {}),
-        "governance_panel": {
-            "watcher_passed": routed_result.get("watcher", {}).get("passed"),
-            "approval_required": routed_result.get("approval_required"),
-            "execution_allowed": routed_result.get("execution_allowed"),
-            "receipt_id": routed_result.get("receipt_trace_packet", {}).get("receipt_id"),
+        "runtime_panel": {
+            "market_regime": market_regime_record.get("regime", "normal"),
+            "event_theme": event_propagation_record.get("theme", event_context.get("theme")),
+            "macro_bias": "mixed",
+            "headline": normalized_packet.get("headline"),
         },
-        "route_mode": route_mode,
-        "mode": "advisory",
-        "execution_allowed": False,
+        "recommendation_panel": recommendation_panel,
+        "cognition_panel": cognition_panel,
+        "refinement_panel": cognition_panel,
+        "pm_workflow_panel": pm_workflow_panel,
+        "governance_panel": governance_panel,
+        "rejection_panel": rejection_panel,
+        "approval_required": _extract_bool(routed_result.get("approval_required"), default=True),
     }
+
+
+def run_live_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Accept a live UI/API payload and force execution through the PM route.
+
+    No fallback path is allowed.
+    """
+    if not isinstance(payload, dict):
+        raise LiveDataRunnerError("payload must be a dict")
+
+    normalized_packet = normalize_live_input(payload)
+    pm_route = _resolve_pm_route_callable()
+    routed_result = pm_route(normalized_packet)
+
+    if hasattr(routed_result, "model_dump"):
+        routed_result = routed_result.model_dump(by_alias=True, exclude_none=False)
+
+    if not isinstance(routed_result, dict):
+        raise LiveDataRunnerError("PM route returned unsupported result type")
+
+    return _build_live_response(
+        normalized_packet=normalized_packet,
+        routed_result=routed_result,
+        route_mode="pm_route",
+    )
 
 
 def run_live_case(case_id: Optional[str] = None) -> Dict[str, Any]:
