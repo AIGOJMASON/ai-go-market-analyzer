@@ -30,11 +30,24 @@ def _safe_str(value: Any) -> str | None:
     return text or None
 
 
+def _safe_float(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 # -----------------------------
 # LOGGING
 # -----------------------------
 
-def _build_log_payload(request: Request, payload: Dict[str, Any], *, route_mode: str | None, status_code: int):
+def _build_log_payload(
+    request: Request,
+    payload: Dict[str, Any],
+    *,
+    route_mode: str | None,
+    status_code: int,
+) -> Dict[str, Any]:
     return build_base_log_payload(
         request_id=_safe_str(payload.get("request_id")),
         case_id=_safe_str(payload.get("case_id")),
@@ -47,80 +60,78 @@ def _build_log_payload(request: Request, payload: Dict[str, Any], *, route_mode:
     )
 
 
-def _log_success(request: Request, payload: Dict[str, Any], *, route_mode: str):
+def _log_success(request: Request, payload: Dict[str, Any], *, route_mode: str) -> None:
     log = _build_log_payload(request, payload, route_mode=route_mode, status_code=200)
     log["status"] = "success"
     append_request_log("run_success", log)
 
 
-def _log_failure(request: Request, payload: Dict[str, Any], *, route_mode: str, exc: Exception):
+def _log_failure(request: Request, payload: Dict[str, Any], *, route_mode: str, exc: Exception) -> None:
     log = _build_log_payload(request, payload, route_mode=route_mode, status_code=500)
-    log.update({
-        "status": "failure",
-        "error_type": exc.__class__.__name__,
-        "error_message": str(exc),
-    })
+    log.update(
+        {
+            "status": "failure",
+            "error_type": exc.__class__.__name__,
+            "error_message": str(exc),
+        }
+    )
     append_request_log("run_failure", log)
 
 
 # -----------------------------
-# NORMALIZATION (FINAL FIX)
+# NORMALIZATION
 # -----------------------------
 
 def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     p = dict(payload)
 
+    request_id = _safe_str(p.get("request_id")) or "live-request"
+    sector = (_safe_str(p.get("sector")) or "").lower()
+    confirmation = (_safe_str(p.get("confirmation")) or "").lower()
+    price_change = _safe_float(p.get("price_change_pct"), 0.0)
+    symbol = _safe_str(p.get("symbol")) or "UNKNOWN"
+
     # case_id
-    if "case_id" not in p:
-        p["case_id"] = p.get("request_id")
+    if "case_id" not in p or not _safe_str(p.get("case_id")):
+        p["case_id"] = request_id
 
     # observed_at
-    if "observed_at" not in p:
+    if "observed_at" not in p or not _safe_str(p.get("observed_at")):
         p["observed_at"] = datetime.utcnow().isoformat() + "Z"
 
-    # event_signal (STRUCTURED OBJECT - CRITICAL FIX)
-    if "event_signal" not in p:
-        sector = (_safe_str(p.get("sector")) or "").lower()
-        confirmation = (_safe_str(p.get("confirmation")) or "").lower()
-
+    # event_signal
+    if "event_signal" not in p or not isinstance(p.get("event_signal"), dict):
         if sector == "energy":
-            signal_type = "energy_rebound"
+            event_theme = "energy_rebound"
+        elif sector in {"utilities", "consumer_staples", "healthcare", "materials"}:
+            event_theme = "necessity_rebound"
         else:
-            signal_type = "market_move"
+            event_theme = "market_move"
 
-        confirmed = confirmation in ["confirmed", "partial"]
+        confirmed = confirmation in {"confirmed", "partial"}
 
         p["event_signal"] = {
-            "type": signal_type,
+            "event_theme": event_theme,
             "confirmed": confirmed,
         }
 
     # candidates
-    if "candidates" not in p:
-        symbol = _safe_str(p.get("symbol")) or "UNKNOWN"
-        sector = (_safe_str(p.get("sector")) or "").lower()
-        confirmation = (_safe_str(p.get("confirmation")) or "").lower()
-        price_change = p.get("price_change_pct") or 0
-
-        necessity_qualified = sector in [
+    if "candidates" not in p or not isinstance(p.get("candidates"), list) or not p.get("candidates"):
+        necessity_qualified = sector in {
             "energy",
             "utilities",
             "consumer_staples",
             "healthcare",
             "materials",
-        ]
+        }
+        rebound_confirmed = confirmation in {"confirmed", "partial"}
 
-        rebound_confirmed = confirmation in ["confirmed", "partial"]
-
-        if isinstance(price_change, (int, float)):
-            if price_change >= 3:
-                confidence = "high"
-            elif price_change >= 1.5:
-                confidence = "medium"
-            else:
-                confidence = "low"
+        if price_change >= 3.0:
+            confidence = "high"
+        elif price_change >= 1.5:
+            confidence = "medium"
         else:
-            confidence = "unknown"
+            confidence = "low"
 
         p["candidates"] = [
             {
@@ -161,8 +172,8 @@ def _load_live_callable() -> Callable[..., Any]:
 
 
 def _execute_live_callable(live_callable: Callable[..., Any], payload: Dict[str, Any]) -> Dict[str, Any]:
-    payload = _normalize_payload(payload)
-    return live_callable(payload)
+    normalized_payload = _normalize_payload(payload)
+    return live_callable(normalized_payload)
 
 
 # -----------------------------
@@ -172,11 +183,8 @@ def _execute_live_callable(live_callable: Callable[..., Any], payload: Dict[str,
 def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str) -> Dict[str, Any]:
     try:
         live_callable = _load_live_callable()
-
         response = _execute_live_callable(live_callable, payload)
-
         _log_success(request, payload, route_mode=route_mode)
-
         return response
 
     except Exception as exc:
@@ -200,6 +208,8 @@ def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str
     "/run/live",
     dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
 )
-def run_market_analyzer_live(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
+def run_market_analyzer_live(
+    request: Request,
+    request_payload: Dict[str, Any],
+) -> Dict[str, Any]:
     return _execute_route(request, request_payload, route_mode="live_route")
-      
