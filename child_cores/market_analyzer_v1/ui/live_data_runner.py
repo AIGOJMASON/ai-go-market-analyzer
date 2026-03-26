@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import importlib
 import json
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from .live_data_adapter import normalize_live_input
 from .live_data_source import get_default_live_style_case, get_live_style_case
@@ -49,12 +49,146 @@ def _resolve_pm_route_callable() -> Callable[[Dict[str, Any]], Dict[str, Any]]:
     )
 
 
-def _extract_bool(value: Any, default: bool = False) -> bool:
-    if isinstance(value, bool):
-        return value
+def _safe_str(value: Any, default: str = "") -> str:
     if value is None:
         return default
-    return bool(value)
+    text = str(value).strip()
+    return text if text else default
+
+
+def _safe_float(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _truthy_confirmation(value: Any) -> bool:
+    normalized = _safe_str(value).lower()
+    return normalized in {"confirmed", "partial", "true", "yes", "1"}
+
+
+def _normalize_macro_bias(normalized_packet: Dict[str, Any], raw_payload: Dict[str, Any]) -> str:
+    event_context = normalized_packet.get("event_context", {})
+    candidate = _safe_str(event_context.get("macro_bias"))
+    if candidate:
+        return candidate
+
+    sector = _safe_str(raw_payload.get("sector")).lower()
+    if sector in {"energy", "utilities", "consumer_staples", "healthcare"}:
+        return "supportive"
+    if sector in {"technology", "consumer_discretionary", "communication_services"}:
+        return "mixed"
+    return "neutral"
+
+
+def _normalize_theme(normalized_packet: Dict[str, Any], raw_payload: Dict[str, Any]) -> str:
+    event_context = normalized_packet.get("event_context", {})
+    candidate = _safe_str(event_context.get("theme"))
+    if candidate:
+        return candidate
+
+    sector = _safe_str(raw_payload.get("sector")).lower()
+    confirmation = _safe_str(raw_payload.get("confirmation")).lower()
+
+    if sector == "energy":
+        return "energy_rebound" if confirmation in {"confirmed", "partial"} else "energy_move"
+    if sector in {"utilities", "consumer_staples", "healthcare"}:
+        return "necessity_rebound"
+    return "speculative_move"
+
+
+def _normalize_propagation(normalized_packet: Dict[str, Any], raw_payload: Dict[str, Any]) -> str:
+    event_context = normalized_packet.get("event_context", {})
+    candidate = _safe_str(event_context.get("propagation"))
+    if candidate:
+        return candidate
+
+    price_change_pct = _safe_float(raw_payload.get("price_change_pct"), 0.0)
+    if abs(price_change_pct) >= 3.0:
+        return "fast"
+    if abs(price_change_pct) >= 1.0:
+        return "moderate"
+    return "limited"
+
+
+def _build_candidate_from_payload(raw_payload: Dict[str, Any]) -> Dict[str, Any]:
+    symbol = _safe_str(raw_payload.get("symbol"), "UNKNOWN")
+    sector = _safe_str(raw_payload.get("sector")).lower()
+    confirmation = _safe_str(raw_payload.get("confirmation")).lower()
+    price_change_pct = _safe_float(raw_payload.get("price_change_pct"), 0.0)
+
+    necessity_qualified = sector in {"energy", "utilities", "consumer_staples", "healthcare", "materials"}
+    rebound_confirmed = confirmation in {"confirmed", "partial"}
+
+    if price_change_pct >= 3.0:
+        confidence = "high"
+    elif price_change_pct >= 1.5:
+        confidence = "medium"
+    else:
+        confidence = "low"
+
+    return {
+        "symbol": symbol,
+        "necessity_qualified": necessity_qualified,
+        "rebound_confirmed": rebound_confirmed,
+        "entry_signal": "reclaim support",
+        "exit_signal": "short-term resistance",
+        "confidence": confidence,
+    }
+
+
+def _normalize_candidates(normalized_packet: Dict[str, Any], raw_payload: Dict[str, Any]) -> List[Dict[str, Any]]:
+    candidates = normalized_packet.get("candidates")
+    if isinstance(candidates, list) and candidates:
+        normalized_list: List[Dict[str, Any]] = []
+        for candidate in candidates:
+            if not isinstance(candidate, dict):
+                continue
+
+            normalized_list.append(
+                {
+                    "symbol": _safe_str(candidate.get("symbol"), _safe_str(raw_payload.get("symbol"), "UNKNOWN")),
+                    "necessity_qualified": bool(candidate.get("necessity_qualified", False)),
+                    "rebound_confirmed": bool(candidate.get("rebound_confirmed", False)),
+                    "entry_signal": _safe_str(candidate.get("entry_signal"), "reclaim support"),
+                    "exit_signal": _safe_str(candidate.get("exit_signal"), "short-term resistance"),
+                    "confidence": _safe_str(candidate.get("confidence"), "unknown"),
+                }
+            )
+
+        if normalized_list:
+            return normalized_list
+
+    return [_build_candidate_from_payload(raw_payload)]
+
+
+def _build_pm_packet(normalized_packet: Dict[str, Any], raw_payload: Dict[str, Any]) -> Dict[str, Any]:
+    request_id = _safe_str(raw_payload.get("request_id"), "live-request")
+    headline = _safe_str(raw_payload.get("headline"), "Live market event")
+    confirmed = _truthy_confirmation(raw_payload.get("confirmation"))
+
+    event_context = normalized_packet.get("event_context")
+    if not isinstance(event_context, dict):
+        event_context = {}
+
+    pm_packet = {
+        "packet_type": "pm_style_live_input",
+        "parent_authority": "PM_CORE",
+        "target_core": "market_analyzer_v1",
+        "case_id": _safe_str(normalized_packet.get("case_id"), request_id),
+        "headline": _safe_str(normalized_packet.get("headline"), headline),
+        "event_context": {
+            "theme": _normalize_theme(normalized_packet, raw_payload),
+            "propagation": _normalize_propagation(normalized_packet, raw_payload),
+            "confirmed": bool(event_context.get("confirmed", confirmed)),
+            "headline": _safe_str(event_context.get("headline"), headline),
+            "macro_bias": _normalize_macro_bias(normalized_packet, raw_payload),
+        },
+        "candidates": _normalize_candidates(normalized_packet, raw_payload),
+    }
+
+    return pm_packet
 
 
 def _extract_recommendation_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
@@ -85,17 +219,21 @@ def _extract_governance_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _extract_cognition_panel(normalized_packet: Dict[str, Any], routed_result: Dict[str, Any]) -> Dict[str, Any]:
-    event_context = normalized_packet.get("event_context", {})
+def _extract_cognition_panel(pm_packet: Dict[str, Any], routed_result: Dict[str, Any]) -> Dict[str, Any]:
+    event_context = pm_packet.get("event_context", {})
     rejection_reason = routed_result.get("reason")
 
-    if rejection_reason == "event_not_confirmed":
+    if rejection_reason == "unsafe_market_regime":
+        insight = "Market regime is unsafe for advisory recommendation."
+        risk_flag = "unsafe_market_regime"
+        confidence_adjustment = "down"
+    elif rejection_reason == "event_not_confirmed":
         insight = "Event is not sufficiently confirmed for recommendation."
         risk_flag = "missing_confirmation"
         confidence_adjustment = "down"
-    elif rejection_reason == "no necessity-qualified candidates available":
-        insight = "No necessity-qualified rebound candidates are available."
-        risk_flag = "no_necessity_candidate"
+    elif rejection_reason == "no rebound-validated candidates available":
+        insight = "No rebound-validated candidates are available."
+        risk_flag = "no_rebound_candidate"
         confidence_adjustment = "down"
     else:
         insight = "Confirmed necessity rebound candidates support advisory recommendation."
@@ -116,7 +254,7 @@ def _extract_pm_workflow_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(approval_packet, dict):
         approval_packet = {}
 
-    if not routed_result.get("status") == "ok":
+    if routed_result.get("status") != "ok":
         return {}
 
     return {
@@ -127,13 +265,13 @@ def _extract_pm_workflow_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _build_live_response(normalized_packet: Dict[str, Any], routed_result: Dict[str, Any], route_mode: str) -> Dict[str, Any]:
-    event_context = normalized_packet.get("event_context", {})
+def _build_live_response(pm_packet: Dict[str, Any], raw_payload: Dict[str, Any], routed_result: Dict[str, Any]) -> Dict[str, Any]:
+    event_context = pm_packet.get("event_context", {})
     market_regime_record = routed_result.get("market_regime_record", {})
     event_propagation_record = routed_result.get("event_propagation_record", {})
     recommendation_panel = _extract_recommendation_panel(routed_result)
     governance_panel = _extract_governance_panel(routed_result)
-    cognition_panel = _extract_cognition_panel(normalized_packet, routed_result)
+    cognition_panel = _extract_cognition_panel(pm_packet, routed_result)
     pm_workflow_panel = _extract_pm_workflow_panel(routed_result)
 
     rejection_panel = None
@@ -144,27 +282,28 @@ def _build_live_response(normalized_packet: Dict[str, Any], routed_result: Dict[
 
     return {
         "status": "ok" if routed_result.get("status") == "ok" else "rejected",
-        "request_id": normalized_packet.get("case_id"),
+        "request_id": _safe_str(raw_payload.get("request_id"), pm_packet.get("case_id")),
         "core_id": "market_analyzer_v1",
-        "route_mode": route_mode,
+        "route_mode": "pm_route",
         "mode": "advisory",
-        "execution_allowed": _extract_bool(routed_result.get("execution_allowed"), default=False),
+        "execution_allowed": bool(routed_result.get("execution_allowed", False)),
+        "approval_required": bool(routed_result.get("approval_required", True)),
         "case_panel": {
-            "case_id": normalized_packet.get("case_id"),
-            "title": normalized_packet.get("headline"),
+            "case_id": pm_packet.get("case_id"),
+            "title": _safe_str(raw_payload.get("headline"), pm_packet.get("headline")),
             "observed_at": None,
         },
         "market_panel": {
             "market_regime": market_regime_record.get("regime", "normal"),
             "event_theme": event_propagation_record.get("theme", event_context.get("theme")),
-            "macro_bias": "mixed",
-            "headline": normalized_packet.get("headline"),
+            "macro_bias": market_regime_record.get("macro_bias", event_context.get("macro_bias", "mixed")),
+            "headline": _safe_str(raw_payload.get("headline"), event_context.get("headline")),
         },
         "runtime_panel": {
             "market_regime": market_regime_record.get("regime", "normal"),
             "event_theme": event_propagation_record.get("theme", event_context.get("theme")),
-            "macro_bias": "mixed",
-            "headline": normalized_packet.get("headline"),
+            "macro_bias": market_regime_record.get("macro_bias", event_context.get("macro_bias", "mixed")),
+            "headline": _safe_str(raw_payload.get("headline"), event_context.get("headline")),
         },
         "recommendation_panel": recommendation_panel,
         "cognition_panel": cognition_panel,
@@ -172,22 +311,23 @@ def _build_live_response(normalized_packet: Dict[str, Any], routed_result: Dict[
         "pm_workflow_panel": pm_workflow_panel,
         "governance_panel": governance_panel,
         "rejection_panel": rejection_panel,
-        "approval_required": _extract_bool(routed_result.get("approval_required"), default=True),
     }
 
 
 def run_live_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Accept a live UI/API payload and force execution through the PM route.
-
-    No fallback path is allowed.
-    """
     if not isinstance(payload, dict):
         raise LiveDataRunnerError("payload must be a dict")
 
     normalized_packet = normalize_live_input(payload)
+    if hasattr(normalized_packet, "model_dump"):
+        normalized_packet = normalized_packet.model_dump(by_alias=True, exclude_none=False)
+
+    if not isinstance(normalized_packet, dict):
+        raise LiveDataRunnerError("normalize_live_input returned unsupported result type")
+
+    pm_packet = _build_pm_packet(normalized_packet, payload)
     pm_route = _resolve_pm_route_callable()
-    routed_result = pm_route(normalized_packet)
+    routed_result = pm_route(pm_packet)
 
     if hasattr(routed_result, "model_dump"):
         routed_result = routed_result.model_dump(by_alias=True, exclude_none=False)
@@ -196,9 +336,9 @@ def run_live_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         raise LiveDataRunnerError("PM route returned unsupported result type")
 
     return _build_live_response(
-        normalized_packet=normalized_packet,
+        pm_packet=pm_packet,
+        raw_payload=payload,
         routed_result=routed_result,
-        route_mode="pm_route",
     )
 
 
