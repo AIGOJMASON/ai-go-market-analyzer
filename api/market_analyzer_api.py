@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Dict
+import importlib
+from typing import Any, Callable, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
@@ -163,17 +164,101 @@ def _log_unexpected_failure(
     append_request_log(event_type, payload)
 
 
-def _run_market_analyzer_logic(
-    payload: Dict[str, Any],
+def _invoke_operator_dashboard(case_id: str) -> Dict[str, Any]:
+    result = run_operator_dashboard(case_id=case_id)
+
+    if hasattr(result, "model_dump"):
+        result = result.model_dump(by_alias=True, exclude_none=False)
+
+    if not isinstance(result, dict):
+        raise RuntimeError("operator dashboard runner returned unsupported result type")
+
+    if isinstance(result.get("dashboard"), dict):
+        return result["dashboard"]
+
+    if isinstance(result.get("payload"), dict):
+        return result["payload"]
+
+    return result
+
+
+def _normalize_runtime_result(result: Any) -> Dict[str, Any]:
+    if hasattr(result, "model_dump"):
+        result = result.model_dump(by_alias=True, exclude_none=False)
+
+    if not isinstance(result, dict):
+        raise RuntimeError("live execution returned unsupported result type")
+
+    if isinstance(result.get("dashboard"), dict):
+        return result["dashboard"]
+
+    if isinstance(result.get("payload"), dict):
+        return result["payload"]
+
+    return result
+
+
+def _load_live_execution_callable() -> Callable[..., Any] | None:
+    module_names = [
+        "AI_GO.child_cores.market_analyzer_v1.ui.live_data_runner",
+        "child_cores.market_analyzer_v1.ui.live_data_runner",
+    ]
+    candidate_names = [
+        "run_live_payload",
+        "run_live_input",
+        "run_live_data",
+        "run_live_route",
+        "run_live_packet",
+        "run_live_case",
+    ]
+
+    for module_name in module_names:
+        try:
+            module = importlib.import_module(module_name)
+        except ModuleNotFoundError:
+            continue
+
+        for candidate_name in candidate_names:
+            candidate = getattr(module, candidate_name, None)
+            if callable(candidate):
+                return candidate
+
+    return None
+
+
+def _execute_live_callable(live_callable: Callable[..., Any], request_payload: Dict[str, Any]) -> Dict[str, Any]:
+    call_patterns = [
+        lambda fn, payload: fn(request_payload=payload),
+        lambda fn, payload: fn(payload=payload),
+        lambda fn, payload: fn(live_payload=payload),
+        lambda fn, payload: fn(case=payload),
+        lambda fn, payload: fn(packet=payload),
+        lambda fn, payload: fn(payload),
+    ]
+
+    last_type_error: TypeError | None = None
+
+    for call_pattern in call_patterns:
+        try:
+            result = call_pattern(live_callable, request_payload)
+            return _normalize_runtime_result(result)
+        except TypeError as exc:
+            last_type_error = exc
+            continue
+
+    if last_type_error is not None:
+        raise last_type_error
+
+    raise RuntimeError("no valid live execution call pattern succeeded")
+
+
+def _build_placeholder_response(
+    request_payload: Dict[str, Any],
     *,
     route_mode: str,
-    operator_id: str | None = None,
+    operator_id: str | None,
 ) -> Dict[str, Any]:
-    """
-    Placeholder for the governed runtime path.
-    Keeps advisory-only posture and stable outward response shape.
-    """
-    governed_payload = dict(payload)
+    governed_payload = dict(request_payload)
     governed_payload.setdefault("route_mode", route_mode)
     governed_payload.setdefault("mode", "advisory")
     governed_payload.setdefault("execution_allowed", False)
@@ -181,25 +266,38 @@ def _run_market_analyzer_logic(
     if operator_id:
         governed_payload.setdefault("operator_id", operator_id)
 
-    return governed_payload
+    response = build_market_analyzer_response(governed_payload)
+    return response.model_dump(by_alias=True, exclude_none=False)
 
 
-def _build_response(
-    request: Request,
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str,
-) -> Dict[str, Any]:
-    operator_id = getattr(request.state, "operator_id", None)
+def _build_fixture_response(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
+    case_id = _extract_case_id(request_payload)
+    if case_id:
+        return _invoke_operator_dashboard(case_id)
 
-    raw_payload = _run_market_analyzer_logic(
+    return _build_placeholder_response(
         request_payload,
-        route_mode=route_mode,
-        operator_id=operator_id,
+        route_mode="fixture_route",
+        operator_id=getattr(request.state, "operator_id", None),
     )
 
-    response = build_market_analyzer_response(raw_payload)
-    return response.model_dump(by_alias=True, exclude_none=False)
+
+def _build_live_response(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
+    case_id = _safe_str(request_payload.get("case_id"))
+    if case_id:
+        return _invoke_operator_dashboard(case_id)
+
+    live_callable = _load_live_execution_callable()
+    if live_callable is None:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail=(
+                "Live payload execution is not wired to a callable runtime surface. "
+                "Provide case_id for dashboard-backed execution or wire a payload-based live runner."
+            ),
+        )
+
+    return _execute_live_callable(live_callable, request_payload)
 
 
 def _execute_route(
@@ -209,11 +307,16 @@ def _execute_route(
     route_mode: str,
 ) -> Dict[str, Any]:
     try:
-        response = _build_response(
-            request,
-            request_payload,
-            route_mode=route_mode,
-        )
+        if route_mode == "fixture_route":
+            response = _build_fixture_response(request, request_payload)
+        elif route_mode == "live_route":
+            response = _build_live_response(request, request_payload)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Unsupported route_mode: {route_mode}",
+            )
+
         _log_success(
             request,
             request_payload,
@@ -288,13 +391,12 @@ def run_market_analyzer_raw(
     }
 
     try:
-        result = run_operator_dashboard(case_id=raw_request.case_id)
-        dashboard = result["dashboard"]
+        dashboard = _invoke_operator_dashboard(raw_request.case_id)
 
         _log_success(
             request,
             endpoint_payload,
-            route_mode=dashboard.get("route_mode"),
+            route_mode=dashboard.get("route_mode", "raw_route"),
             response=dashboard,
             event_type="raw_run_success",
         )
