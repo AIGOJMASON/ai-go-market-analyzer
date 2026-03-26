@@ -110,10 +110,40 @@ def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
 
         confirmed = confirmation in {"confirmed", "partial"}
 
+        if abs(price_change) >= 3.0:
+            propagation = "fast"
+        elif abs(price_change) >= 1.5:
+            propagation = "moderate"
+        else:
+            propagation = "limited"
+
         p["event_signal"] = {
             "event_theme": event_theme,
             "confirmed": confirmed,
+            "propagation": propagation,
         }
+    else:
+        event_signal = dict(p["event_signal"])
+        if "event_theme" not in event_signal or not _safe_str(event_signal.get("event_theme")):
+            if sector == "energy":
+                event_signal["event_theme"] = "energy_rebound"
+            elif sector in {"utilities", "consumer_staples", "healthcare", "materials"}:
+                event_signal["event_theme"] = "necessity_rebound"
+            else:
+                event_signal["event_theme"] = "market_move"
+
+        if "confirmed" not in event_signal:
+            event_signal["confirmed"] = confirmation in {"confirmed", "partial"}
+
+        if "propagation" not in event_signal or not _safe_str(event_signal.get("propagation")):
+            if abs(price_change) >= 3.0:
+                event_signal["propagation"] = "fast"
+            elif abs(price_change) >= 1.5:
+                event_signal["propagation"] = "moderate"
+            else:
+                event_signal["propagation"] = "limited"
+
+        p["event_signal"] = event_signal
 
     # candidates
     if "candidates" not in p or not isinstance(p.get("candidates"), list) or not p.get("candidates"):
