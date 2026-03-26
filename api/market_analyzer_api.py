@@ -30,7 +30,7 @@ def _safe_str(value: Any) -> str | None:
 
 
 # -----------------------------
-# LOGGING
+# LOGGING (FIXED)
 # -----------------------------
 
 def _build_log_payload(
@@ -42,7 +42,8 @@ def _build_log_payload(
 ) -> Dict[str, Any]:
     return build_base_log_payload(
         request_id=_safe_str(request_payload.get("request_id")),
-        case_id=_safe_str(request_payload.get("case_id")) or _safe_str(request_payload.get("request_id")),
+        case_id=_safe_str(request_payload.get("case_id")),
+        receipt_id=None,  # 🔥 FIX REQUIRED FIELD
         auth_status=getattr(request.state, "auth_status", None),
         response_status=response_status,
         route_mode=route_mode,
@@ -106,12 +107,19 @@ def _load_live_callable() -> Callable[..., Any]:
 def _execute_live_callable(live_callable: Callable[..., Any], request_payload: Dict[str, Any]) -> Dict[str, Any]:
     """
     🔥 CRITICAL FIX:
-    Ensure case_id exists before hitting canonical adapter
+    Inject required canonical fields before hitting adapter
     """
 
+    request_payload = dict(request_payload)
+
+    # ✅ REQUIRED FIELD 1
     if "case_id" not in request_payload:
-        request_payload = dict(request_payload)
         request_payload["case_id"] = request_payload.get("request_id")
+
+    # ✅ REQUIRED FIELD 2 (NEW FIX)
+    if "observed_at" not in request_payload:
+        from datetime import datetime
+        request_payload["observed_at"] = datetime.utcnow().isoformat() + "Z"
 
     return live_callable(request_payload)
 
