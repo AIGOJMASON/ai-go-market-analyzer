@@ -38,7 +38,7 @@ def _build_log_payload(request: Request, payload: Dict[str, Any], *, route_mode:
     return build_base_log_payload(
         request_id=_safe_str(payload.get("request_id")),
         case_id=_safe_str(payload.get("case_id")),
-        receipt_id=None,  # required by signature
+        receipt_id=None,  # required by contract
         auth_status=getattr(request.state, "auth_status", None),
         response_status=status_code,
         route_mode=route_mode,
@@ -64,7 +64,7 @@ def _log_failure(request: Request, payload: Dict[str, Any], *, route_mode: str, 
 
 
 # -----------------------------
-# PAYLOAD NORMALIZATION (FINAL FIX)
+# PAYLOAD NORMALIZATION
 # -----------------------------
 
 def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -73,25 +73,63 @@ def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     """
     p = dict(payload)
 
-    # REQUIRED
+    # case_id
     if "case_id" not in p:
         p["case_id"] = p.get("request_id")
 
+    # observed_at
     if "observed_at" not in p:
         p["observed_at"] = datetime.utcnow().isoformat() + "Z"
 
-    # 🔥 NEW REQUIRED FIELD
+    # event_signal
     if "event_signal" not in p:
-        sector = _safe_str(p.get("sector")) or "unknown"
-        confirmation = _safe_str(p.get("confirmation")) or "unknown"
+        sector = (_safe_str(p.get("sector")) or "").lower()
+        confirmation = (_safe_str(p.get("confirmation")) or "").lower()
 
-        # simple but valid signal mapping
         if sector == "energy" and confirmation == "confirmed":
             p["event_signal"] = "energy_rebound"
         elif confirmation == "confirmed":
             p["event_signal"] = "confirmed_move"
         else:
             p["event_signal"] = "speculative_move"
+
+    # candidates
+    if "candidates" not in p:
+        symbol = _safe_str(p.get("symbol")) or "UNKNOWN"
+        sector = (_safe_str(p.get("sector")) or "").lower()
+        confirmation = (_safe_str(p.get("confirmation")) or "").lower()
+        price_change = p.get("price_change_pct") or 0
+
+        necessity_qualified = sector in [
+            "energy",
+            "utilities",
+            "consumer_staples",
+            "healthcare",
+            "materials",
+        ]
+
+        rebound_confirmed = confirmation in ["confirmed", "partial"]
+
+        if isinstance(price_change, (int, float)):
+            if price_change >= 3:
+                confidence = "high"
+            elif price_change >= 1.5:
+                confidence = "medium"
+            else:
+                confidence = "low"
+        else:
+            confidence = "unknown"
+
+        p["candidates"] = [
+            {
+                "symbol": symbol,
+                "necessity_qualified": necessity_qualified,
+                "rebound_confirmed": rebound_confirmed,
+                "entry_signal": "reclaim support",
+                "exit_signal": "short-term resistance",
+                "confidence": confidence,
+            }
+        ]
 
     return p
 
@@ -126,7 +164,7 @@ def _execute_live_callable(live_callable: Callable[..., Any], payload: Dict[str,
 
 
 # -----------------------------
-# ROUTE
+# ROUTE EXECUTION
 # -----------------------------
 
 def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str) -> Dict[str, Any]:
@@ -153,7 +191,7 @@ def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str
 
 
 # -----------------------------
-# ENDPOINT
+# API ENDPOINT
 # -----------------------------
 
 @router.post(
@@ -161,4 +199,8 @@ def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str
     dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
 )
 def run_market_analyzer_live(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
-    return _execute_route(request, request_payload, route_mode="live_route")
+    return _execute_route(
+        request,
+        request_payload,
+        route_mode="live_route",
+    )
