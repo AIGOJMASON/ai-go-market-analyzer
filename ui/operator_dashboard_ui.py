@@ -373,7 +373,8 @@ HTML_PAGE = r"""
 
     .risk-box,
     .empty-box,
-    .error-box {
+    .error-box,
+    .success-box {
       border-radius: 14px;
       padding: 14px 16px;
       border: 1px solid var(--border);
@@ -393,6 +394,12 @@ HTML_PAGE = r"""
       background: rgba(255, 123, 114, 0.08);
       border-color: rgba(255, 123, 114, 0.32);
       color: #ffd3cf;
+    }
+
+    .success-box {
+      background: rgba(126, 231, 135, 0.08);
+      border-color: rgba(126, 231, 135, 0.30);
+      color: #d7ffe0;
     }
 
     .toolbar {
@@ -463,6 +470,12 @@ HTML_PAGE = r"""
           <h2>Run Live Analysis</h2>
           <div class="stack">
             <div class="field">
+              <label for="api_key">API Key</label>
+              <input id="api_key" name="api_key" type="password" placeholder="Enter x-api-key value" />
+              <div class="helper">Required for protected API routes. Stored only in this browser tab.</div>
+            </div>
+
+            <div class="field">
               <label for="request_id">Request ID</label>
               <input id="request_id" name="request_id" type="text" placeholder="live-case-001" />
               <div class="helper">Unique operator-visible request identifier.</div>
@@ -520,6 +533,8 @@ HTML_PAGE = r"""
               Calls the governed <span class="mono">/market-analyzer/run/live</span> endpoint and renders the
               unified <span class="mono">system_view</span> response without changing authority.
             </div>
+
+            <div id="auth_hint" class="empty-box hidden"></div>
           </div>
         </div>
       </aside>
@@ -535,6 +550,7 @@ HTML_PAGE = r"""
           </div>
 
           <div id="result_error" class="error-box hidden"></div>
+          <div id="result_success" class="success-box hidden"></div>
 
           <div id="result_surface" class="hidden">
             <section class="summary-grid">
@@ -607,6 +623,7 @@ HTML_PAGE = r"""
 
   <script>
     const endpoint = "/market-analyzer/run/live";
+    const storageKey = "ai_go_operator_api_key";
 
     function el(id) {
       return document.getElementById(id);
@@ -958,6 +975,8 @@ HTML_PAGE = r"""
       const compressed = compressSystemView(response);
 
       el("result_error").classList.add("hidden");
+      el("result_success").classList.remove("hidden");
+      el("result_success").innerHTML = "<strong>Request Succeeded</strong><div style='margin-top:6px;'>Governed live route returned a valid response.</div>";
       el("result_surface").classList.remove("hidden");
 
       el("summary_insight").textContent = compressed.summary.insight;
@@ -982,6 +1001,7 @@ HTML_PAGE = r"""
 
     function renderError(message, detail = "") {
       el("result_surface").classList.add("hidden");
+      el("result_success").classList.add("hidden");
       const box = el("result_error");
       box.classList.remove("hidden");
       box.innerHTML = `
@@ -989,6 +1009,17 @@ HTML_PAGE = r"""
         <div style="margin-top:6px;">${safeValue(message)}</div>
         ${detail ? `<div class="small" style="margin-top:8px;">${safeValue(detail)}</div>` : ""}
       `;
+    }
+
+    function showAuthHint(message) {
+      const hint = el("auth_hint");
+      hint.classList.remove("hidden");
+      hint.innerHTML = `<strong>Auth Required</strong><div style="margin-top:6px;">${message}</div>`;
+    }
+
+    function hideAuthHint() {
+      el("auth_hint").classList.add("hidden");
+      el("auth_hint").innerHTML = "";
     }
 
     function buildPayload() {
@@ -1009,6 +1040,29 @@ HTML_PAGE = r"""
       };
     }
 
+    function getApiKey() {
+      return el("api_key").value.trim();
+    }
+
+    function saveApiKeyToSession(apiKey) {
+      try {
+        sessionStorage.setItem(storageKey, apiKey);
+      } catch (_) {
+        // ignore storage errors
+      }
+    }
+
+    function loadApiKeyFromSession() {
+      try {
+        const saved = sessionStorage.getItem(storageKey);
+        if (saved) {
+          el("api_key").value = saved;
+        }
+      } catch (_) {
+        // ignore storage errors
+      }
+    }
+
     function loadSample() {
       el("request_id").value = "live-energy-001";
       el("symbol").value = "XLE";
@@ -1027,22 +1081,35 @@ HTML_PAGE = r"""
       el("confirmation").value = "confirmed";
       el("result_surface").classList.add("hidden");
       el("result_error").classList.add("hidden");
+      el("result_success").classList.add("hidden");
       el("raw_json").textContent = "";
       el("top_badges").innerHTML = "";
+      hideAuthHint();
     }
 
     async function runLiveRoute() {
       const button = el("run_live_btn");
       button.disabled = true;
       button.textContent = "Running...";
+      hideAuthHint();
 
       try {
+        const apiKey = getApiKey();
+        if (!apiKey) {
+          showAuthHint("Enter your API key before running the protected live route.");
+          renderError("Missing API key", "Provide the x-api-key value in the API Key field.");
+          return;
+        }
+
+        saveApiKeyToSession(apiKey);
+
         const payload = buildPayload();
 
         const response = await fetch(endpoint, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-api-key": apiKey
           },
           body: JSON.stringify(payload)
         });
@@ -1056,6 +1123,9 @@ HTML_PAGE = r"""
         }
 
         if (!response.ok) {
+          if (response.status === 401) {
+            showAuthHint("The API rejected the current key. Check the value and try again.");
+          }
           renderError(data.detail || data.error || `HTTP ${response.status}`, text);
           return;
         }
@@ -1073,6 +1143,7 @@ HTML_PAGE = r"""
     el("load_sample_btn").addEventListener("click", loadSample);
     el("clear_btn").addEventListener("click", clearForm);
 
+    loadApiKeyFromSession();
     loadSample();
   </script>
 </body>
@@ -1083,3 +1154,4 @@ HTML_PAGE = r"""
 @router.get("/operator", response_class=HTMLResponse)
 def operator_dashboard_page() -> HTMLResponse:
     return HTMLResponse(content=HTML_PAGE)
+
