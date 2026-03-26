@@ -292,8 +292,4 @@ def run_market_analyzer_live(
     request: Request,
     request_payload: Dict[str, Any],
 ) -> Dict[str, Any]:
-<<<<<<< HEAD
     return _execute_route(request, request_payload, route_mode="live_route")
-=======
-    return _execute_route(request, request_payload, route_mode="live_route")
->>>>>>> 5be4953 (Complete live operator execution path)
