@@ -20,7 +20,7 @@ router = APIRouter(prefix="/market-analyzer", tags=["market-analyzer"])
 
 
 # -----------------------------
-# UTILITIES
+# UTIL
 # -----------------------------
 
 def _safe_str(value: Any) -> str | None:
@@ -38,7 +38,7 @@ def _build_log_payload(request: Request, payload: Dict[str, Any], *, route_mode:
     return build_base_log_payload(
         request_id=_safe_str(payload.get("request_id")),
         case_id=_safe_str(payload.get("case_id")),
-        receipt_id=None,  # required by contract
+        receipt_id=None,
         auth_status=getattr(request.state, "auth_status", None),
         response_status=status_code,
         route_mode=route_mode,
@@ -64,13 +64,10 @@ def _log_failure(request: Request, payload: Dict[str, Any], *, route_mode: str, 
 
 
 # -----------------------------
-# PAYLOAD NORMALIZATION
+# NORMALIZATION (FINAL FIX)
 # -----------------------------
 
 def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Convert UI payload → canonical adapter payload
-    """
     p = dict(payload)
 
     # case_id
@@ -81,17 +78,22 @@ def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     if "observed_at" not in p:
         p["observed_at"] = datetime.utcnow().isoformat() + "Z"
 
-    # event_signal
+    # event_signal (STRUCTURED OBJECT - CRITICAL FIX)
     if "event_signal" not in p:
         sector = (_safe_str(p.get("sector")) or "").lower()
         confirmation = (_safe_str(p.get("confirmation")) or "").lower()
 
-        if sector == "energy" and confirmation == "confirmed":
-            p["event_signal"] = "energy_rebound"
-        elif confirmation == "confirmed":
-            p["event_signal"] = "confirmed_move"
+        if sector == "energy":
+            signal_type = "energy_rebound"
         else:
-            p["event_signal"] = "speculative_move"
+            signal_type = "market_move"
+
+        confirmed = confirmation in ["confirmed", "partial"]
+
+        p["event_signal"] = {
+            "type": signal_type,
+            "confirmed": confirmed,
+        }
 
     # candidates
     if "candidates" not in p:
@@ -135,7 +137,7 @@ def _normalize_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # -----------------------------
-# LIVE EXECUTION
+# EXECUTION
 # -----------------------------
 
 def _load_live_callable() -> Callable[..., Any]:
@@ -164,7 +166,7 @@ def _execute_live_callable(live_callable: Callable[..., Any], payload: Dict[str,
 
 
 # -----------------------------
-# ROUTE EXECUTION
+# ROUTE
 # -----------------------------
 
 def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str) -> Dict[str, Any]:
@@ -191,7 +193,7 @@ def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str
 
 
 # -----------------------------
-# API ENDPOINT
+# ENDPOINT
 # -----------------------------
 
 @router.post(
@@ -199,8 +201,5 @@ def _execute_route(request: Request, payload: Dict[str, Any], *, route_mode: str
     dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
 )
 def run_market_analyzer_live(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
-    return _execute_route(
-        request,
-        request_payload,
-        route_mode="live_route",
-    )
+    return _execute_route(request, request_payload, route_mode="live_route")
+      
