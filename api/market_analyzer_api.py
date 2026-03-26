@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib
+import traceback
 from typing import Any, Callable, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -83,14 +84,7 @@ def _build_log_payload(
     )
 
 
-def _log_success(
-    request: Request,
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str,
-    response: Dict[str, Any],
-    event_type: str = "run_success",
-) -> None:
+def _log_success(request: Request, request_payload: Dict[str, Any], *, route_mode: str, response: Dict[str, Any]) -> None:
     payload = _build_log_payload(
         request,
         request_payload,
@@ -106,44 +100,10 @@ def _log_success(
             "status": "success",
         }
     )
-    append_request_log(event_type, payload)
+    append_request_log("run_success", payload)
 
 
-def _log_http_failure(
-    request: Request,
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str | None,
-    exc: HTTPException,
-    event_type: str = "run_http_failure",
-) -> None:
-    payload = _build_log_payload(
-        request,
-        request_payload,
-        route_mode=route_mode,
-        response_status=exc.status_code,
-        response=None,
-    )
-    payload.update(
-        {
-            "path": request.url.path,
-            "method": request.method,
-            "operator_id": getattr(request.state, "operator_id", None),
-            "status": "http_failure",
-            "error_detail": exc.detail,
-        }
-    )
-    append_request_log(event_type, payload)
-
-
-def _log_unexpected_failure(
-    request: Request,
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str | None,
-    exc: Exception,
-    event_type: str = "run_unexpected_failure",
-) -> None:
+def _log_unexpected_failure(request: Request, request_payload: Dict[str, Any], *, route_mode: str | None, exc: Exception) -> None:
     payload = _build_log_payload(
         request,
         request_payload,
@@ -161,41 +121,7 @@ def _log_unexpected_failure(
             "error_message": str(exc),
         }
     )
-    append_request_log(event_type, payload)
-
-
-def _invoke_operator_dashboard(case_id: str) -> Dict[str, Any]:
-    result = run_operator_dashboard(case_id=case_id)
-
-    if hasattr(result, "model_dump"):
-        result = result.model_dump(by_alias=True, exclude_none=False)
-
-    if not isinstance(result, dict):
-        raise RuntimeError("operator dashboard runner returned unsupported result type")
-
-    if isinstance(result.get("dashboard"), dict):
-        return result["dashboard"]
-
-    if isinstance(result.get("payload"), dict):
-        return result["payload"]
-
-    return result
-
-
-def _normalize_runtime_result(result: Any) -> Dict[str, Any]:
-    if hasattr(result, "model_dump"):
-        result = result.model_dump(by_alias=True, exclude_none=False)
-
-    if not isinstance(result, dict):
-        raise RuntimeError("live execution returned unsupported result type")
-
-    if isinstance(result.get("dashboard"), dict):
-        return result["dashboard"]
-
-    if isinstance(result.get("payload"), dict):
-        return result["payload"]
-
-    return result
+    append_request_log("run_unexpected_failure", payload)
 
 
 def _load_live_execution_callable() -> Callable[..., Any] | None:
@@ -205,10 +131,6 @@ def _load_live_execution_callable() -> Callable[..., Any] | None:
     ]
     candidate_names = [
         "run_live_payload",
-        "run_live_input",
-        "run_live_data",
-        "run_live_route",
-        "run_live_packet",
         "run_live_case",
     ]
 
@@ -227,224 +149,33 @@ def _load_live_execution_callable() -> Callable[..., Any] | None:
 
 
 def _execute_live_callable(live_callable: Callable[..., Any], request_payload: Dict[str, Any]) -> Dict[str, Any]:
-    call_patterns = [
-        lambda fn, payload: fn(request_payload=payload),
-        lambda fn, payload: fn(payload=payload),
-        lambda fn, payload: fn(live_payload=payload),
-        lambda fn, payload: fn(case=payload),
-        lambda fn, payload: fn(packet=payload),
-        lambda fn, payload: fn(payload),
-    ]
-
-    last_type_error: TypeError | None = None
-
-    for call_pattern in call_patterns:
-        try:
-            result = call_pattern(live_callable, request_payload)
-            return _normalize_runtime_result(result)
-        except TypeError as exc:
-            last_type_error = exc
-            continue
-
-    if last_type_error is not None:
-        raise last_type_error
-
-    raise RuntimeError("no valid live execution call pattern succeeded")
+    return live_callable(request_payload)
 
 
-def _build_placeholder_response(
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str,
-    operator_id: str | None,
-) -> Dict[str, Any]:
-    governed_payload = dict(request_payload)
-    governed_payload.setdefault("route_mode", route_mode)
-    governed_payload.setdefault("mode", "advisory")
-    governed_payload.setdefault("execution_allowed", False)
-
-    if operator_id:
-        governed_payload.setdefault("operator_id", operator_id)
-
-    response = build_market_analyzer_response(governed_payload)
-    return response.model_dump(by_alias=True, exclude_none=False)
-
-
-def _build_fixture_response(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
-    case_id = _extract_case_id(request_payload)
-    if case_id:
-        return _invoke_operator_dashboard(case_id)
-
-    return _build_placeholder_response(
-        request_payload,
-        route_mode="fixture_route",
-        operator_id=getattr(request.state, "operator_id", None),
-    )
-
-
-def _build_live_response(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
-    case_id = _safe_str(request_payload.get("case_id"))
-    if case_id:
-        return _invoke_operator_dashboard(case_id)
-
-    live_callable = _load_live_execution_callable()
-    if live_callable is None:
-        raise HTTPException(
-            status_code=status.HTTP_501_NOT_IMPLEMENTED,
-            detail=(
-                "Live payload execution is not wired to a callable runtime surface. "
-                "Provide case_id for dashboard-backed execution or wire a payload-based live runner."
-            ),
-        )
-
-    return _execute_live_callable(live_callable, request_payload)
-
-
-def _execute_route(
-    request: Request,
-    request_payload: Dict[str, Any],
-    *,
-    route_mode: str,
-) -> Dict[str, Any]:
+def _execute_route(request: Request, request_payload: Dict[str, Any], *, route_mode: str) -> Dict[str, Any]:
     try:
-        if route_mode == "fixture_route":
-            response = _build_fixture_response(request, request_payload)
-        elif route_mode == "live_route":
-            response = _build_live_response(request, request_payload)
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Unsupported route_mode: {route_mode}",
-            )
+        live_callable = _load_live_execution_callable()
+        if not live_callable:
+            raise RuntimeError("No live callable found")
 
-        _log_success(
-            request,
-            request_payload,
-            route_mode=route_mode,
-            response=response,
-        )
+        response = _execute_live_callable(live_callable, request_payload)
+
+        _log_success(request, request_payload, route_mode=route_mode, response=response)
         return response
 
-    except HTTPException as exc:
-        _log_http_failure(
-            request,
-            request_payload,
-            route_mode=route_mode,
-            exc=exc,
-        )
-        raise
-
     except Exception as exc:
-        _log_unexpected_failure(
-            request,
-            request_payload,
-            route_mode=route_mode,
-            exc=exc,
-        )
+        print("\n🔥 LIVE ROUTE ERROR TRACEBACK 🔥")
+        traceback.print_exc()
+        print("🔥 END TRACEBACK 🔥\n")
+
+        _log_unexpected_failure(request, request_payload, route_mode=route_mode, exc=exc)
+
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error.",
+            detail=f"Internal server error: {str(exc)}",
         ) from exc
 
 
-@router.post(
-    "/run",
-    dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
-)
-def run_market_analyzer(
-    request: Request,
-    request_payload: Dict[str, Any],
-) -> Dict[str, Any]:
-    return _execute_route(
-        request,
-        request_payload,
-        route_mode="fixture_route",
-    )
-
-
-@router.post(
-    "/run/live",
-    dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
-)
-def run_market_analyzer_live(
-    request: Request,
-    request_payload: Dict[str, Any],
-) -> Dict[str, Any]:
-    return _execute_route(
-        request,
-        request_payload,
-        route_mode="live_route",
-    )
-
-
-@router.post(
-    "/run/raw",
-    dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)],
-)
-def run_market_analyzer_raw(
-    request: Request,
-    raw_request: MarketAnalyzerRequest,
-) -> JSONResponse:
-    endpoint_payload = {
-        "request_id": raw_request.request_id,
-        "case_id": raw_request.case_id,
-    }
-
-    try:
-        dashboard = _invoke_operator_dashboard(raw_request.case_id)
-
-        _log_success(
-            request,
-            endpoint_payload,
-            route_mode=dashboard.get("route_mode", "raw_route"),
-            response=dashboard,
-            event_type="raw_run_success",
-        )
-
-        return JSONResponse(
-            content={
-                "status": "ok",
-                "request_id": raw_request.request_id,
-                "core_id": "market_analyzer_v1",
-                "mode": "advisory",
-                "execution_allowed": False,
-                "payload": dashboard,
-            }
-        )
-
-    except KeyError as exc:
-        http_exc = HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Unknown case_id: {raw_request.case_id}",
-        )
-        _log_http_failure(
-            request,
-            endpoint_payload,
-            route_mode=None,
-            exc=http_exc,
-            event_type="raw_run_http_failure",
-        )
-        raise http_exc from exc
-
-    except HTTPException as exc:
-        _log_http_failure(
-            request,
-            endpoint_payload,
-            route_mode=None,
-            exc=exc,
-            event_type="raw_run_http_failure",
-        )
-        raise
-
-    except Exception as exc:
-        _log_unexpected_failure(
-            request,
-            endpoint_payload,
-            route_mode=None,
-            exc=exc,
-            event_type="raw_run_unexpected_failure",
-        )
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"market_analyzer_raw_run_failed: {exc}",
-        ) from exc
+@router.post("/run/live", dependencies=[Depends(require_api_key), Depends(enforce_rate_limit)])
+def run_market_analyzer_live(request: Request, request_payload: Dict[str, Any]) -> Dict[str, Any]:
+    return _execute_route(request, request_payload, route_mode="live_route")
