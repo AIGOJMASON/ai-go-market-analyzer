@@ -29,6 +29,16 @@ router = APIRouter(prefix="/market-analyzer/sources", tags=["market-analyzer-sou
 _SIGNAL_STORE: List[dict] = []
 
 
+def rehydrate_signal(payload: Dict) -> SourceSignalRecord:
+    try:
+        return SourceSignalRecord(**payload)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"invalid stored source signal record: {exc}",
+        ) from exc
+
+
 @router.get("/health")
 def source_signal_desk_health() -> dict:
     return {
@@ -152,13 +162,3 @@ def reset_signal_store() -> dict:
         "execution_allowed": False,
         "message": "signal store cleared",
     }
-
-
-def rehydrate_signal(payload: Dict) -> SourceSignalRecord:
-    try:
-        return SourceSignalRecord(**payload)
-    except Exception as exc:
-        raise HTTPException(
-            status_code=500,
-            detail=f"invalid stored source signal record: {exc}",
-        ) from exc
