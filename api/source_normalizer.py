@@ -1,7 +1,11 @@
 from typing import Optional
 
-from AI_GO.api.source_ingress_schema import SourceIngressRequest, SourceSignalRecord
-from AI_GO.api.source_registry import resolve_trust_class
+try:
+    from AI_GO.api.source_ingress_schema import SourceIngressRequest, SourceSignalRecord
+    from AI_GO.api.source_registry import resolve_trust_class
+except ModuleNotFoundError:
+    from api.source_ingress_schema import SourceIngressRequest, SourceSignalRecord
+    from api.source_registry import resolve_trust_class
 
 
 ENERGY_KEYWORDS = {
