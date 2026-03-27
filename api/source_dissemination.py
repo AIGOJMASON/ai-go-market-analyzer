@@ -1,11 +1,19 @@
 from typing import List
 
-from AI_GO.api.source_ingress_schema import (
-    SourceClusterRecord,
-    SourceCandidateRecord,
-    SourceSignalRecord,
-    SourceInboxRecord,
-)
+try:
+    from AI_GO.api.source_ingress_schema import (
+        SourceClusterRecord,
+        SourceCandidateRecord,
+        SourceSignalRecord,
+        SourceInboxRecord,
+    )
+except ModuleNotFoundError:
+    from api.source_ingress_schema import (
+        SourceClusterRecord,
+        SourceCandidateRecord,
+        SourceSignalRecord,
+        SourceInboxRecord,
+    )
 
 
 def _resolve_suggestion_class(cluster: SourceClusterRecord, confirmation_state: str) -> str:
