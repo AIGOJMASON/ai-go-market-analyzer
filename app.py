@@ -3,30 +3,13 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-try:
-    from AI_GO.api.market_analyzer_api import router as market_analyzer_router
-    from AI_GO.api.source_signal_desk import router as source_signal_desk_router
-    from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
-    from AI_GO.ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
-except ModuleNotFoundError:
-    from api.market_analyzer_api import router as market_analyzer_router
-    from api.source_signal_desk import router as source_signal_desk_router
-    from ui.operator_dashboard_ui import router as operator_ui_router
-    from ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
+from api.market_analyzer_api import router as market_analyzer_router
+from api.source_signal_desk import router as source_signal_desk_router
+from ui.operator_dashboard_ui import router as operator_ui_router
+from ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
 
 
 def load_allowed_hosts() -> list[str]:
-    """
-    Load allowed hosts from environment.
-
-    Env:
-      AI_GO_ALLOWED_HOSTS="example.com,api.example.com"
-
-    Safe defaults:
-      - localhost
-      - 127.0.0.1
-      - testserver (for FastAPI TestClient)
-    """
     raw = os.getenv("AI_GO_ALLOWED_HOSTS", "").strip()
 
     if raw:
@@ -70,6 +53,7 @@ def root() -> dict[str, object]:
             "sources_signals": "/market-analyzer/sources/signals",
             "sources_candidates": "/market-analyzer/sources/candidates",
             "sources_inbox": "/market-analyzer/sources/inbox",
+            "sources_analyze_candidate": "/market-analyzer/sources/analyze-candidate",
             "health": "/healthz",
         },
     }
