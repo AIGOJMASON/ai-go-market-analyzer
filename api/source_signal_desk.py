@@ -2,15 +2,26 @@ from typing import Dict, List
 
 from fastapi import APIRouter, HTTPException
 
-from AI_GO.api.source_candidate_bridge import build_live_analysis_bridge_payload
-from AI_GO.api.source_ingress_schema import (
-    SourceAnalyzeCandidateRequest,
-    SourceIngressRequest,
-    SourceSignalRecord,
-)
-from AI_GO.api.source_normalizer import normalize_source_item
-from AI_GO.api.source_clusterer import cluster_signals
-from AI_GO.api.source_dissemination import build_candidate_records, build_inbox_record
+try:
+    from AI_GO.api.source_candidate_bridge import build_live_analysis_bridge_payload
+    from AI_GO.api.source_ingress_schema import (
+        SourceAnalyzeCandidateRequest,
+        SourceIngressRequest,
+        SourceSignalRecord,
+    )
+    from AI_GO.api.source_normalizer import normalize_source_item
+    from AI_GO.api.source_clusterer import cluster_signals
+    from AI_GO.api.source_dissemination import build_candidate_records, build_inbox_record
+except ModuleNotFoundError:
+    from api.source_candidate_bridge import build_live_analysis_bridge_payload
+    from api.source_ingress_schema import (
+        SourceAnalyzeCandidateRequest,
+        SourceIngressRequest,
+        SourceSignalRecord,
+    )
+    from api.source_normalizer import normalize_source_item
+    from api.source_clusterer import cluster_signals
+    from api.source_dissemination import build_candidate_records, build_inbox_record
 
 
 router = APIRouter(prefix="/market-analyzer/sources", tags=["market-analyzer-sources"])
