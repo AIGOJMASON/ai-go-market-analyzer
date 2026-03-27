@@ -3,7 +3,10 @@ from typing import List, Optional
 
 from fastapi import HTTPException
 
-from AI_GO.api.source_ingress_schema import SourceCandidateRecord, SourceSignalRecord
+try:
+    from AI_GO.api.source_ingress_schema import SourceCandidateRecord, SourceSignalRecord
+except ModuleNotFoundError:
+    from api.source_ingress_schema import SourceCandidateRecord, SourceSignalRecord
 
 
 _ALLOWED_CONFIRMATIONS = {"confirmed", "partial", "missing"}
