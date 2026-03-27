@@ -3,10 +3,10 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from api.market_analyzer_api import router as market_analyzer_router
-from api.source_signal_desk import router as source_signal_desk_router
-from ui.operator_dashboard_ui import router as operator_ui_router
-from ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
+from AI_GO.api.market_analyzer_api import router as market_analyzer_router
+from AI_GO.api.source_signal_desk import router as source_signal_desk_router
+from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
+from AI_GO.ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
 
 
 def load_allowed_hosts() -> list[str]:
