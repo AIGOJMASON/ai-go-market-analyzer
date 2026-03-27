@@ -1,11 +1,18 @@
 from collections import defaultdict
 from typing import Dict, List
 
-from AI_GO.api.source_ingress_schema import (
-    SourceSignalRecord,
-    SourceClusterMember,
-    SourceClusterRecord,
-)
+try:
+    from AI_GO.api.source_ingress_schema import (
+        SourceSignalRecord,
+        SourceClusterMember,
+        SourceClusterRecord,
+    )
+except ModuleNotFoundError:
+    from api.source_ingress_schema import (
+        SourceSignalRecord,
+        SourceClusterMember,
+        SourceClusterRecord,
+    )
 
 
 def build_cluster_key(signal: SourceSignalRecord) -> str:
