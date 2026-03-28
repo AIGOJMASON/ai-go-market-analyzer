@@ -1,13 +1,22 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+import importlib
+from typing import Any, Callable, Dict, Optional, Tuple
 
-from AI_GO.EXTERNAL_MEMORY.qualification.qualification_engine import (
-    qualify_external_memory_candidate,
-)
-from AI_GO.EXTERNAL_MEMORY.persistence.persistence_gate import (
-    apply_persistence_gate,
-)
+try:
+    from AI_GO.EXTERNAL_MEMORY.qualification.qualification_engine import (
+        qualify_external_memory_candidate,
+    )
+    from AI_GO.EXTERNAL_MEMORY.persistence.persistence_gate import (
+        apply_persistence_gate,
+    )
+except ModuleNotFoundError:
+    from EXTERNAL_MEMORY.qualification.qualification_engine import (
+        qualify_external_memory_candidate,
+    )
+    from EXTERNAL_MEMORY.persistence.persistence_gate import (
+        apply_persistence_gate,
+    )
 
 
 def _safe_float(value: Any, default: float = 0.0) -> float:
@@ -142,7 +151,7 @@ def _trust_class(payload: Dict[str, Any]) -> str:
     return "unverifiable"
 
 
-def _target_child_cores(payload: Dict[str, Any]) -> List[str]:
+def _target_child_cores(payload: Dict[str, Any]) -> list[str]:
     targets = payload.get("target_child_cores")
     if isinstance(targets, list) and targets:
         return [str(item) for item in targets]
@@ -199,6 +208,205 @@ def build_external_memory_panel(
     }
 
 
+def _resolve_callable(
+    module_names: tuple[str, ...],
+    candidate_function_names: tuple[str, ...],
+) -> Optional[Callable[..., Dict[str, Any]]]:
+    for module_name in module_names:
+        try:
+            module = importlib.import_module(module_name)
+        except Exception:
+            continue
+
+        for function_name in candidate_function_names:
+            candidate = getattr(module, function_name, None)
+            if callable(candidate):
+                return candidate
+
+    return None
+
+
+def _invoke_callable(
+    fn: Callable[..., Dict[str, Any]],
+    *,
+    payload: Dict[str, Any],
+    artifact: Dict[str, Any] | None = None,
+    receipt: Dict[str, Any] | None = None,
+) -> Optional[Dict[str, Any]]:
+    attempts = []
+
+    if artifact is not None and receipt is not None:
+        attempts.extend(
+            [
+                lambda: fn(artifact, receipt),
+                lambda: fn(source_artifact=artifact, source_receipt=receipt),
+                lambda: fn(retrieval_artifact=artifact, retrieval_receipt=receipt),
+                lambda: fn(promotion_artifact=artifact, promotion_receipt=receipt),
+            ]
+        )
+
+    attempts.extend(
+        [
+            lambda: fn(payload),
+            lambda: fn(request=payload),
+            lambda: fn(**payload),
+        ]
+    )
+
+    for attempt in attempts:
+        try:
+            result = attempt()
+        except TypeError:
+            continue
+        except Exception:
+            return None
+
+        if isinstance(result, dict):
+            return result
+
+    return None
+
+
+def _extract_artifact_and_receipt(
+    result: Dict[str, Any],
+) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    if not isinstance(result, dict):
+        return None, None
+
+    artifact = result.get("artifact")
+    receipt = result.get("receipt")
+
+    if isinstance(artifact, dict) and isinstance(receipt, dict):
+        return artifact, receipt
+
+    if result.get("artifact_type") and result.get("receipt_type"):
+        return result, result
+
+    for artifact_key, receipt_key in (
+        ("retrieval_artifact", "retrieval_receipt"),
+        ("promotion_artifact", "promotion_receipt"),
+        ("source_artifact", "source_receipt"),
+    ):
+        candidate_artifact = result.get(artifact_key)
+        candidate_receipt = result.get(receipt_key)
+        if isinstance(candidate_artifact, dict) and isinstance(candidate_receipt, dict):
+            return candidate_artifact, candidate_receipt
+
+    return None, None
+
+
+def _build_retrieval_payload(
+    payload: Dict[str, Any],
+    qualification_record: Dict[str, Any],
+) -> Dict[str, Any]:
+    return {
+        "requester_profile": "market_analyzer_reader",
+        "symbol": payload.get("symbol"),
+        "sector": payload.get("sector"),
+        "trust_class": qualification_record.get("trust_class"),
+        "source_type": payload.get("source_type", "live_market_input"),
+        "limit": 10,
+        "min_adjusted_weight": None,
+    }
+
+
+def _run_retrieval(
+    payload: Dict[str, Any],
+    qualification_record: Dict[str, Any],
+) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    try:
+        from AI_GO.child_cores.market_analyzer_v1.external_memory.retrieval_path import (
+            run_market_analyzer_external_memory_retrieval,
+        )
+    except ModuleNotFoundError:
+        from child_cores.market_analyzer_v1.external_memory.retrieval_path import (
+            run_market_analyzer_external_memory_retrieval,
+        )
+
+    retrieval_payload = _build_retrieval_payload(payload, qualification_record)
+
+    try:
+        retrieval_result = run_market_analyzer_external_memory_retrieval(
+            **retrieval_payload
+        )
+    except Exception as exc:
+        return {
+            "artifact_type": "external_memory_retrieval_error",
+            "error": str(exc),
+            "payload_used": retrieval_payload,
+        }, None, None
+
+    if not isinstance(retrieval_result, dict):
+        return None, None, None
+
+    artifact = (
+        retrieval_result.get("artifact")
+        or retrieval_result.get("retrieval_artifact")
+    )
+    receipt = (
+        retrieval_result.get("receipt")
+        or retrieval_result.get("retrieval_receipt")
+    )
+
+    return retrieval_result, artifact, receipt
+
+
+def _build_promotion_payload(
+    payload: Dict[str, Any],
+    qualification_record: Dict[str, Any],
+) -> Dict[str, Any]:
+    return {
+        "requester_profile": "market_analyzer_reader",
+        "symbol": payload.get("symbol"),
+        "sector": payload.get("sector"),
+        "trust_class": qualification_record.get("trust_class"),
+        "source_type": payload.get("source_type", "live_market_input"),
+        "limit": 10,
+        "min_adjusted_weight": None,
+    }
+
+
+def _run_promotion(
+    payload: Dict[str, Any],
+    qualification_record: Dict[str, Any],
+) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    try:
+        from AI_GO.child_cores.market_analyzer_v1.external_memory.promotion_path import (
+            run_market_analyzer_external_memory_promotion,
+        )
+    except ModuleNotFoundError:
+        from child_cores.market_analyzer_v1.external_memory.promotion_path import (
+            run_market_analyzer_external_memory_promotion,
+        )
+
+    promotion_payload = _build_promotion_payload(payload, qualification_record)
+
+    try:
+        promotion_result = run_market_analyzer_external_memory_promotion(
+            **promotion_payload
+        )
+    except Exception as exc:
+        return {
+            "artifact_type": "external_memory_promotion_error",
+            "error": str(exc),
+            "payload_used": promotion_payload,
+        }, None, None
+
+    if not isinstance(promotion_result, dict):
+        return None, None, None
+
+    artifact = (
+        promotion_result.get("artifact")
+        or promotion_result.get("promotion_artifact")
+    )
+    receipt = (
+        promotion_result.get("receipt")
+        or promotion_result.get("promotion_receipt")
+    )
+
+    return promotion_result, artifact, receipt
+
+
 def run_external_memory_runtime_path(
     payload: Dict[str, Any],
 ) -> Dict[str, Any]:
@@ -206,7 +414,7 @@ def run_external_memory_runtime_path(
     qualification = qualify_external_memory_candidate(signal)
     persistence_receipt = apply_persistence_gate(qualification.record)
 
-    return {
+    result: Dict[str, Any] = {
         "artifact_type": "external_memory_runtime_result",
         "status": "ok",
         "qualification_decision": qualification.record.get("decision"),
@@ -218,3 +426,33 @@ def run_external_memory_runtime_path(
             persistence_receipt=persistence_receipt,
         ),
     }
+
+    if qualification.record.get("decision") != "persist_candidate":
+        return result
+
+    if persistence_receipt.get("persistence_decision") != "committed":
+        return result
+
+    retrieval_result, retrieval_artifact, retrieval_receipt = _run_retrieval(
+        payload=payload,
+        qualification_record=qualification.record,
+    )
+    if retrieval_result is not None:
+        result["external_memory_retrieval_result"] = retrieval_result
+    if retrieval_artifact is not None:
+        result["external_memory_retrieval_artifact"] = retrieval_artifact
+    if retrieval_receipt is not None:
+        result["external_memory_retrieval_receipt"] = retrieval_receipt
+
+    promotion_result, promotion_artifact, promotion_receipt = _run_promotion(
+        payload=payload,
+        qualification_record=qualification.record,
+    )
+    if promotion_result is not None:
+        result["external_memory_promotion_result"] = promotion_result
+    if promotion_artifact is not None:
+        result["external_memory_promotion_artifact"] = promotion_artifact
+    if promotion_receipt is not None:
+        result["external_memory_promotion_receipt"] = promotion_receipt
+
+    return result
