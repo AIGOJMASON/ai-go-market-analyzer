@@ -7,6 +7,15 @@ from typing import Any, Callable, Dict, List, Optional
 from .live_data_adapter import normalize_live_input
 from .live_data_source import get_default_live_style_case, get_live_style_case
 
+try:
+    from AI_GO.child_cores.market_analyzer_v1.external_memory.runtime_path import (
+        run_market_analyzer_external_memory_path,
+    )
+except ModuleNotFoundError:
+    from child_cores.market_analyzer_v1.external_memory.runtime_path import (
+        run_market_analyzer_external_memory_path,
+    )
+
 
 class LiveDataRunnerError(RuntimeError):
     pass
@@ -265,7 +274,34 @@ def _extract_pm_workflow_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _build_live_response(pm_packet: Dict[str, Any], raw_payload: Dict[str, Any], routed_result: Dict[str, Any]) -> Dict[str, Any]:
+def _run_external_memory(
+    raw_payload: Dict[str, Any],
+    pm_packet: Dict[str, Any],
+    route_mode: str,
+) -> Dict[str, Any] | None:
+    try:
+        return run_market_analyzer_external_memory_path(
+            request_id=_safe_str(raw_payload.get("request_id"), pm_packet.get("case_id")),
+            symbol=_safe_str(raw_payload.get("symbol"), "UNKNOWN"),
+            headline=_safe_str(raw_payload.get("headline"), pm_packet.get("headline")),
+            price_change_pct=_safe_float(raw_payload.get("price_change_pct"), 0.0),
+            sector=_safe_str(raw_payload.get("sector"), "unknown"),
+            confirmation=_safe_str(raw_payload.get("confirmation"), "partial"),
+            event_theme=_safe_str(pm_packet.get("event_context", {}).get("theme")),
+            macro_bias=_safe_str(pm_packet.get("event_context", {}).get("macro_bias")),
+            route_mode=route_mode,
+            source_type="live_market_input",
+        )
+    except Exception:
+        return None
+
+
+def _build_live_response(
+    pm_packet: Dict[str, Any],
+    raw_payload: Dict[str, Any],
+    routed_result: Dict[str, Any],
+    external_memory_result: Dict[str, Any] | None = None,
+) -> Dict[str, Any]:
     event_context = pm_packet.get("event_context", {})
     market_regime_record = routed_result.get("market_regime_record", {})
     event_propagation_record = routed_result.get("event_propagation_record", {})
@@ -280,7 +316,7 @@ def _build_live_response(pm_packet: Dict[str, Any], raw_payload: Dict[str, Any],
             "reason": routed_result.get("reason", "live_route_rejected"),
         }
 
-    return {
+    response = {
         "status": "ok" if routed_result.get("status") == "ok" else "rejected",
         "request_id": _safe_str(raw_payload.get("request_id"), pm_packet.get("case_id")),
         "core_id": "market_analyzer_v1",
@@ -313,6 +349,24 @@ def _build_live_response(pm_packet: Dict[str, Any], raw_payload: Dict[str, Any],
         "rejection_panel": rejection_panel,
     }
 
+    if isinstance(external_memory_result, dict):
+        response["external_memory_runtime_result"] = external_memory_result
+        response["external_memory_panel"] = external_memory_result.get("panel")
+        response["external_memory_retrieval_artifact"] = external_memory_result.get(
+            "external_memory_retrieval_artifact"
+        )
+        response["external_memory_retrieval_receipt"] = external_memory_result.get(
+            "external_memory_retrieval_receipt"
+        )
+        response["external_memory_promotion_artifact"] = external_memory_result.get(
+            "external_memory_promotion_artifact"
+        )
+        response["external_memory_promotion_receipt"] = external_memory_result.get(
+            "external_memory_promotion_receipt"
+        )
+
+    return response
+
 
 def run_live_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(payload, dict):
@@ -335,10 +389,17 @@ def run_live_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(routed_result, dict):
         raise LiveDataRunnerError("PM route returned unsupported result type")
 
+    external_memory_result = _run_external_memory(
+        raw_payload=payload,
+        pm_packet=pm_packet,
+        route_mode="pm_route",
+    )
+
     return _build_live_response(
         pm_packet=pm_packet,
         raw_payload=payload,
         routed_result=routed_result,
+        external_memory_result=external_memory_result,
     )
 
 
