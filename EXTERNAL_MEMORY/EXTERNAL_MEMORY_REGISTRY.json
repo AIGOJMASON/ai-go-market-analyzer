@@ -1,0 +1,78 @@
+{
+  "layer_id": "external_memory",
+  "layer_name": "EXTERNAL_MEMORY",
+  "authority_class": "governed_external_memory_admission",
+  "version": "1.0.0",
+  "phase_scope": "phase_1_admission_only",
+  "allowed_inputs": [
+    "governed_external_signal",
+    "research_packet",
+    "external_refinement_packet"
+  ],
+  "emitted_artifacts": [
+    "external_memory_qualification_record",
+    "external_memory_qualification_receipt",
+    "external_memory_rejection_receipt",
+    "external_memory_persistence_receipt",
+    "external_memory_db_record"
+  ],
+  "subsurfaces": {
+    "qualification": {
+      "modules": [
+        "qualification/qualification_engine.py",
+        "qualification/qualification_receipt_builder.py",
+        "qualification/qualification_registry.py"
+      ]
+    },
+    "persistence": {
+      "modules": [
+        "persistence/persistence_gate.py",
+        "persistence/db_writer.py"
+      ]
+    }
+  },
+  "hard_rules": [
+    "no_raw_external_input_direct_to_db",
+    "qualification_must_precede_persistence",
+    "source_quality_is_primary_weight",
+    "source_quality_floor_can_block_persistence",
+    "rejection_must_be_receipted",
+    "db_commit_must_be_receipted",
+    "stored_record_is_not_automatic_training_memory",
+    "no_runtime_mutation",
+    "no_smi_mutation",
+    "no_pm_strategy_mutation"
+  ],
+  "decision_vocabularies": {
+    "qualification_decision": [
+      "persist_candidate",
+      "hold",
+      "reject"
+    ],
+    "persistence_decision": [
+      "committed",
+      "rejected"
+    ],
+    "rejection_reason": [
+      "source_quality_below_floor",
+      "trust_class_blocked",
+      "persistence_weight_below_threshold",
+      "contamination_penalty_exceeded",
+      "redundancy_penalty_exceeded",
+      "invalid_input",
+      "missing_required_fields"
+    ]
+  },
+  "disallowed_authorities": [
+    "runtime_execution",
+    "pm_strategy_formation",
+    "child_core_execution",
+    "smi_continuity_write",
+    "canon_mutation",
+    "implicit_archive_all"
+  ],
+  "storage": {
+    "db_engine": "sqlite",
+    "db_path": "AI_GO/state/external_memory/external_memory.db"
+  }
+}

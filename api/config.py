@@ -2,80 +2,62 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import List
-
-
-_ALLOWED_ENVIRONMENTS = {"development", "staging", "production"}
-
-
-class ConfigError(ValueError):
-    pass
+from functools import lru_cache
 
 
 @dataclass(frozen=True)
-class AppConfig:
+class ApiSettings:
     environment: str
-    api_key_header: str
+    allowed_hosts: list[str]
     rate_limit_requests: int
     rate_limit_window_seconds: int
-    allowed_hosts: List[str]
-    debug: bool
+    api_key_header: str
 
 
-def _get_required_str(name: str) -> str:
-    value = os.getenv(name, "").strip()
-    if not value:
-        raise ConfigError(f"Missing required environment variable: {name}")
-    return value
-
-
-def _get_required_int(name: str) -> int:
-    raw_value = _get_required_str(name)
-    try:
-        value = int(raw_value)
-    except ValueError as exc:
-        raise ConfigError(f"Invalid integer for {name}: {raw_value}") from exc
-
-    if value <= 0:
-        raise ConfigError(f"{name} must be greater than zero.")
-
-    return value
-
-
-def _parse_allowed_hosts(raw_value: str) -> List[str]:
-    hosts = [item.strip() for item in raw_value.split(",") if item.strip()]
+def _parse_allowed_hosts(raw: str) -> list[str]:
+    hosts = [host.strip() for host in raw.split(",") if host.strip()]
     if not hosts:
-        raise ConfigError("AI_GO_ALLOWED_HOSTS must contain at least one host.")
+        raise ValueError("AI_GO_ALLOWED_HOSTS must contain at least one host")
     return hosts
 
 
-def load_config() -> AppConfig:
-    environment = _get_required_str("ENVIRONMENT").lower()
-    if environment not in _ALLOWED_ENVIRONMENTS:
-        raise ConfigError(
-            "ENVIRONMENT must be one of: development, staging, production"
-        )
+def _parse_positive_int(name: str, raw: str) -> int:
+    try:
+        value = int(raw)
+    except ValueError as exc:
+        raise ValueError(f"{name} must be a valid integer") from exc
 
-    api_key_header = os.getenv("AI_GO_API_KEY_HEADER", "x-api-key").strip() or "x-api-key"
-    rate_limit_requests = _get_required_int("AI_GO_RATE_LIMIT_REQUESTS")
-    rate_limit_window_seconds = _get_required_int(
-        "AI_GO_RATE_LIMIT_WINDOW_SECONDS"
-    )
-    allowed_hosts = _parse_allowed_hosts(
-        _get_required_str("AI_GO_ALLOWED_HOSTS")
-    )
+    if value <= 0:
+        raise ValueError(f"{name} must be greater than zero")
 
-    debug = environment == "development"
+    return value
 
-    return AppConfig(
+
+@lru_cache(maxsize=1)
+def get_settings() -> ApiSettings:
+    environment = os.getenv("ENVIRONMENT", "development").strip().lower()
+    if not environment:
+        raise ValueError("ENVIRONMENT must not be empty")
+
+    allowed_hosts_raw = os.getenv("AI_GO_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").strip()
+    rate_limit_requests_raw = os.getenv("AI_GO_RATE_LIMIT_REQUESTS", "60").strip()
+    rate_limit_window_raw = os.getenv("AI_GO_RATE_LIMIT_WINDOW_SECONDS", "60").strip()
+    api_key_header = os.getenv("AI_GO_API_KEY_HEADER", "x-api-key").strip()
+
+    if not api_key_header:
+        raise ValueError("AI_GO_API_KEY_HEADER must not be empty")
+
+    return ApiSettings(
         environment=environment,
+        allowed_hosts=_parse_allowed_hosts(allowed_hosts_raw),
+        rate_limit_requests=_parse_positive_int("AI_GO_RATE_LIMIT_REQUESTS", rate_limit_requests_raw),
+        rate_limit_window_seconds=_parse_positive_int(
+            "AI_GO_RATE_LIMIT_WINDOW_SECONDS",
+            rate_limit_window_raw,
+        ),
         api_key_header=api_key_header,
-        rate_limit_requests=rate_limit_requests,
-        rate_limit_window_seconds=rate_limit_window_seconds,
-        allowed_hosts=allowed_hosts,
-        debug=debug,
     )
 
 
-def validate_startup_config() -> AppConfig:
-    return load_config()
+def validate_startup_settings() -> None:
+    get_settings()

@@ -37,9 +37,6 @@ def _normalize_confidence(value: Any) -> str:
 
 
 def _step_confidence(base_confidence: str, direction: str) -> str:
-    """
-    Apply at most one bounded step. This is the core safety rule.
-    """
     current = _normalize_confidence(base_confidence)
     index = CONFIDENCE_ORDER.index(current)
 
@@ -61,16 +58,12 @@ def _clean_visible_text(value: Any) -> Optional[str]:
 
 
 def _normalize_refinement_packet(packet: Any) -> Optional[Dict[str, Any]]:
-    """
-    Converts mixed incoming refinement packets into one bounded shape.
-    Unknown or malformed packets are discarded rather than guessed.
-    """
     item = _safe_dict(packet)
     if not item:
         return None
 
     signal = _clean_visible_text(item.get("signal"))
-    insight = _clean_visible_text(item.get("visible_insight"))
+    insight = _clean_visible_text(item.get("visible_insight") or item.get("insight"))
     impact = _clean_visible_text(item.get("impact"))
     confidence_adjustment = _clean_visible_text(item.get("confidence_adjustment"))
     authority = _clean_visible_text(item.get("authority")) or "refinement_influence"
@@ -80,7 +73,12 @@ def _normalize_refinement_packet(packet: Any) -> Optional[Dict[str, Any]]:
         return None
 
     if impact not in APPROVED_INFLUENCE_ACTIONS:
-        impact = "annotation_only"
+        if confidence_adjustment == "down":
+            impact = "confidence_reduction"
+        elif confidence_adjustment == "up":
+            impact = "confidence_increase"
+        else:
+            impact = "annotation_only"
 
     if confidence_adjustment not in {"down", "up", None}:
         confidence_adjustment = None
@@ -140,12 +138,6 @@ def _apply_display_confidence_to_recommendations(
     recommendation_panel: Dict[str, Any],
     influence_action: str,
 ) -> Dict[str, Any]:
-    """
-    Important safety rule:
-    - preserve original PM confidence
-    - expose display confidence separately
-    - never change entry/exit or symbol ownership
-    """
     panel = deepcopy(_safe_dict(recommendation_panel))
     recommendations = _safe_list(panel.get("recommendations"))
 
@@ -180,13 +172,6 @@ def build_pm_influence_record(
     recommendation_panel: Optional[Dict[str, Any]],
     refinement_packets: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
-    """
-    Lawful Phase 6 constructor.
-
-    This function never mutates recommendation logic.
-    It creates one bounded influence record that downstream PM-owned output
-    surfaces may consume.
-    """
     normalized_packets = normalize_refinement_packets(refinement_packets)
     influence_action = _determine_influence_action(normalized_packets)
     visible_insights = _derive_visible_insights(normalized_packets)

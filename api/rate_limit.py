@@ -9,9 +9,9 @@ from typing import DefaultDict, Deque
 from fastapi import HTTPException, Request, status
 
 try:
-    from AI_GO.api.request_logging import append_request_log, build_base_log_payload
+    from AI_GO.api.request_logging import log_request_event
 except ModuleNotFoundError:
-    from api.request_logging import append_request_log, build_base_log_payload
+    from api.request_logging import log_request_event
 
 
 @dataclass(frozen=True)
@@ -57,7 +57,7 @@ def _client_ip(request: Request) -> str:
 
 
 def _bucket_id(request: Request) -> str:
-    api_key_id = getattr(request.state, "api_key_id", None)
+    api_key_id = getattr(request.state, "operator_id", None)
     path = request.url.path
 
     if api_key_id:
@@ -83,20 +83,15 @@ async def enforce_rate_limit(request: Request) -> RateLimitDecision:
         request.state.rate_limit_bucket_id = bucket_id
         request.state.rate_limit_count = len(bucket)
 
-        append_request_log(
-            "rate_limit",
-            build_base_log_payload(
-                request_id=None,
-                case_id=None,
-                auth_status=getattr(request.state, "auth_status", None),
-                response_status=429,
-                route_mode=None,
-                receipt_id=None,
-                client_ip=_client_ip(request),
-                api_key_id=getattr(request.state, "api_key_id", None),
-                rate_limit_bucket_id=bucket_id,
-                rate_limit_count=len(bucket),
-            ),
+        log_request_event(
+            event_type="rate_limit_exceeded",
+            route=str(request.url.path),
+            method=request.method,
+            status_code=429,
+            client_host=_client_ip(request),
+            operator_id=getattr(request.state, "operator_id", None),
+            rate_limit_bucket_id=bucket_id,
+            rate_limit_count=len(bucket),
         )
 
         oldest = bucket[0]

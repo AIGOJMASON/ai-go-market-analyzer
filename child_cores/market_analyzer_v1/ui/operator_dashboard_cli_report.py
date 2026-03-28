@@ -10,6 +10,7 @@ def render_operator_dashboard_cli(dashboard: Dict[str, Any]) -> str:
     recommendation_panel = dashboard["recommendation_panel"]
     governance_panel = dashboard["governance_panel"]
     rejection_panel = dashboard["rejection_panel"]
+    external_memory_pattern_panel = dashboard.get("external_memory_pattern_panel")
 
     lines: List[str] = []
     lines.append("")
@@ -37,6 +38,32 @@ def render_operator_dashboard_cli(dashboard: Dict[str, Any]) -> str:
             lines.append(f"Exit: {recommendation['exit']}")
             lines.append(f"Confidence: {recommendation['confidence']}")
             lines.append("")
+
+    if external_memory_pattern_panel:
+        lines.append("--- External Memory Pattern ---")
+        lines.append(f"Source Type: {external_memory_pattern_panel.get('source_type')}")
+        lines.append(
+            f"Recurrence Count: {external_memory_pattern_panel.get('recurrence_count')}"
+        )
+        lines.append(
+            f"Temporal Span Days: {external_memory_pattern_panel.get('temporal_span_days')}"
+        )
+        lines.append(
+            f"Dominant Symbol: {external_memory_pattern_panel.get('dominant_symbol')}"
+        )
+        lines.append(
+            f"Dominant Sector: {external_memory_pattern_panel.get('dominant_sector')}"
+        )
+        lines.append(
+            f"Pattern Strength: {external_memory_pattern_panel.get('pattern_strength')}"
+        )
+        lines.append(
+            f"Historical Confirmation: {external_memory_pattern_panel.get('historical_confirmation')}"
+        )
+        lines.append(
+            f"Summary: {external_memory_pattern_panel.get('pattern_summary')}"
+        )
+        lines.append("")
 
     if rejection_panel["rejected"]:
         lines.append("--- Rejection Detail ---")

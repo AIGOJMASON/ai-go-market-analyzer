@@ -24,14 +24,13 @@ def case_02_operator_route_has_unified_sections() -> None:
     client = TestClient(app)
     html = client.get("/operator").text
 
+    # UPDATED: match new decision-panel surface
     for section in [
-        "Operator System View",
-        "Case",
-        "Runtime",
-        "Recommendation",
-        "Cognition",
-        "PM Workflow",
-        "Governance",
+        "SIGNAL",
+        "WHY IT MATTERS",
+        "RECOMMENDATION",
+        "RISK",
+        "STATUS",
     ]:
         _assert(section in html, f"missing operator section: {section}")
 

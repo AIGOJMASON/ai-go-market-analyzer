@@ -3,22 +3,29 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from AI_GO.api.market_analyzer_api import router as market_analyzer_router
-from AI_GO.api.source_signal_desk import router as source_signal_desk_router
-from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
-from AI_GO.ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
+try:
+    from AI_GO.api.config import get_settings, validate_startup_settings
+    from AI_GO.api.market_analyzer_api import router as market_analyzer_router
+    from AI_GO.api.source_signal_desk import router as source_signal_desk_router
+    from AI_GO.ui.operator_dashboard_ui import router as operator_ui_router
+    from AI_GO.ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
+except ModuleNotFoundError:
+    from api.config import get_settings, validate_startup_settings
+    from api.market_analyzer_api import router as market_analyzer_router
+    from api.source_signal_desk import router as source_signal_desk_router
+    from ui.operator_dashboard_ui import router as operator_ui_router
+    from ui.operator_signal_desk_ui import router as operator_signal_desk_ui_router
 
 
 def load_allowed_hosts() -> list[str]:
-    raw = os.getenv("AI_GO_ALLOWED_HOSTS", "").strip()
-
-    if raw:
-        hosts = [host.strip() for host in raw.split(",") if host.strip()]
-        if hosts:
-            return hosts
-
+    settings = get_settings()
+    if settings.allowed_hosts:
+        return settings.allowed_hosts
     return ["127.0.0.1", "localhost", "testserver"]
 
+
+validate_startup_settings()
+settings = get_settings()
 
 app = FastAPI(
     title="AI_GO Market Analyzer V1",
@@ -43,6 +50,7 @@ def root() -> dict[str, object]:
         "status": "ok",
         "service": "AI_GO Market Analyzer V1",
         "mode": "advisory",
+        "environment": settings.environment,
         "routes": {
             "operator": "/operator",
             "operator_signal_desk": "/operator/signal-desk",
