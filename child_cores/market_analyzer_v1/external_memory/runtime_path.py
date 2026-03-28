@@ -2,9 +2,14 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from AI_GO.EXTERNAL_MEMORY.runtime.external_memory_runtime_bridge import (
-    run_external_memory_runtime_path,
-)
+try:
+    from AI_GO.EXTERNAL_MEMORY.runtime.external_memory_runtime_bridge import (
+        run_external_memory_runtime_path,
+    )
+except ModuleNotFoundError:
+    from EXTERNAL_MEMORY.runtime.external_memory_runtime_bridge import (
+        run_external_memory_runtime_path,
+    )
 
 
 def run_market_analyzer_external_memory_path(
