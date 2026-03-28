@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from AI_GO.EXTERNAL_MEMORY.pattern_aggregation import aggregate_pattern
+try:
+    from AI_GO.EXTERNAL_MEMORY.pattern_aggregation import aggregate_pattern
+except ModuleNotFoundError:
+    from EXTERNAL_MEMORY.pattern_aggregation import aggregate_pattern
 
 
 def build_market_analyzer_pattern_context(
