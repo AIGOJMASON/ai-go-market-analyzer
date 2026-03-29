@@ -1,126 +1,108 @@
+# AI_GO/child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
+
 from __future__ import annotations
 
-from typing import Any, Dict
+from copy import deepcopy
+from typing import Any, Callable, Dict, Optional
 
-try:
-    from AI_GO.api.pm_influence import build_pm_influence_record
-    from AI_GO.child_cores.market_analyzer_v1.ui.live_data_runner import run_live_payload
-    from AI_GO.child_cores.market_analyzer_v1.ui.operator_dashboard_builder import (
-        build_operator_dashboard,
-    )
-    from AI_GO.child_cores.market_analyzer_v1.external_memory.pattern_runtime_integration import (
-        apply_external_memory_pattern_flow,
-    )
-except ModuleNotFoundError:
-    from api.pm_influence import build_pm_influence_record
-    from child_cores.market_analyzer_v1.ui.live_data_runner import run_live_payload
-    from child_cores.market_analyzer_v1.ui.operator_dashboard_builder import (
-        build_operator_dashboard,
-    )
-    from child_cores.market_analyzer_v1.external_memory.pattern_runtime_integration import (
-        apply_external_memory_pattern_flow,
-    )
+from AI_GO.api.pre_interface_smi import run_pre_interface_smi
+from AI_GO.api.pre_interface_watcher import run_pre_interface_watcher
 
 
-def _build_live_case_from_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
-    request_id = payload.get("request_id", "live-case")
-    symbol = payload.get("symbol", "UNKNOWN")
-    headline = payload.get("headline", "Live event")
-    sector = payload.get("sector", "unknown")
-    confirmation = payload.get("confirmation", "partial")
-    price_change_pct = float(payload.get("price_change_pct", 0.0))
+BUILDER_CANDIDATES = (
+    "build_operator_dashboard_payload",
+    "build_operator_dashboard",
+    "build_system_view_payload",
+    "build_system_view",
+)
 
-    return {
-        "case_id": request_id,
-        "observed_at": None,
-        "macro_context": {
-            "headline": headline,
-            "macro_bias": "neutral",
-        },
-        "event_signal": {
-            "event_theme": "energy_rebound" if sector == "energy" else "speculative_move",
-            "confirmed": confirmation in {"confirmed", "partial"},
-            "propagation": "moderate" if abs(price_change_pct) >= 1 else "limited",
-        },
-        "candidates": [
-            {
-                "symbol": symbol,
-                "sector": sector,
-                "necessity_qualified": sector in {
-                    "energy",
-                    "utilities",
-                    "consumer_staples",
-                    "healthcare",
-                    "materials",
-                },
-                "rebound_confirmed": confirmation in {"confirmed", "partial"},
-                "entry_signal": "reclaim support",
-                "exit_signal": "short-term resistance",
-                "confidence": "medium",
-            }
-        ],
-        "operator_notes": "Generated from live API payload",
+
+def _resolve_builder() -> Callable[[Dict[str, Any]], Dict[str, Any]]:
+    from AI_GO.child_cores.market_analyzer_v1.ui import operator_dashboard_builder as builder_module
+
+    for name in BUILDER_CANDIDATES:
+        candidate = getattr(builder_module, name, None)
+        if callable(candidate):
+            return candidate
+
+    raise RuntimeError(
+        "operator_dashboard_builder_missing_supported_builder;"
+        f" tried={','.join(BUILDER_CANDIDATES)}"
+    )
+
+
+def _build_pre_interface_rejection_payload(
+    base_payload: Dict[str, Any],
+    watcher_receipt: Dict[str, Any],
+) -> Dict[str, Any]:
+    case_panel = deepcopy(base_payload.get("case_panel", {})) if isinstance(base_payload.get("case_panel"), dict) else {}
+    governance_panel = deepcopy(base_payload.get("governance_panel", {})) if isinstance(base_payload.get("governance_panel"), dict) else {}
+
+    governance_panel["watcher_passed"] = False
+    governance_panel["pre_interface_status"] = "rejected"
+
+    rejection_panel = {
+        "reason": "pre_interface_watcher_failed",
+        "failures": watcher_receipt.get("failures", []),
     }
 
-
-def _coerce_refinement_packet(result: Dict[str, Any]) -> Dict[str, Any] | None:
-    refinement_packet = result.get("refinement_packet")
-    if isinstance(refinement_packet, dict):
-        return refinement_packet
-
-    refinement_panel = result.get("refinement_panel")
-    if isinstance(refinement_panel, dict):
-        return refinement_panel
-
-    cognition_panel = result.get("cognition_panel")
-    if isinstance(cognition_panel, dict):
-        refinement = cognition_panel.get("refinement")
-        if isinstance(refinement, dict):
-            return refinement
-
-    return None
-
-
-def _apply_pm_influence(result: Dict[str, Any]) -> Dict[str, Any]:
-    enriched = dict(result)
-
-    refinement_packet = _coerce_refinement_packet(enriched)
-    recommendation_panel = enriched.get("recommendation_panel", {})
-
-    if not refinement_packet:
-        enriched["pm_influence_record"] = build_pm_influence_record(
-            core_id="market_analyzer_v1",
-            recommendation_panel=recommendation_panel,
-            refinement_packets=None,
-        )
-        return enriched
-
-    enriched["pm_influence_record"] = build_pm_influence_record(
-        core_id="market_analyzer_v1",
-        recommendation_panel=recommendation_panel,
-        refinement_packets=[refinement_packet],
-    )
-
-    return enriched
-
-
-def run_operator_dashboard(payload: Dict[str, Any]) -> Dict[str, Any]:
-    live_case = _build_live_case_from_payload(payload)
-
-    result = run_live_payload(live_case)
-
-    # 🔥 NEW: pattern aggregation injection
-    result = apply_external_memory_pattern_flow(result)
-
-    influenced_result = _apply_pm_influence(result)
-    dashboard = build_operator_dashboard(influenced_result)
-
     return {
-        "status": "ok",
-        "request_id": payload.get("request_id"),
-        "core_id": "market_analyzer_v1",
-        "route_mode": "pm_route",
+        "status": "rejected",
+        "request_id": base_payload.get("request_id") or case_panel.get("case_id"),
+        "core_id": base_payload.get("core_id", "market_analyzer_v1"),
+        "route_mode": base_payload.get("route_mode"),
         "mode": "advisory",
         "execution_allowed": False,
-        **dashboard,
+        "approval_required": base_payload.get("approval_required", True),
+        "dashboard_type": "market_analyzer_v1_operator_dashboard",
+        "case_panel": case_panel,
+        "governance_panel": governance_panel,
+        "rejection_panel": rejection_panel,
+        "pre_interface_watcher": watcher_receipt,
     }
+
+
+def finalize_operator_dashboard_payload(
+    base_payload: Dict[str, Any],
+    upstream_refs: Optional[Dict[str, Any]] = None,
+    persist_receipts: bool = True,
+) -> Dict[str, Any]:
+    payload = deepcopy(base_payload)
+
+    watcher_result = run_pre_interface_watcher(
+        payload=payload,
+        upstream_refs=upstream_refs,
+        persist=persist_receipts,
+    )
+    watcher_receipt = watcher_result["receipt"]
+
+    if watcher_receipt["status"] != "passed":
+        return _build_pre_interface_rejection_payload(
+            base_payload=payload,
+            watcher_receipt=watcher_receipt,
+        )
+
+    smi_result = run_pre_interface_smi(
+        payload=payload,
+        watcher_receipt=watcher_receipt,
+        upstream_refs=upstream_refs,
+        persist=persist_receipts,
+    )
+
+    payload["pre_interface_watcher"] = watcher_receipt
+    payload["pre_interface_smi"] = smi_result["record"]
+    return payload
+
+
+def run_operator_dashboard(
+    upstream_result: Dict[str, Any],
+    upstream_refs: Optional[Dict[str, Any]] = None,
+    persist_receipts: bool = True,
+) -> Dict[str, Any]:
+    builder = _resolve_builder()
+    base_payload = builder(upstream_result)
+    return finalize_operator_dashboard_payload(
+        base_payload=base_payload,
+        upstream_refs=upstream_refs,
+        persist_receipts=persist_receipts,
+    )
