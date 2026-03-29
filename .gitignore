@@ -1,13 +1,43 @@
+# .gitignore
+
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
 
-# Environment files (DO NOT COMMIT SECRETS)
-.env
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
 
-# Logs
-AI_GO/logs/*.jsonl
+# Packaging / tooling
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# OS junk
+# IDE / OS
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
+
+# Runtime logs and receipts
+logs/
+receipts/
+*.jsonl
+
+# Runtime state that should not be versioned
+state/external_memory/
+AI_GO/logs/
+AI_GO/state/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
