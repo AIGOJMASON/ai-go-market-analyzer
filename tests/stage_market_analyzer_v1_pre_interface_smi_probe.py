@@ -1,8 +1,15 @@
-# AI_GO/tests/stage_market_analyzer_v1_pre_interface_smi_probe.py
-
 from __future__ import annotations
 
-from AI_GO.api.pre_interface_smi import build_pre_interface_smi_record
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+try:
+    from AI_GO.api.pre_interface_smi import build_pre_interface_smi_record
+except ModuleNotFoundError:
+    from api.pre_interface_smi import build_pre_interface_smi_record
 
 
 def _payload():
@@ -18,6 +25,25 @@ def _payload():
         "recommendation_panel": {"count": 2, "items": [{"symbol": "XLE"}, {"symbol": "CVX"}]},
         "refinement_panel": {"signal": "detected"},
         "external_memory_panel": {"promotion_status": "promoted"},
+        "pm_workflow_panel": {"dispatch_class": "review"},
+    }
+
+
+def _payload_with_recommendation_count():
+    return {
+        "status": "ok",
+        "request_id": "probe-003",
+        "core_id": "market_analyzer_v1",
+        "mode": "advisory",
+        "execution_allowed": False,
+        "dashboard_type": "market_analyzer_v1_operator_dashboard",
+        "case_panel": {"case_id": "probe-003", "title": "Probe case"},
+        "governance_panel": {"watcher_passed": True, "approval_required": True},
+        "recommendation_panel": {
+            "recommendation_count": 1,
+            "recommendations": [{"symbol": "XLE", "confidence": "medium"}],
+        },
+        "refinement_panel": {"signal": "detected"},
         "pm_workflow_panel": {"dispatch_class": "review"},
     }
 
@@ -43,17 +69,25 @@ def main():
         failed += 1
         results.append({"case": "case_01_valid_record_created", "status": "failed", "detail": record})
 
+    record = build_pre_interface_smi_record(_payload_with_recommendation_count(), _watcher_receipt())
+    if record["recommendation_count"] == 1:
+        passed += 1
+        results.append({"case": "case_02_recommendation_count_shape_supported", "status": "passed"})
+    else:
+        failed += 1
+        results.append({"case": "case_02_recommendation_count_shape_supported", "status": "failed", "detail": record})
+
     try:
         build_pre_interface_smi_record(_payload(), _watcher_receipt(status="failed"))
         failed += 1
-        results.append({"case": "case_02_failed_watcher_rejected", "status": "failed", "detail": "no_error"})
+        results.append({"case": "case_03_failed_watcher_rejected", "status": "failed", "detail": "no_error"})
     except ValueError as exc:
         if str(exc) == "watcher_receipt_must_be_passed":
             passed += 1
-            results.append({"case": "case_02_failed_watcher_rejected", "status": "passed"})
+            results.append({"case": "case_03_failed_watcher_rejected", "status": "passed"})
         else:
             failed += 1
-            results.append({"case": "case_02_failed_watcher_rejected", "status": "failed", "detail": str(exc)})
+            results.append({"case": "case_03_failed_watcher_rejected", "status": "failed", "detail": str(exc)})
 
     print(
         {
