@@ -1,3 +1,5 @@
+# child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
+
 from __future__ import annotations
 
 from copy import deepcopy
@@ -19,6 +21,21 @@ try:
     from AI_GO.child_cores.market_analyzer_v1.ui.operator_dashboard_builder import build_operator_dashboard
 except ModuleNotFoundError:
     from child_cores.market_analyzer_v1.ui.operator_dashboard_builder import build_operator_dashboard
+
+
+def _ensure_runtime_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    runtime_payload = deepcopy(payload)
+
+    request_id = runtime_payload.get("request_id")
+    if not isinstance(request_id, str) or not request_id.strip():
+        request_id = "live-request"
+        runtime_payload["request_id"] = request_id
+
+    case_id = runtime_payload.get("case_id")
+    if not isinstance(case_id, str) or not case_id.strip():
+        runtime_payload["case_id"] = request_id
+
+    return runtime_payload
 
 
 def _build_pre_interface_rejection_payload(
@@ -55,14 +72,11 @@ def run_operator_dashboard(
     upstream_refs: Optional[Dict[str, Any]] = None,
     persist_receipts: bool = True,
 ) -> Dict[str, Any]:
+    runtime_payload = _ensure_runtime_payload(payload)
 
-    # 🔷 CRITICAL FIX: run full runtime path first
-    runtime_result = run_live_payload(payload)
-
-    # 🔷 THEN build operator dashboard
+    runtime_result = run_live_payload(runtime_payload)
     base_payload = build_operator_dashboard(runtime_result)
 
-    # 🔷 FINAL WATCHER
     watcher_result = run_pre_interface_watcher(
         payload=base_payload,
         upstream_refs=upstream_refs,
@@ -76,7 +90,6 @@ def run_operator_dashboard(
             watcher_receipt=watcher_receipt,
         )
 
-    # 🔷 FINAL SMI
     smi_result = run_pre_interface_smi(
         payload=base_payload,
         watcher_receipt=watcher_receipt,
