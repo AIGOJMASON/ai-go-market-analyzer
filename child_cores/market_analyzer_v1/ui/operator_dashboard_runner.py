@@ -1,8 +1,10 @@
+
 # child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
 
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 try:
@@ -23,6 +25,10 @@ except ModuleNotFoundError:
     from child_cores.market_analyzer_v1.ui.operator_dashboard_builder import build_operator_dashboard
 
 
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def _ensure_runtime_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     runtime_payload = deepcopy(payload)
 
@@ -34,6 +40,10 @@ def _ensure_runtime_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     case_id = runtime_payload.get("case_id")
     if not isinstance(case_id, str) or not case_id.strip():
         runtime_payload["case_id"] = request_id
+
+    observed_at = runtime_payload.get("observed_at")
+    if not isinstance(observed_at, str) or not observed_at.strip():
+        runtime_payload["observed_at"] = _utc_now()
 
     return runtime_payload
 
