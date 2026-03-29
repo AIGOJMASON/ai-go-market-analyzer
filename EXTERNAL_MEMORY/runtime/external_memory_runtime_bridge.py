@@ -455,4 +455,8 @@ def run_external_memory_runtime_path(
     if promotion_receipt is not None:
         result["external_memory_promotion_receipt"] = promotion_receipt
 
+<<<<<<< HEAD
     return result
+=======
+    return result
+>>>>>>> 38d503e (external memory pipeline fully activated: runtime → retrieval → promotion → pattern flow)

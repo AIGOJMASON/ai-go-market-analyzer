@@ -58,4 +58,8 @@ def run():
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     run()
+=======
+    run()
+>>>>>>> 38d503e (external memory pipeline fully activated: runtime → retrieval → promotion → pattern flow)
