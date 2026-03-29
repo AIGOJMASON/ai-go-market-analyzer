@@ -1,4 +1,3 @@
-
 # child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
 
 from __future__ import annotations
@@ -32,18 +31,56 @@ def _utc_now() -> str:
 def _ensure_runtime_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     runtime_payload = deepcopy(payload)
 
-    request_id = runtime_payload.get("request_id")
-    if not isinstance(request_id, str) or not request_id.strip():
-        request_id = "live-request"
-        runtime_payload["request_id"] = request_id
+    # 🔷 REQUIRED: request_id / case_id
+    request_id = runtime_payload.get("request_id") or "live-request"
+    runtime_payload["request_id"] = request_id
+    runtime_payload["case_id"] = runtime_payload.get("case_id") or request_id
 
-    case_id = runtime_payload.get("case_id")
-    if not isinstance(case_id, str) or not case_id.strip():
-        runtime_payload["case_id"] = request_id
+    # 🔷 REQUIRED: observed_at
+    runtime_payload["observed_at"] = runtime_payload.get("observed_at") or _utc_now()
 
-    observed_at = runtime_payload.get("observed_at")
-    if not isinstance(observed_at, str) or not observed_at.strip():
-        runtime_payload["observed_at"] = _utc_now()
+    # 🔷 BUILD macro_context
+    runtime_payload["macro_context"] = {
+        "headline": runtime_payload.get("headline", ""),
+        "macro_bias": "supportive" if runtime_payload.get("sector") == "energy" else "neutral",
+    }
+
+    # 🔷 BUILD event_signal
+    confirmation = str(runtime_payload.get("confirmation", "")).lower()
+    price_change = float(runtime_payload.get("price_change_pct", 0.0))
+    sector = str(runtime_payload.get("sector", "")).lower()
+
+    runtime_payload["event_signal"] = {
+        "event_id": f"EVT-{runtime_payload['case_id']}",
+        "event_type": "confirmed_shock",
+        "event_theme": (
+            "energy_rebound" if sector == "energy" and confirmation in {"confirmed", "partial"}
+            else "speculative_move"
+        ),
+        "confirmed": confirmation in {"confirmed", "partial"},
+        "propagation": (
+            "fast" if abs(price_change) >= 3
+            else "moderate" if abs(price_change) >= 1
+            else "limited"
+        ),
+    }
+
+    # 🔷 BUILD candidates
+    runtime_payload["candidates"] = [
+        {
+            "symbol": runtime_payload.get("symbol", "UNKNOWN"),
+            "sector": runtime_payload.get("sector", "unknown"),
+            "necessity_qualified": sector in {"energy", "utilities", "consumer_staples", "healthcare"},
+            "rebound_confirmed": confirmation in {"confirmed", "partial"},
+            "entry_signal": "reclaim support",
+            "exit_signal": "short-term resistance",
+            "confidence": (
+                "high" if abs(price_change) >= 3
+                else "medium" if abs(price_change) >= 1.5
+                else "low"
+            ),
+        }
+    ]
 
     return runtime_payload
 
@@ -82,6 +119,7 @@ def run_operator_dashboard(
     upstream_refs: Optional[Dict[str, Any]] = None,
     persist_receipts: bool = True,
 ) -> Dict[str, Any]:
+
     runtime_payload = _ensure_runtime_payload(payload)
 
     runtime_result = run_live_payload(runtime_payload)
