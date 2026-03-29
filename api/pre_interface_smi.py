@@ -1,5 +1,3 @@
-# AI_GO/api/pre_interface_smi.py
-
 from __future__ import annotations
 
 import json
@@ -51,6 +49,26 @@ def _collect_visible_panels(payload: Dict[str, Any]) -> List[str]:
     return visible
 
 
+def _extract_recommendation_count(recommendation_panel: Dict[str, Any]) -> int:
+    count = recommendation_panel.get("count")
+    if isinstance(count, int):
+        return count
+
+    recommendation_count = recommendation_panel.get("recommendation_count")
+    if isinstance(recommendation_count, int):
+        return recommendation_count
+
+    items = recommendation_panel.get("items")
+    if isinstance(items, list):
+        return len(items)
+
+    recommendations = recommendation_panel.get("recommendations")
+    if isinstance(recommendations, list):
+        return len(recommendations)
+
+    return 0
+
+
 def build_pre_interface_smi_record(
     payload: Dict[str, Any],
     watcher_receipt: Dict[str, Any],
@@ -69,10 +87,7 @@ def build_pre_interface_smi_record(
     recommendation_panel = payload.get("recommendation_panel", {}) if isinstance(payload.get("recommendation_panel"), dict) else {}
     visible_panels = _collect_visible_panels(payload)
 
-    recommendation_count = recommendation_panel.get("count")
-    if not isinstance(recommendation_count, int):
-        items = recommendation_panel.get("items")
-        recommendation_count = len(items) if isinstance(items, list) else 0
+    recommendation_count = _extract_recommendation_count(recommendation_panel)
 
     record: Dict[str, Any] = {
         "artifact_type": ARTIFACT_TYPE,
