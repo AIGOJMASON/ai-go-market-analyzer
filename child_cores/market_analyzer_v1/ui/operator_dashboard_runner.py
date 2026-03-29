@@ -1,12 +1,16 @@
-# AI_GO/child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
+# child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
 
 from __future__ import annotations
 
 from copy import deepcopy
 from typing import Any, Callable, Dict, Optional
 
-from AI_GO.api.pre_interface_smi import run_pre_interface_smi
-from AI_GO.api.pre_interface_watcher import run_pre_interface_watcher
+try:
+    from AI_GO.api.pre_interface_smi import run_pre_interface_smi
+    from AI_GO.api.pre_interface_watcher import run_pre_interface_watcher
+except ModuleNotFoundError:
+    from api.pre_interface_smi import run_pre_interface_smi
+    from api.pre_interface_watcher import run_pre_interface_watcher
 
 
 BUILDER_CANDIDATES = (
@@ -18,7 +22,10 @@ BUILDER_CANDIDATES = (
 
 
 def _resolve_builder() -> Callable[[Dict[str, Any]], Dict[str, Any]]:
-    from AI_GO.child_cores.market_analyzer_v1.ui import operator_dashboard_builder as builder_module
+    try:
+        from AI_GO.child_cores.market_analyzer_v1.ui import operator_dashboard_builder as builder_module
+    except ModuleNotFoundError:
+        from child_cores.market_analyzer_v1.ui import operator_dashboard_builder as builder_module
 
     for name in BUILDER_CANDIDATES:
         candidate = getattr(builder_module, name, None)
