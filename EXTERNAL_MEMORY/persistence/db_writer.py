@@ -7,7 +7,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any, Dict
 
-DB_PATH = Path("AI_GO/state/external_memory/external_memory.db")
+DB_PATH = Path("state/external_memory/external_memory.db")
 
 
 def _utc_now() -> str:
