@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# 🔷 FIX: add project root to path
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
 from child_cores.market_analyzer_v1.ui.operator_dashboard_builder import build_operator_dashboard
 
 
