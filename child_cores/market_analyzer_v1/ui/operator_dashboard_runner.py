@@ -1,9 +1,12 @@
-# child_cores/market_analyzer_v1/ui/operator_dashboard_runner.py
-
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict, Optional
+
+try:
+    from AI_GO.child_cores.market_analyzer_v1.ui.live_data_runner import run_live_payload
+except ModuleNotFoundError:
+    from child_cores.market_analyzer_v1.ui.live_data_runner import run_live_payload
 
 try:
     from AI_GO.api.pre_interface_smi import run_pre_interface_smi
@@ -12,30 +15,10 @@ except ModuleNotFoundError:
     from api.pre_interface_smi import run_pre_interface_smi
     from api.pre_interface_watcher import run_pre_interface_watcher
 
-
-BUILDER_CANDIDATES = (
-    "build_operator_dashboard_payload",
-    "build_operator_dashboard",
-    "build_system_view_payload",
-    "build_system_view",
-)
-
-
-def _resolve_builder() -> Callable[[Dict[str, Any]], Dict[str, Any]]:
-    try:
-        from AI_GO.child_cores.market_analyzer_v1.ui import operator_dashboard_builder as builder_module
-    except ModuleNotFoundError:
-        from child_cores.market_analyzer_v1.ui import operator_dashboard_builder as builder_module
-
-    for name in BUILDER_CANDIDATES:
-        candidate = getattr(builder_module, name, None)
-        if callable(candidate):
-            return candidate
-
-    raise RuntimeError(
-        "operator_dashboard_builder_missing_supported_builder;"
-        f" tried={','.join(BUILDER_CANDIDATES)}"
-    )
+try:
+    from AI_GO.child_cores.market_analyzer_v1.ui.operator_dashboard_builder import build_operator_dashboard
+except ModuleNotFoundError:
+    from child_cores.market_analyzer_v1.ui.operator_dashboard_builder import build_operator_dashboard
 
 
 def _build_pre_interface_rejection_payload(
@@ -48,11 +31,6 @@ def _build_pre_interface_rejection_payload(
     governance_panel["watcher_passed"] = False
     governance_panel["pre_interface_status"] = "rejected"
 
-    rejection_panel = {
-        "reason": "pre_interface_watcher_failed",
-        "failures": watcher_receipt.get("failures", []),
-    }
-
     return {
         "status": "rejected",
         "request_id": base_payload.get("request_id") or case_panel.get("case_id"),
@@ -64,20 +42,29 @@ def _build_pre_interface_rejection_payload(
         "dashboard_type": "market_analyzer_v1_operator_dashboard",
         "case_panel": case_panel,
         "governance_panel": governance_panel,
-        "rejection_panel": rejection_panel,
+        "rejection_panel": {
+            "reason": "pre_interface_watcher_failed",
+            "failures": watcher_receipt.get("failures", []),
+        },
         "pre_interface_watcher": watcher_receipt,
     }
 
 
-def finalize_operator_dashboard_payload(
-    base_payload: Dict[str, Any],
+def run_operator_dashboard(
+    payload: Dict[str, Any],
     upstream_refs: Optional[Dict[str, Any]] = None,
     persist_receipts: bool = True,
 ) -> Dict[str, Any]:
-    payload = deepcopy(base_payload)
 
+    # 🔷 CRITICAL FIX: run full runtime path first
+    runtime_result = run_live_payload(payload)
+
+    # 🔷 THEN build operator dashboard
+    base_payload = build_operator_dashboard(runtime_result)
+
+    # 🔷 FINAL WATCHER
     watcher_result = run_pre_interface_watcher(
-        payload=payload,
+        payload=base_payload,
         upstream_refs=upstream_refs,
         persist=persist_receipts,
     )
@@ -85,31 +72,19 @@ def finalize_operator_dashboard_payload(
 
     if watcher_receipt["status"] != "passed":
         return _build_pre_interface_rejection_payload(
-            base_payload=payload,
+            base_payload=base_payload,
             watcher_receipt=watcher_receipt,
         )
 
+    # 🔷 FINAL SMI
     smi_result = run_pre_interface_smi(
-        payload=payload,
+        payload=base_payload,
         watcher_receipt=watcher_receipt,
         upstream_refs=upstream_refs,
         persist=persist_receipts,
     )
 
-    payload["pre_interface_watcher"] = watcher_receipt
-    payload["pre_interface_smi"] = smi_result["record"]
-    return payload
+    base_payload["pre_interface_watcher"] = watcher_receipt
+    base_payload["pre_interface_smi"] = smi_result["record"]
 
-
-def run_operator_dashboard(
-    upstream_result: Dict[str, Any],
-    upstream_refs: Optional[Dict[str, Any]] = None,
-    persist_receipts: bool = True,
-) -> Dict[str, Any]:
-    builder = _resolve_builder()
-    base_payload = builder(upstream_result)
-    return finalize_operator_dashboard_payload(
-        base_payload=base_payload,
-        upstream_refs=upstream_refs,
-        persist_receipts=persist_receipts,
-    )
+    return base_payload
