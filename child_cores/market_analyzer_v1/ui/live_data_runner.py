@@ -16,6 +16,15 @@ except ModuleNotFoundError:
         run_market_analyzer_external_memory_path,
     )
 
+try:
+    from AI_GO.child_cores.market_analyzer_v1.external_memory.pattern_runtime_integration import (
+        apply_external_memory_pattern_flow,
+    )
+except ModuleNotFoundError:
+    from child_cores.market_analyzer_v1.external_memory.pattern_runtime_integration import (
+        apply_external_memory_pattern_flow,
+    )
+
 
 class LiveDataRunnerError(RuntimeError):
     pass
@@ -274,26 +283,260 @@ def _extract_pm_workflow_panel(routed_result: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _derive_external_memory_inputs(
+    raw_payload: Dict[str, Any],
+    pm_packet: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Build the external-memory input payload from the actual live-style case shape.
+
+    This is the critical fix:
+    - symbol / sector come from candidate data
+    - headline comes from macro_context or event_context
+    - confirmation comes from event_signal.confirmed when top-level confirmation is absent
+    - price_change_pct stays top-level if present, else defaults to 0.0
+    """
+    candidates = raw_payload.get("candidates")
+    first_candidate: Dict[str, Any] = {}
+    if isinstance(candidates, list) and candidates and isinstance(candidates[0], dict):
+        first_candidate = candidates[0]
+
+    macro_context = raw_payload.get("macro_context")
+    if not isinstance(macro_context, dict):
+        macro_context = {}
+
+    event_signal = raw_payload.get("event_signal")
+    if not isinstance(event_signal, dict):
+        event_signal = {}
+
+    symbol = _safe_str(raw_payload.get("symbol"))
+    if not symbol:
+        symbol = _safe_str(first_candidate.get("symbol"))
+
+    sector = _safe_str(raw_payload.get("sector"))
+    if not sector:
+        sector = _safe_str(first_candidate.get("sector"))
+
+    headline = _safe_str(raw_payload.get("headline"))
+    if not headline:
+        headline = _safe_str(macro_context.get("headline"))
+    if not headline:
+        headline = _safe_str(pm_packet.get("headline"), "Live market event")
+
+    confirmation = _safe_str(raw_payload.get("confirmation"))
+    if not confirmation:
+        confirmed_flag = event_signal.get("confirmed")
+        if confirmed_flag is True:
+            confirmation = "confirmed"
+        elif confirmed_flag is False:
+            confirmation = "unconfirmed"
+        else:
+            confirmation = "partial"
+
+    price_change_pct = _safe_float(raw_payload.get("price_change_pct"), 0.0)
+
+    return {
+        "request_id": _safe_str(raw_payload.get("request_id"), pm_packet.get("case_id")),
+        "symbol": symbol,
+        "headline": headline,
+        "price_change_pct": price_change_pct,
+        "sector": sector,
+        "confirmation": confirmation,
+        "event_theme": _safe_str(pm_packet.get("event_context", {}).get("theme")),
+        "macro_bias": _safe_str(pm_packet.get("event_context", {}).get("macro_bias")),
+    }
+
+
 def _run_external_memory(
     raw_payload: Dict[str, Any],
     pm_packet: Dict[str, Any],
     route_mode: str,
 ) -> Dict[str, Any] | None:
+    external_inputs = _derive_external_memory_inputs(raw_payload, pm_packet)
+
     try:
         return run_market_analyzer_external_memory_path(
-            request_id=_safe_str(raw_payload.get("request_id"), pm_packet.get("case_id")),
-            symbol=_safe_str(raw_payload.get("symbol"), "UNKNOWN"),
-            headline=_safe_str(raw_payload.get("headline"), pm_packet.get("headline")),
-            price_change_pct=_safe_float(raw_payload.get("price_change_pct"), 0.0),
-            sector=_safe_str(raw_payload.get("sector"), "unknown"),
-            confirmation=_safe_str(raw_payload.get("confirmation"), "partial"),
-            event_theme=_safe_str(pm_packet.get("event_context", {}).get("theme")),
-            macro_bias=_safe_str(pm_packet.get("event_context", {}).get("macro_bias")),
+            request_id=external_inputs["request_id"],
+            symbol=external_inputs["symbol"],
+            headline=external_inputs["headline"],
+            price_change_pct=external_inputs["price_change_pct"],
+            sector=external_inputs["sector"],
+            confirmation=external_inputs["confirmation"],
+            event_theme=external_inputs["event_theme"],
+            macro_bias=external_inputs["macro_bias"],
             route_mode=route_mode,
             source_type="live_market_input",
         )
-    except Exception:
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "external_memory_failed": True,
+            "external_memory_error": str(exc),
+            "panel": {
+                "visible": True,
+                "source": "external_memory",
+                "advisory_only": True,
+                "pattern_detected": False,
+                "pattern_strength": None,
+                "historical_confirmation": None,
+                "confidence_adjustment": "none",
+                "summary": f"External memory path failed: {exc}",
+                "dominant_symbol": external_inputs["symbol"] or None,
+                "dominant_sector": external_inputs["sector"] or None,
+                "recurrence_count": 0,
+                "temporal_span_days": 0,
+                "similar_events": [],
+                "provenance_refs": [],
+            },
+        }
+
+
+def _safe_dict(value: Any) -> Dict[str, Any] | None:
+    return value if isinstance(value, dict) else None
+
+
+def _safe_list_of_dicts(value: Any) -> List[Dict[str, Any]]:
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, dict)]
+
+
+def _coerce_int(value: Any, default: int = 0) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _flatten_external_memory_result(external_memory_result: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Normalize bridge output into the flattened top-level keys expected by the
+    pattern integration and response builder.
+    """
+    flattened = dict(external_memory_result)
+
+    retrieval_result = _safe_dict(flattened.get("external_memory_retrieval_result"))
+    if retrieval_result:
+        flattened["external_memory_retrieval_artifact"] = retrieval_result.get("artifact") or retrieval_result.get(
+            "retrieval_artifact"
+        )
+        flattened["external_memory_retrieval_receipt"] = retrieval_result.get("receipt") or retrieval_result.get(
+            "retrieval_receipt"
+        )
+
+    promotion_result = _safe_dict(flattened.get("external_memory_promotion_result"))
+    if promotion_result:
+        flattened["external_memory_promotion_artifact"] = promotion_result.get("artifact") or promotion_result.get(
+            "promotion_artifact"
+        )
+        flattened["external_memory_promotion_receipt"] = promotion_result.get("receipt") or promotion_result.get(
+            "promotion_receipt"
+        )
+
+    return flattened
+
+
+def _build_external_memory_panel(external_memory_result: Dict[str, Any] | None) -> Dict[str, Any] | None:
+    """
+    Convert the external-memory runtime result into the exact builder-compatible
+    outward panel shape.
+
+    Priority:
+    1. pattern/return-path output from apply_external_memory_pattern_flow
+    2. return packet memory_context_panel if present
+    3. fallback panel if it already contains builder-compatible fields
+
+    This remains advisory-only and non-mutating.
+    """
+    if not isinstance(external_memory_result, dict):
         return None
+
+    flattened_result = _flatten_external_memory_result(external_memory_result)
+    enriched_result = apply_external_memory_pattern_flow(flattened_result)
+
+    pattern_panel = _safe_dict(enriched_result.get("external_memory_pattern_panel"))
+    if pattern_panel:
+        summary = pattern_panel.get("summary") or pattern_panel.get("insight") or pattern_panel.get("narrative")
+        recurrence_count = _coerce_int(pattern_panel.get("recurrence_count"), default=0)
+        temporal_span_days = _coerce_int(pattern_panel.get("temporal_span_days"), default=0)
+        similar_events = _safe_list_of_dicts(pattern_panel.get("similar_events"))
+
+        provenance_refs = pattern_panel.get("provenance_refs")
+        if not isinstance(provenance_refs, list):
+            provenance_refs = []
+
+        bounded_panel = {
+            "visible": True,
+            "source": "external_memory",
+            "advisory_only": True,
+            "pattern_detected": True,
+            "pattern_strength": pattern_panel.get("pattern_strength"),
+            "historical_confirmation": pattern_panel.get("historical_confirmation"),
+            "confidence_adjustment": pattern_panel.get("confidence_adjustment"),
+            "summary": summary,
+            "dominant_symbol": pattern_panel.get("dominant_symbol"),
+            "dominant_sector": pattern_panel.get("dominant_sector"),
+            "recurrence_count": recurrence_count,
+            "temporal_span_days": temporal_span_days,
+            "similar_events": similar_events,
+            "provenance_refs": provenance_refs,
+        }
+
+        if bounded_panel["summary"] or bounded_panel["recurrence_count"] > 0:
+            return bounded_panel
+
+    return_packet = _safe_dict(enriched_result.get("external_memory_return_packet"))
+    if return_packet:
+        memory_context_panel = _safe_dict(return_packet.get("memory_context_panel"))
+        if memory_context_panel:
+            provenance_refs = memory_context_panel.get("provenance_refs", [])
+            if not isinstance(provenance_refs, list):
+                provenance_refs = []
+
+            return {
+                "visible": bool(memory_context_panel.get("visible", True)),
+                "source": memory_context_panel.get("source", "external_memory"),
+                "advisory_only": True,
+                "pattern_detected": bool(memory_context_panel.get("pattern_detected", False)),
+                "pattern_strength": memory_context_panel.get("pattern_strength"),
+                "historical_confirmation": memory_context_panel.get("historical_confirmation"),
+                "confidence_adjustment": memory_context_panel.get("confidence_adjustment"),
+                "summary": memory_context_panel.get("summary"),
+                "dominant_symbol": memory_context_panel.get("dominant_symbol"),
+                "dominant_sector": memory_context_panel.get("dominant_sector"),
+                "recurrence_count": _coerce_int(memory_context_panel.get("recurrence_count"), default=0),
+                "temporal_span_days": _coerce_int(memory_context_panel.get("temporal_span_days"), default=0),
+                "similar_events": _safe_list_of_dicts(memory_context_panel.get("similar_events")),
+                "provenance_refs": provenance_refs,
+            }
+
+    fallback_panel = _safe_dict(flattened_result.get("panel"))
+    if fallback_panel and (
+        "pattern_detected" in fallback_panel
+        or "summary" in fallback_panel
+        or "recurrence_count" in fallback_panel
+    ):
+        provenance_refs = fallback_panel.get("provenance_refs", [])
+        if not isinstance(provenance_refs, list):
+            provenance_refs = []
+
+        return {
+            "visible": bool(fallback_panel.get("visible", True)),
+            "source": fallback_panel.get("source", "external_memory"),
+            "advisory_only": True,
+            "pattern_detected": bool(fallback_panel.get("pattern_detected", False)),
+            "pattern_strength": fallback_panel.get("pattern_strength"),
+            "historical_confirmation": fallback_panel.get("historical_confirmation"),
+            "confidence_adjustment": fallback_panel.get("confidence_adjustment"),
+            "summary": fallback_panel.get("summary"),
+            "dominant_symbol": fallback_panel.get("dominant_symbol"),
+            "dominant_sector": fallback_panel.get("dominant_sector"),
+            "recurrence_count": _coerce_int(fallback_panel.get("recurrence_count"), default=0),
+            "temporal_span_days": _coerce_int(fallback_panel.get("temporal_span_days"), default=0),
+            "similar_events": _safe_list_of_dicts(fallback_panel.get("similar_events")),
+            "provenance_refs": provenance_refs,
+        }
+
+    return None
 
 
 def _build_live_response(
@@ -350,20 +593,29 @@ def _build_live_response(
     }
 
     if isinstance(external_memory_result, dict):
-        response["external_memory_runtime_result"] = external_memory_result
-        response["external_memory_panel"] = external_memory_result.get("panel")
-        response["external_memory_retrieval_artifact"] = external_memory_result.get(
+        flattened_result = _flatten_external_memory_result(external_memory_result)
+
+        response["external_memory_runtime_result"] = flattened_result
+        response["external_memory_retrieval_artifact"] = flattened_result.get(
             "external_memory_retrieval_artifact"
         )
-        response["external_memory_retrieval_receipt"] = external_memory_result.get(
+        response["external_memory_retrieval_receipt"] = flattened_result.get(
             "external_memory_retrieval_receipt"
         )
-        response["external_memory_promotion_artifact"] = external_memory_result.get(
+        response["external_memory_promotion_artifact"] = flattened_result.get(
             "external_memory_promotion_artifact"
         )
-        response["external_memory_promotion_receipt"] = external_memory_result.get(
+        response["external_memory_promotion_receipt"] = flattened_result.get(
             "external_memory_promotion_receipt"
         )
+
+        external_memory_panel = _build_external_memory_panel(flattened_result)
+        if isinstance(external_memory_panel, dict):
+            response["external_memory_panel"] = external_memory_panel
+
+        if flattened_result.get("external_memory_failed") is True:
+            response["external_memory_failed"] = True
+            response["external_memory_error"] = flattened_result.get("external_memory_error")
 
     return response
 

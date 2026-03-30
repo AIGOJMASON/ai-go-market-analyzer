@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import importlib
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, Dict
 
 try:
     from AI_GO.EXTERNAL_MEMORY.qualification.qualification_engine import (
@@ -210,16 +209,28 @@ def build_external_memory_panel(
 
 def _run_retrieval(payload: Dict[str, Any], qualification_record: Dict[str, Any]):
     try:
-        from AI_GO.child_cores.market_analyzer_v1.external_memory.retrieval_path import (
-            run_market_analyzer_external_memory_retrieval,
+        from AI_GO.EXTERNAL_MEMORY.retrieval.retrieval_runtime import (
+            run_external_memory_retrieval,
         )
     except ModuleNotFoundError:
-        from child_cores.market_analyzer_v1.external_memory.retrieval_path import (
-            run_market_analyzer_external_memory_retrieval,
+        from EXTERNAL_MEMORY.retrieval.retrieval_runtime import (
+            run_external_memory_retrieval,
         )
 
+    request = {
+        "artifact_type": "external_memory_retrieval_request",
+        "requester_profile": "market_analyzer_reader",
+        "target_child_core": "market_analyzer_v1",
+        "limit": 10,
+        "symbol": payload.get("symbol"),
+        "sector": payload.get("sector"),
+        "trust_class": qualification_record.get("trust_class"),
+        "source_type": payload.get("source_type"),
+        "min_adjusted_weight": None,
+    }
+
     try:
-        return run_market_analyzer_external_memory_retrieval(**payload)
+        return run_external_memory_retrieval(request)
     except Exception:
         return None
 
@@ -235,7 +246,14 @@ def _run_promotion(payload: Dict[str, Any], qualification_record: Dict[str, Any]
         )
 
     try:
-        return run_market_analyzer_external_memory_promotion(**payload)
+        return run_market_analyzer_external_memory_promotion(
+            symbol=payload.get("symbol"),
+            sector=payload.get("sector"),
+            trust_class=qualification_record.get("trust_class"),
+            source_type=payload.get("source_type"),
+            limit=10,
+            min_adjusted_weight=None,
+        )
     except Exception:
         return None
 
@@ -264,7 +282,25 @@ def run_external_memory_runtime_path(payload: Dict[str, Any]) -> Dict[str, Any]:
     if persistence_receipt.get("persistence_decision") != "committed":
         return result
 
-    result["external_memory_retrieval_result"] = _run_retrieval(payload, qualification.record)
-    result["external_memory_promotion_result"] = _run_promotion(payload, qualification.record)
+    retrieval = _run_retrieval(payload, qualification.record)
+    promotion = _run_promotion(payload, qualification.record)
+
+    if isinstance(retrieval, dict):
+        result["external_memory_retrieval_result"] = retrieval
+        result["external_memory_retrieval_artifact"] = retrieval.get("artifact") or retrieval.get(
+            "retrieval_artifact"
+        )
+        result["external_memory_retrieval_receipt"] = retrieval.get("receipt") or retrieval.get(
+            "retrieval_receipt"
+        )
+
+    if isinstance(promotion, dict):
+        result["external_memory_promotion_result"] = promotion
+        result["external_memory_promotion_artifact"] = promotion.get("artifact") or promotion.get(
+            "promotion_artifact"
+        )
+        result["external_memory_promotion_receipt"] = promotion.get("receipt") or promotion.get(
+            "promotion_receipt"
+        )
 
     return result

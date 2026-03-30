@@ -47,6 +47,26 @@ def _coerce_number(value: Any) -> float:
     raise ValueError(f"non_numeric_weight:{value!r}")
 
 
+def _payload_identity_parts(payload: Dict[str, Any]) -> List[str]:
+    provenance = payload.get("provenance", {})
+    if not isinstance(provenance, dict):
+        provenance = {}
+
+    inner_payload = payload.get("payload", {})
+    if not isinstance(inner_payload, dict):
+        inner_payload = {}
+
+    return [
+        str(provenance.get("request_id", "")),
+        str(provenance.get("source_ref", "")),
+        str(inner_payload.get("symbol", "")),
+        str(inner_payload.get("sector", "")),
+        str(inner_payload.get("headline", "")),
+        str(inner_payload.get("event_theme", "")),
+        str(inner_payload.get("confirmation", "")),
+    ]
+
+
 def qualify_external_memory_candidate(payload: Dict[str, Any]) -> QualificationResult:
     valid_required, required_reason = _validate_required_fields(payload)
     if not valid_required:
@@ -197,6 +217,7 @@ def _build_rejection_record(
                 str(payload.get("source_type", "unknown")),
                 rejection_reason,
                 detail,
+                *_payload_identity_parts(payload),
             ],
         ),
         "created_at": _utc_now(),
@@ -214,6 +235,7 @@ def _build_rejection_record(
         "trust_class": payload.get("trust_class"),
         "target_child_cores": payload.get("target_child_cores", []),
         "provenance": payload.get("provenance"),
+        "payload": payload.get("payload"),
     }
 
 
@@ -235,11 +257,12 @@ def _build_decision_record(
         "qualification_record_id": _stable_id(
             "extmemqual",
             [
-                payload["artifact_type"],
-                payload["source_type"],
+                str(payload["artifact_type"]),
+                str(payload["source_type"]),
                 trust_class,
                 decision,
                 str(adjusted_weight),
+                *_payload_identity_parts(payload),
             ],
         ),
         "created_at": _utc_now(),

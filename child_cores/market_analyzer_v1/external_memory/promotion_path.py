@@ -2,12 +2,23 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from AI_GO.EXTERNAL_MEMORY.promotion.promotion_runtime import (
-    run_external_memory_promotion,
-)
-from AI_GO.child_cores.market_analyzer_v1.external_memory.retrieval_path import (
-    run_market_analyzer_external_memory_retrieval,
-)
+try:
+    from AI_GO.EXTERNAL_MEMORY.promotion.promotion_runtime import (
+        run_external_memory_promotion,
+    )
+except ModuleNotFoundError:
+    from EXTERNAL_MEMORY.promotion.promotion_runtime import (
+        run_external_memory_promotion,
+    )
+
+try:
+    from AI_GO.child_cores.market_analyzer_v1.external_memory.retrieval_path import (
+        run_market_analyzer_external_memory_retrieval,
+    )
+except ModuleNotFoundError:
+    from child_cores.market_analyzer_v1.external_memory.retrieval_path import (
+        run_market_analyzer_external_memory_retrieval,
+    )
 
 
 def run_market_analyzer_external_memory_promotion(
@@ -28,7 +39,8 @@ def run_market_analyzer_external_memory_promotion(
         sector=sector,
         requester_profile=requester_profile,
     )
+
     return run_external_memory_promotion(
-        artifact=retrieval_result["artifact"] or {},
-        receipt=retrieval_result["receipt"],
+        artifact=retrieval_result.get("artifact") or {},
+        receipt=retrieval_result.get("receipt"),
     )

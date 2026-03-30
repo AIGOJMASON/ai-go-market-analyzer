@@ -21,15 +21,25 @@ def run_market_analyzer_external_memory_retrieval(
     limit: int = 10,
     min_adjusted_weight: Optional[float] = None,
 ) -> Dict[str, Any]:
+    """
+    Market Analyzer retrieval should stay permissive enough to recover
+    repeated symbol-level event history for downstream promotion/pattern logic.
+
+    Intentionally minimal filter set:
+    - requester_profile
+    - target_child_core
+    - limit
+    - symbol
+
+    This avoids over-constraining retrieval with fields that may vary across
+    otherwise relevant historical records.
+    """
     request = {
+        "artifact_type": "external_memory_retrieval_request",
         "requester_profile": requester_profile,
-        "target_core_id": "market_analyzer_v1",
-        "symbol": symbol,
-        "sector": sector,
-        "trust_class": trust_class,
-        "source_type": source_type,
+        "target_child_core": "market_analyzer_v1",
         "limit": limit,
-        "min_adjusted_weight": min_adjusted_weight,
+        "symbol": symbol,
     }
 
     result = run_external_memory_retrieval(request)

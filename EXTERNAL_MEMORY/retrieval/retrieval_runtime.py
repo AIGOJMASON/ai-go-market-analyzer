@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
@@ -107,7 +108,17 @@ def run_external_memory_retrieval(
             "receipt": failure_receipt,
         }
 
-    matched_count, records = query_external_memory_records(request)
+    records = query_external_memory_records(
+        target_core_id=str(request["target_child_core"]),
+        symbol=request.get("symbol"),
+        sector=request.get("sector"),
+        trust_class=request.get("trust_class"),
+        source_type=request.get("source_type"),
+        limit=int(request["limit"]),
+        min_adjusted_weight=request.get("min_adjusted_weight"),
+    )
+    matched_count = len(records)
+
     artifact = _build_artifact(request, matched_count, records)
     receipt = build_retrieval_receipt(
         request=request,

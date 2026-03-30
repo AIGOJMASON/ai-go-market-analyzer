@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 from typing import Any, Dict
@@ -12,6 +13,18 @@ except ModuleNotFoundError:
     )
 
 
+def _normalize_symbol_sector(symbol: str | None, sector: str | None) -> tuple[str, str]:
+    """
+    Ensure symbol and sector are usable for retrieval/promotion.
+    """
+    if not symbol or symbol.strip().lower() in {"", "unknown"}:
+        symbol = None
+    if not sector or sector.strip().lower() in {"", "unknown"}:
+        sector = None
+
+    return symbol, sector
+
+
 def run_market_analyzer_external_memory_path(
     request_id: str,
     symbol: str,
@@ -24,6 +37,10 @@ def run_market_analyzer_external_memory_path(
     route_mode: str | None = None,
     source_type: str = "live_market_input",
 ) -> Dict[str, Any]:
+
+    # 🔥 FIX — normalize incoming values
+    symbol, sector = _normalize_symbol_sector(symbol, sector)
+
     payload = {
         "request_id": request_id,
         "symbol": symbol,
@@ -39,4 +56,5 @@ def run_market_analyzer_external_memory_path(
         "target_child_cores": ["market_analyzer_v1"],
         "origin_surface": "market_analyzer_live",
     }
+
     return run_external_memory_runtime_path(payload)
