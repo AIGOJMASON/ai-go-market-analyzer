@@ -1,0 +1,15 @@
+{
+  "latest_cycle_id": "system_cycle_20260504T214109Z_3633",
+  "latest_receipt_path": "/root/apps/AI_GO/state/system_cycle/receipts/system_cycle_20260504T214109Z_3633.json",
+  "latest_started_at": "2026-05-04T21:41:09.158705+00:00",
+  "latest_ended_at": "2026-05-04T21:41:09.161312+00:00",
+  "latest_status": "error",
+  "iteration": 3633,
+  "step_statuses": {
+    "live_trigger": "skipped",
+    "continuity_weighting": "ok",
+    "continuity_weighting_refinement_bridge": "ok",
+    "refinement_to_pm_bridge": "ok",
+    "visibility": "error"
+  }
+}

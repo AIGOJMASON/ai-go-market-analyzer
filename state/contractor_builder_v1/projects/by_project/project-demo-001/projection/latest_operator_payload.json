@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-04-30T14:53:38.487396+00:00",
+  "request_id": "contractor-live-demo-001",
+  "child_core_id": "contractor_builder_v1",
+  "mode": "advisory",
+  "approval_required": true,
+  "execution_allowed": false,
+  "summary_panel": {
+    "project_id": "project-demo-001",
+    "project_name": "Demo Kitchen Remodel",
+    "current_phase_id": "phase-demo-framing",
+    "compliance_blocking": false,
+    "open_or_monitoring_risks": 0,
+    "approved_change_count": 0,
+    "customer_signoff_required_change_count": 0,
+    "blocking_unresolved_change_count": 0,
+    "change_blocking": false
+  },
+  "project_panel": {
+    "project_id": "project-demo-001",
+    "project_name": "Demo Kitchen Remodel",
+    "project_type": "Kitchen Remodel",
+    "status": "active",
+    "client_name": "Demo Client",
+    "pm_name": "Demo PM",
+    "jurisdiction": {
+      "jurisdiction_id": "scottsburg-in",
+      "state": "IN"
+    },
+    "baseline_refs": {
+      "schedule_baseline_id": "schedule-demo-001",
+      "budget_baseline_id": "budget-demo-001",
+      "compliance_snapshot_id": "compliance-demo-001"
+    },
+    "workflow": {
+      "workflow_status": "active",
+      "phase_count": 3,
+      "current_phase_id": "phase-demo-framing"
+    },
+    "latest_report": {
+      "report_id": "report-project_demo_001_project_weekly-20260430T145338Z-ba16e7bc",
+      "report_status": "pm_review",
+      "reporting_period_label": "Weekly Demo",
+      "headline": "Weekly project summary for project-demo-001 | no dominant blocking condition is active",
+      "bullets": [
+        "Approved changes: 0 with approved total amount 0.0.",
+        "Compliance blocking count: 0. Router conflicts: 0.",
+        "Open or monitoring risks: 0. Invalidated assumptions: 0.",
+        "External pressure summary: stable. High-pressure domains: 0."
+      ]
+    },
+    "report_metrics": {
+      "approved_change_total_amount": 0.0,
+      "compliance_blocking": false,
+      "conflict_count": 0,
+      "open_or_monitoring_risks": 0
+    },
+    "phase_signoff_status": "not_requested"
+  },
+  "portfolio_panel": {
+    "portfolio_id": "portfolio-demo",
+    "report_id": "report-portfolio_demo_portfolio_weekly-20260430T145338Z-71d9cab2",
+    "report_status": "pm_review",
+    "reporting_period_label": "Weekly Demo",
+    "headline": "Weekly portfolio summary for portfolio-demo | projects: 1",
+    "bullets": [
+      "Blocking projects: 0. Total conflicts: 0.",
+      "Total open or monitoring risks: 0.",
+      "Approved change total amount: 0.0.",
+      "Projects under elevated external pressure: 0."
+    ],
+    "portfolio_metrics": {
+      "project_count": 1,
+      "blocking_project_count": 0,
+      "total_conflict_count": 0,
+      "total_open_or_monitoring_risks": 0,
+      "approved_change_total_amount": 0.0
+    }
+  },
+  "decisions_panel": {
+    "decision_count": 0,
+    "approved_count": 0,
+    "submitted_count": 0,
+    "review_count": 0,
+    "latest_items": []
+  },
+  "changes_panel": {
+    "change_count": 0,
+    "approved_change_count": 0,
+    "pending_approval_count": 0,
+    "customer_signoff_required_count": 0,
+    "blocking_unresolved_change_count": 0,
+    "has_blocking_unresolved_changes": false,
+    "approved_change_total_amount": 0,
+    "latest_items": [],
+    "blocking_items": []
+  },
+  "compliance_panel": {
+    "blocking": false,
+    "blocking_count": 0,
+    "permit_count": 0,
+    "inspection_count": 0,
+    "blocking_permits": [],
+    "blocking_inspections": []
+  },
+  "risks_panel": {
+    "risk_count": 0,
+    "open_or_monitoring_count": 0,
+    "occurred_count": 0,
+    "latest_items": []
+  },
+  "checklist_panel": {
+    "summary": {
+      "required_item_count": 0,
+      "completed_required_count": 0,
+      "ready_for_signoff": false,
+      "phase_id": "phase-demo-framing"
+    },
+    "items": []
+  },
+  "signoff_summary_panel": {
+    "latest_status": "not_requested",
+    "phase_posture": "awaiting_signoff",
+    "checklist_summary": {
+      "required_item_count": 0,
+      "completed_required_count": 0,
+      "ready_for_signoff": false,
+      "phase_id": "phase-demo-framing"
+    },
+    "resend_allowed": false,
+    "recommended_action": "review"
+  },
+  "delivery_summary_panel": {
+    "delivery_status": "unknown",
+    "delivery_id": "",
+    "sent_at": "",
+    "recipient": "",
+    "attachment": "",
+    "error": "",
+    "provider": "",
+    "retry_recommended": false
+  },
+  "explanation_panel": {
+    "operator_read": "Demo Kitchen Remodel is the active project. current phase is phase-demo-framing. no active compliance block is shown. approved changes on record: 0. open or monitoring risks: 0.",
+    "change_read": "Change posture shows 0 approved changes, 0 awaiting approval, and approved change total amount of 0.",
+    "compliance_read": "Compliance posture is not currently blocked. Tracked permits: 0. Tracked inspections: 0.",
+    "risk_read": "Risk posture shows 0 total risks, 0 open or monitoring, and 0 occurred.",
+    "portfolio_read": "Portfolio view covers 1 projects, with 0 blocking and 0 total routing conflicts.",
+    "operator_should_notice": [
+      "Compliance blocking should be treated as a stop condition for forward progress when active.",
+      "Approved change totals and pending approvals should be reviewed together, not separately.",
+      "Open and monitoring risks should be read alongside current phase and compliance posture."
+    ],
+    "uncertainty_flags": [
+      "Explanation is bounded to structured payload fields only.",
+      "No execution authority is implied by this explanation layer."
+    ]
+  }
+}

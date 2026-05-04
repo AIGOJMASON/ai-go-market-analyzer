@@ -1,0 +1,14 @@
+{
+  "artifact_id": "seed-cont-002-continuation",
+  "artifact_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\setup_patterns\\seed-cont-002-continuation.json",
+  "artifact_type": "historical_setup_pattern",
+  "event_id": "seed-cont-002",
+  "index_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\indexes\\setup_patterns\\2026-04.jsonl",
+  "payload_summary": {
+    "event_id": "seed-cont-002",
+    "setup_type": "continuation"
+  },
+  "receipt_type": "historical_market_curated_write_receipt",
+  "status": "written",
+  "written_at": "2026-04-06T19:38:07.039171+00:00"
+}

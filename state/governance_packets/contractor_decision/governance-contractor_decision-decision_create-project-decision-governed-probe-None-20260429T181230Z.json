@@ -1,0 +1,145 @@
+{
+  "action": "decision_create",
+  "allowed": false,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "authority_boundary": {
+    "ai_may_execute": false,
+    "ai_may_override": false,
+    "bypass_allowed": false,
+    "child_core_may_execute": false,
+    "root_governor": true
+  },
+  "canon": {
+    "action": "decision_create",
+    "approval_required": true,
+    "approved": false,
+    "artifact_type": "canon_permission",
+    "artifact_version": "v2",
+    "errors": [
+      "unknown_governed_profile"
+    ],
+    "execution_allowed": false,
+    "mode": "blocked",
+    "profile": "contractor_decision",
+    "registry_enabled": false,
+    "registry_known": false,
+    "request": {
+      "action": "decision_create",
+      "actor": "stage_contractor_decision_governed_probe",
+      "decision_id": "",
+      "project_id": "project-decision-governed-probe",
+      "route": "/contractor-builder/decision/create"
+    },
+    "sealed": true,
+    "status": "failed",
+    "valid": false
+  },
+  "created_at": "2026-04-29T18:12:30.099601+00:00",
+  "execution_gate": {
+    "allowed": false,
+    "artifact_type": "execution_gate_decision",
+    "artifact_version": "v1",
+    "authority": {
+      "bypass_allowed": false,
+      "side_effects_allowed_after_pass": [
+        "file_write",
+        "receipt_write",
+        "artifact_creation",
+        "email_delivery",
+        "workflow_mutation"
+      ],
+      "side_effects_allowed_before_pass": []
+    },
+    "evaluated_at": "2026-04-29T18:12:30.099583+00:00",
+    "inputs": {
+      "approval_present": false,
+      "approval_required": true,
+      "canon_status": "failed",
+      "canon_valid": false,
+      "execution_allowed": false,
+      "state_status": "passed",
+      "state_valid": true,
+      "watcher_status": "passed",
+      "watcher_valid": true
+    },
+    "reasons": [
+      "canon_not_passed",
+      "execution_not_permitted_by_canon",
+      "required_approval_missing"
+    ],
+    "request": {
+      "action": "decision_create",
+      "phase_id": null,
+      "project_id": "project-decision-governed-probe",
+      "request_id": null,
+      "route": "/contractor-builder/decision/create"
+    },
+    "sealed": true,
+    "status": "blocked"
+  },
+  "governance_packet_id": "governance-contractor_decision-decision_create-project-decision-governed-probe-None-20260429T181230Z",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "e893f3e2fa3ff44ded9186a8f5691d0bbff3967a7372cbe491577944b4fa9852"
+  },
+  "phase_id": null,
+  "profile": "contractor_decision",
+  "project_id": "project-decision-governed-probe",
+  "request": {
+    "action": "decision_create",
+    "actor": "stage_contractor_decision_governed_probe",
+    "decision_id": "",
+    "project_id": "project-decision-governed-probe",
+    "route": "/contractor-builder/decision/create"
+  },
+  "sealed": true,
+  "state": {
+    "artifact_type": "state_validation",
+    "checks": {
+      "action_present": true,
+      "profile_present": true,
+      "project_id_present": true
+    },
+    "decision_id": "",
+    "errors": [],
+    "mutation_allowed": true,
+    "profile": "contractor_decision",
+    "project_id": "project-decision-governed-probe",
+    "read_only": false,
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "status": "blocked",
+  "summary": {
+    "canon_valid": false,
+    "execution_gate_allowed": false,
+    "state_valid": true,
+    "watcher_valid": true
+  },
+  "watcher": {
+    "artifact_type": "watcher_validation",
+    "checks": {
+      "entry_kwargs_present": true,
+      "execution_required": true,
+      "mutation_declared": true,
+      "state_valid": true
+    },
+    "decision_id": "",
+    "errors": [],
+    "policy": {
+      "execution_allowed": false,
+      "mutation_allowed": true,
+      "read_only": false,
+      "requires_execution_gate": true
+    },
+    "profile": "contractor_decision",
+    "project_id": "project-decision-governed-probe",
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  }
+}

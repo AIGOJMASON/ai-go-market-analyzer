@@ -1,0 +1,382 @@
+{
+  "ledger_id": "SMI_CHANGE_LEDGER",
+  "last_updated": "2026-04-30T19:35:50Z",
+  "entries": [
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-03-30T16:44:00Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-03-30T16-44-00Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-03-30T16:45:02Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-03-30T16-45-02Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T14:54:12Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T14-54-12Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:02:37Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-02-37Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:09:00Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-09-00Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:12:27Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-12-27Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:13:12Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-13-12Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:38:29Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-38-29Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:45:30Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-45-30Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:45:35Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-45-35Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:45:58Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-45-58Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T15:51:22Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T15-51-22Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T18:29:36Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T18-29-36Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T18:33:21Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T18-33-21Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-03T18:33:50Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-03T18-33-50Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:energy_rebound:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-06T19:21:04Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-06T19-21-04Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-06T19:29:41Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-06T19-29-41Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-06T19:54:01Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-06T19-54-01Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:08:50Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-08-50Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:17:45Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-17-45Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:25:10Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-25-10Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:30:44Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-30-44Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:40:17Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-40-17Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:46:36Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-46-36Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:54:44Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-54-44Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T01:56:53Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T01-56-53Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T02:49:40Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T02-49-40Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T02:57:37Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T02-57-37Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T03:08:00Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T03-08-00Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T03:16:02Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T03-16-02Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-07T18:25:56Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-07T18-25-56Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T16:33:45Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T16-33-45Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T16:33:45Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T16-33-45Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T16:34:55Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T16-34-55Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T16:34:55Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T16-34-55Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T17:12:48Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T17-12-48Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T17:12:48Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T17-12-48Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T17:54:27Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T17-54-27Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T17:54:27Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T17-54-27Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T18:04:19Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T18-04-19Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T18:04:19Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T18-04-19Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T18:11:06Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T18-11-06Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T18:11:06Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T18-11-06Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T19:06:26Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T19-06-26Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T19:06:26Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T19-06-26Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T19:35:50Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T19-35-50Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    },
+    {
+      "ledger_id": "SMI_CHANGE_LEDGER_ENTRY",
+      "timestamp": "2026-04-30T19:35:50Z",
+      "change_class": "accepted_event_recorded",
+      "summary": "accepted continuity event recorded for market_analyzer_v1",
+      "event_id": "smi_event_2026-04-30T19-35-50Z",
+      "continuity_key": "market_analyzer_v1:interface_exposure_verified:unknown_event:XLE"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "action": "change_create",
+  "allowed": true,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "authority_boundary": {
+    "ai_may_execute": false,
+    "ai_may_override": false,
+    "bypass_allowed": false,
+    "child_core_may_execute": true,
+    "root_governor": true
+  },
+  "canon": {
+    "action": "change_create",
+    "allowed_actions": [
+      "change_approval_event",
+      "change_create",
+      "change_sign",
+      "change_transition"
+    ],
+    "approval_required": true,
+    "approved": true,
+    "artifact_type": "canon_permission",
+    "artifact_version": "v2",
+    "errors": [],
+    "execution_allowed": true,
+    "metadata": {},
+    "mode": "governed_execution",
+    "notes": "Phase 1 migrated contractor change mutation profile.",
+    "profile": "contractor_change",
+    "registry_enabled": true,
+    "registry_known": true,
+    "request": {
+      "action": "change_create",
+      "change_packet_id": "",
+      "packet_kwargs": {
+        "added_items": [
+          "Governed test item"
+        ],
+        "budget_baseline_id": "budget-baseline-test-001",
+        "change_packet_id": "change-phase1-governed-test-001",
+        "compliance_snapshot_id": "compliance-snapshot-test-001",
+        "drawing_revision_id": "drawing-revision-test-001",
+        "originator_name": "Phase 1 Probe",
+        "originator_org": "AI_GO",
+        "originator_role": "tester",
+        "phase_id": "phase-demo-change",
+        "phase_status": "in_progress",
+        "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+        "removed_items": [],
+        "schedule_baseline_id": "schedule-baseline-test-001",
+        "scope_delta_description": "Testing governed change create path.",
+        "scope_notes": "Created by Phase 1 change governance test.",
+        "title": "Phase 1 governed change test",
+        "workflow_phase_state_snapshot_id": "workflow-snapshot-test-001"
+      },
+      "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+      "route": "/contractor-builder/change"
+    },
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "created_at": "2026-04-29T00:11:03.115097+00:00",
+  "execution_gate": {
+    "allowed": true,
+    "artifact_type": "execution_gate_decision",
+    "artifact_version": "v1",
+    "authority": {
+      "bypass_allowed": false,
+      "side_effects_allowed_after_pass": [
+        "file_write",
+        "receipt_write",
+        "artifact_creation",
+        "email_delivery",
+        "workflow_mutation"
+      ],
+      "side_effects_allowed_before_pass": []
+    },
+    "evaluated_at": "2026-04-29T00:11:03.115083+00:00",
+    "inputs": {
+      "approval_present": true,
+      "approval_required": true,
+      "canon_status": "passed",
+      "canon_valid": true,
+      "execution_allowed": true,
+      "state_status": "passed",
+      "state_valid": true,
+      "watcher_status": "passed",
+      "watcher_valid": true
+    },
+    "reasons": [],
+    "request": {
+      "action": "change_create",
+      "phase_id": null,
+      "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+      "request_id": null,
+      "route": "/contractor-builder/change"
+    },
+    "sealed": true,
+    "status": "pass"
+  },
+  "governance_packet_id": "governance-contractor_change-change_create-project-contractor_change_probe_20260414t202959z-20260414t202959z-e0b09c33-none-20260429T001103Z-030c6149",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "720277b5a01d12be233f83304a1e8a4ca23e844078ae579a84d598bbfd0fbbda"
+  },
+  "phase_id": null,
+  "profile": "contractor_change",
+  "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+  "request": {
+    "action": "change_create",
+    "change_packet_id": "",
+    "packet_kwargs": {
+      "added_items": [
+        "Governed test item"
+      ],
+      "budget_baseline_id": "budget-baseline-test-001",
+      "change_packet_id": "change-phase1-governed-test-001",
+      "compliance_snapshot_id": "compliance-snapshot-test-001",
+      "drawing_revision_id": "drawing-revision-test-001",
+      "originator_name": "Phase 1 Probe",
+      "originator_org": "AI_GO",
+      "originator_role": "tester",
+      "phase_id": "phase-demo-change",
+      "phase_status": "in_progress",
+      "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+      "removed_items": [],
+      "schedule_baseline_id": "schedule-baseline-test-001",
+      "scope_delta_description": "Testing governed change create path.",
+      "scope_notes": "Created by Phase 1 change governance test.",
+      "title": "Phase 1 governed change test",
+      "workflow_phase_state_snapshot_id": "workflow-snapshot-test-001"
+    },
+    "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+    "route": "/contractor-builder/change"
+  },
+  "sealed": true,
+  "state": {
+    "action": "change_create",
+    "artifact_type": "state_validation",
+    "change_packet_id": "",
+    "checks": {
+      "action": "change_create",
+      "change_packet_id": "",
+      "packet_present": false,
+      "packet_project_id": "",
+      "packet_status": "",
+      "project_exists": true,
+      "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33"
+    },
+    "errors": [],
+    "packet": {},
+    "profile": "contractor_change",
+    "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "status": "allowed",
+  "summary": {
+    "canon_valid": true,
+    "execution_gate_allowed": true,
+    "state_valid": true,
+    "watcher_valid": true
+  },
+  "watcher": {
+    "action": "change_create",
+    "artifact_type": "watcher_validation",
+    "change_packet_id": "",
+    "checks": {
+      "action": "change_create",
+      "event_type": "",
+      "new_status": "",
+      "packet_kwargs_present": true,
+      "packet_present": false,
+      "packet_status": "",
+      "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+      "signer_type": ""
+    },
+    "errors": [],
+    "profile": "contractor_change",
+    "project_id": "project-contractor_change_probe_20260414t202959z-20260414T202959Z-e0b09c33",
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "engines": {
+    "curved_mirror": "engines/curved_mirror/engine.py",
+    "rosetta": "engines/rosetta/engine.py"
+  },
+  "refinement": {
+    "pm_smi": "core/refinement/pm_refinement.py",
+    "reasoning_refinement": "core/refinement/reasoning_refinement.py",
+    "narrative_refinement": "core/refinement/narrative_refinement.py"
+  }
+}

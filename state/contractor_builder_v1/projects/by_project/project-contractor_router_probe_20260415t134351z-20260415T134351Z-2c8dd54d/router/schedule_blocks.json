@@ -1,0 +1,32 @@
+{
+  "project_id": "project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d",
+  "block_count": 2,
+  "blocks": [
+    {
+      "block_id": "block-project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d-demo-overlap",
+      "project_id": "project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d",
+      "phase_id": "phase-project_contractor_router_probe_20260415t134351z_20260415t134351z_2c8dd54d_demolition-20260415T134351Z-38d50665",
+      "block_type": "Crew_Assignment",
+      "start_date": "2026-04-20",
+      "end_date": "2026-04-22",
+      "resource_name": "Shared Crew Alpha",
+      "resource_type": "crew",
+      "dependency_phase_ids": [],
+      "notes": "Intentional overlap block for router probe."
+    },
+    {
+      "block_id": "block-project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d-framing-overlap",
+      "project_id": "project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d",
+      "phase_id": "phase-project_contractor_router_probe_20260415t134351z_20260415t134351z_2c8dd54d_framing-20260415T134351Z-52d012a9",
+      "block_type": "Crew_Assignment",
+      "start_date": "2026-04-21",
+      "end_date": "2026-04-24",
+      "resource_name": "Shared Crew Alpha",
+      "resource_type": "crew",
+      "dependency_phase_ids": [
+        "phase-project_contractor_router_probe_20260415t134351z_20260415t134351z_2c8dd54d_demolition-20260415T134351Z-38d50665"
+      ],
+      "notes": "Intentional overlap + dependency pressure for router probe."
+    }
+  ]
+}

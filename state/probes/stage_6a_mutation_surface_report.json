@@ -1,0 +1,2240 @@
+{
+  "status": "passed",
+  "phase": "STAGE_6A_MUTATION_SURFACE",
+  "probe_version": "stage_6a_mutation_surface_probe_v3_path_anchor",
+  "generated_at": "2026-05-04T14:35:30.377279+00:00",
+  "project_root": "C:\\Users\\J\\Desktop\\AI_GO",
+  "report_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\probes\\stage_6a_mutation_surface_report.json",
+  "files_scanned": 1149,
+  "flagged_file_count": 42,
+  "files_requiring_fix_count": 0,
+  "runtime_path_drift_file_count": 0,
+  "direct_mutation_bypass_file_count": 0,
+  "unclassified_mutation_file_count": 0,
+  "test_path_drift_warning_count": 9,
+  "files_requiring_fix": [],
+  "runtime_path_drift_files": [],
+  "direct_mutation_bypass_files": [],
+  "unclassified_mutation_files": [],
+  "test_path_drift_warnings": [
+    {
+      "path": "AI_GO/tests/stage_6b_execution_standardization_probe.py",
+      "relative_path": "tests/stage_6b_execution_standardization_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 6,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 15,
+          "line_text": "REPORT_PATH = Path(\"AI_GO/state/probes/stage_6b_execution_standardization_report.json\")"
+        }
+      ],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 38,
+          "line_text": "\".write_text(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 307,
+          "line_text": "REPORT_PATH.write_text("
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_bytes(",
+          "line": 39,
+          "line_text": "\".write_bytes(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "json.dump(",
+          "line": 40,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 40,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 43,
+          "line_text": "\"send_email(\","
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 306,
+          "line_text": "REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 306,
+          "line_text": "REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_assumption_probe.py",
+      "relative_path": "tests/stage_contractor_assumption_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 445,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_change_probe.py",
+      "relative_path": "tests/stage_contractor_change_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 262,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_dashboard_read_context_probe.py",
+      "relative_path": "tests/stage_contractor_dashboard_read_context_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 27,
+          "line_text": "root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 13,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 12,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 17,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 12,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 17,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_decision_probe.py",
+      "relative_path": "tests/stage_contractor_decision_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 297,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_project_intake_probe.py",
+      "relative_path": "tests/stage_contractor_project_intake_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 142,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_risk_probe.py",
+      "relative_path": "tests/stage_contractor_risk_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 396,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_system_watcher_probe.py",
+      "relative_path": "tests/stage_contractor_system_watcher_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 25,
+          "line_text": "root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 11,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 10,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 15,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 10,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 15,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_workflow_probe.py",
+      "relative_path": "tests/stage_contractor_workflow_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 190,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    }
+  ],
+  "all_flagged_files": [
+    {
+      "path": "AI_GO/api/learning_override.py",
+      "relative_path": "api/learning_override.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 183,
+          "line_text": "root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 183,
+          "line_text": "root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/api/receipts.py",
+      "relative_path": "api/receipts.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": true,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 167,
+          "line_text": "directory.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 167,
+          "line_text": "directory.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/api/request_logging.py",
+      "relative_path": "api/request_logging.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 34,
+          "line_text": "log_dir.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 34,
+          "line_text": "log_dir.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/api/review_decisions.py",
+      "relative_path": "api/review_decisions.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 181,
+          "line_text": "root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 181,
+          "line_text": "root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_5e1_state_authority_probe.py",
+      "relative_path": "tests/stage_5e1_state_authority_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 46,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 45,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 45,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_5e2_request_governor_state_authority_probe.py",
+      "relative_path": "tests/stage_5e2_request_governor_state_authority_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 19,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 18,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 18,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_5e3_state_authority_visibility_probe.py",
+      "relative_path": "tests/stage_5e3_state_authority_visibility_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 45,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 44,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 44,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_5e4_full_state_authority_regression_probe.py",
+      "relative_path": "tests/stage_5e4_full_state_authority_regression_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 49,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 48,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 48,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_5g3_execution_surface_regression_probe.py",
+      "relative_path": "tests/stage_5g3_execution_surface_regression_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "clean_or_low_risk"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 4,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 12,
+          "line_text": "\"send_email(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 23,
+          "line_text": "\"send_email(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 95,
+          "line_text": "\"send_email(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 137,
+          "line_text": "\"send_email(\","
+        }
+      ],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_6a_mutation_surface_probe.py",
+      "relative_path": "tests/stage_6a_mutation_surface_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 19,
+      "directory_mutation_hit_count": 5,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 67,
+          "line_text": "\".write_text(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 456,
+          "line_text": "REPORT_PATH.write_text("
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_bytes(",
+          "line": 68,
+          "line_text": "\".write_bytes(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "json.dump(",
+          "line": 69,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".to_json(",
+          "line": 70,
+          "line_text": "\".to_json(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".to_csv(",
+          "line": 71,
+          "line_text": "\".to_csv(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".save(",
+          "line": 72,
+          "line_text": "\".save(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 69,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 73,
+          "line_text": "\".dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "sqlite3.connect(",
+          "line": 74,
+          "line_text": "\"sqlite3.connect(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".execute(",
+          "line": 75,
+          "line_text": "\".execute(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".executemany(",
+          "line": 76,
+          "line_text": "\".executemany(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 85,
+          "line_text": "\"send_email(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_external(",
+          "line": 86,
+          "line_text": "\"send_external(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "call_external_service(",
+          "line": 87,
+          "line_text": "\"call_external_service(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "requests.post(",
+          "line": 88,
+          "line_text": "\"requests.post(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "requests.put(",
+          "line": 89,
+          "line_text": "\"requests.put(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "requests.patch(",
+          "line": 90,
+          "line_text": "\"requests.patch(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "requests.delete(",
+          "line": 91,
+          "line_text": "\"requests.delete(\","
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 80,
+          "line_text": "\".mkdir(\","
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 455,
+          "line_text": "REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 80,
+          "line_text": "\".mkdir(\","
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 81,
+          "line_text": "\"mkdir(\","
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 455,
+          "line_text": "REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_6a_runtime_mutation_surface_probe.py",
+      "relative_path": "tests/stage_6a_runtime_mutation_surface_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "clean_or_low_risk"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 9,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 292,
+          "line_text": "\".write_text(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_bytes(",
+          "line": 293,
+          "line_text": "\".write_bytes(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "json.dump(",
+          "line": 259,
+          "line_text": "\"pattern\": \"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "json.dump(",
+          "line": 294,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 259,
+          "line_text": "\"pattern\": \"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 294,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "sqlite3.connect(",
+          "line": 269,
+          "line_text": "\"pattern\": \"sqlite3.connect(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "sqlite3.connect(",
+          "line": 295,
+          "line_text": "\"sqlite3.connect(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".execute(",
+          "line": 279,
+          "line_text": "\"pattern\": \".execute(write_sql)\","
+        }
+      ],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_6b_execution_standardization_probe.py",
+      "relative_path": "tests/stage_6b_execution_standardization_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 6,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 15,
+          "line_text": "REPORT_PATH = Path(\"AI_GO/state/probes/stage_6b_execution_standardization_report.json\")"
+        }
+      ],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 38,
+          "line_text": "\".write_text(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 307,
+          "line_text": "REPORT_PATH.write_text("
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_bytes(",
+          "line": 39,
+          "line_text": "\".write_bytes(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "json.dump(",
+          "line": 40,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 40,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 43,
+          "line_text": "\"send_email(\","
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 306,
+          "line_text": "REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 306,
+          "line_text": "REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_assumption_probe.py",
+      "relative_path": "tests/stage_contractor_assumption_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 445,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_change_probe.py",
+      "relative_path": "tests/stage_contractor_change_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 262,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_dashboard_read_context_probe.py",
+      "relative_path": "tests/stage_contractor_dashboard_read_context_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 27,
+          "line_text": "root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 13,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 12,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 17,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 12,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 17,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_decision_probe.py",
+      "relative_path": "tests/stage_contractor_decision_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 297,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_project_intake_probe.py",
+      "relative_path": "tests/stage_contractor_project_intake_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 142,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_risk_probe.py",
+      "relative_path": "tests/stage_contractor_risk_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 396,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_system_watcher_probe.py",
+      "relative_path": "tests/stage_contractor_system_watcher_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 25,
+          "line_text": "root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 11,
+          "line_text": "path.write_text(json.dumps(payload, indent=2), encoding=\"utf-8\")"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 10,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 15,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 10,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 15,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/tests/stage_contractor_workflow_probe.py",
+      "relative_path": "tests/stage_contractor_workflow_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "test_path_drift_warning"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 1,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [
+        {
+          "category": "path_drift",
+          "pattern": "Path\\(\\s*[\"\\']AI_GO[/\\\\]state",
+          "line": 190,
+          "line_text": "project_root = Path(\"AI_GO/state/contractor_builder_v1/projects/by_project\") / project_id"
+        }
+      ],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_extmem_persistence_gate_probe.py",
+      "relative_path": "tests/stage_extmem_persistence_gate_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "clean_or_low_risk"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 4,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": "sqlite3.connect(",
+          "line": 17,
+          "line_text": "with sqlite3.connect(DB_PATH) as conn:"
+        },
+        {
+          "category": "direct_write",
+          "pattern": "sqlite3.connect(",
+          "line": 23,
+          "line_text": "with sqlite3.connect(DB_PATH) as conn:"
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".execute(",
+          "line": 18,
+          "line_text": "conn.execute(f\"DELETE FROM {TABLE_NAME}\")"
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".execute(",
+          "line": 24,
+          "line_text": "row = conn.execute(f\"SELECT COUNT(*) FROM {TABLE_NAME}\").fetchone()"
+        }
+      ],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/tests/stage_pass2_mutation_audit_probe.py",
+      "relative_path": "tests/stage_pass2_mutation_audit_probe.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 6,
+      "directory_mutation_hit_count": 1,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 11,
+          "line_text": "\".write_text(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".write_bytes(",
+          "line": 12,
+          "line_text": "\".write_bytes(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "json.dump(",
+          "line": 14,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".dump(",
+          "line": 14,
+          "line_text": "\"json.dump(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": "sqlite3.connect(",
+          "line": 15,
+          "line_text": "\"sqlite3.connect(\","
+        },
+        {
+          "category": "direct_write",
+          "pattern": ".execute(",
+          "line": 16,
+          "line_text": "\".execute(\","
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 18,
+          "line_text": "\"mkdir(\","
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/trade_tracking/performance/performance_state_writer.py",
+      "relative_path": "trade_tracking/performance/performance_state_writer.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 85,
+          "line_text": "current_dir.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 86,
+          "line_text": "receipts_dir.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 85,
+          "line_text": "current_dir.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 86,
+          "line_text": "receipts_dir.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/trade_tracking/storage/db_paths.py",
+      "relative_path": "trade_tracking/storage/db_paths.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 48,
+          "line_text": "path.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 48,
+          "line_text": "path.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/trade_tracking/storage/event_store.py",
+      "relative_path": "trade_tracking/storage/event_store.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": true,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 93,
+          "line_text": "target_dir.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 93,
+          "line_text": "target_dir.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/PM_CORE/child_core_management/core_creation.py",
+      "relative_path": "PM_CORE/child_core_management/core_creation.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 205,
+          "line_text": "target.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 205,
+          "line_text": "target.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/labeled_outcomes/labeled_outcomes_store.py",
+      "relative_path": "historical_market/labeled_outcomes/labeled_outcomes_store.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": true,
+      "mutation_classes": [
+        "historical_market_labeled_outcome_index",
+        "historical_market_labeled_outcome_persistence",
+        "historical_market_labeled_outcome_receipt"
+      ],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 46,
+          "line_text": "path.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 46,
+          "line_text": "path.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/storage/db_paths.py",
+      "relative_path": "historical_market/storage/db_paths.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 90,
+          "line_text": "directory.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 90,
+          "line_text": "directory.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/storage/raw_store.py",
+      "relative_path": "historical_market/storage/raw_store.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [
+        "historical_market_raw_persistence",
+        "historical_market_raw_receipt"
+      ],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_text(",
+          "line": 137,
+          "line_text": "tmp_path.write_text("
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 135,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 135,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/tests/test_curated_store_smoke.py",
+      "relative_path": "historical_market/tests/test_curated_store_smoke.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 32,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 32,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/tests/test_historical_backfill_runner.py",
+      "relative_path": "historical_market/tests/test_historical_backfill_runner.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 71,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 71,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/tests/test_historical_intelligence_service_smoke.py",
+      "relative_path": "historical_market/tests/test_historical_intelligence_service_smoke.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 21,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 21,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/tests/test_pattern_pipeline_smoke.py",
+      "relative_path": "historical_market/tests/test_pattern_pipeline_smoke.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 23,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 23,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/tests/test_raw_store_smoke.py",
+      "relative_path": "historical_market/tests/test_raw_store_smoke.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 32,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 32,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/historical_market/tests/test_retrieval_and_translation_smoke.py",
+      "relative_path": "historical_market/tests/test_retrieval_and_translation_smoke.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 19,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 19,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/core/governance/governed_persistence.py",
+      "relative_path": "core/governance/governed_persistence.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": true,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "direct_write",
+          "pattern": ".write_bytes(",
+          "line": 156,
+          "line_text": "tmp_path.write_bytes(data)"
+        }
+      ],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 154,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 154,
+          "line_text": "path.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/core/paths/path_resolver.py",
+      "relative_path": "core/paths/path_resolver.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 50,
+          "line_text": "resolved.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 56,
+          "line_text": "resolved.parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 50,
+          "line_text": "resolved.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 56,
+          "line_text": "resolved.parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/core/shared/io_utils.py",
+      "relative_path": "core/shared/io_utils.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 64,
+          "line_text": "Path(path).parent.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 64,
+          "line_text": "Path(path).parent.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/core/visibility/visibility_router.py",
+      "relative_path": "core/visibility/visibility_router.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 4,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 45,
+          "line_text": "STATE_ROOT.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 46,
+          "line_text": "RECEIPT_DIR.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 45,
+          "line_text": "STATE_ROOT.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 46,
+          "line_text": "RECEIPT_DIR.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/child_cores/market_analyzer_v1/tests/test_historical_context_bridge_smoke.py",
+      "relative_path": "child_cores/market_analyzer_v1/tests/test_historical_context_bridge_smoke.py",
+      "is_test": true,
+      "runtime_excluded": true,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "directory_creation_review"
+      ],
+      "has_governed_terms": false,
+      "has_required_mutation_terms": false,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 0,
+      "directory_mutation_hit_count": 2,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [],
+      "directory_mutation_hits": [
+        {
+          "category": "directory_mutation",
+          "pattern": ".mkdir(",
+          "line": 24,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        },
+        {
+          "category": "directory_mutation",
+          "pattern": "mkdir(",
+          "line": 24,
+          "line_text": "self.project_root.mkdir(parents=True, exist_ok=True)"
+        }
+      ]
+    },
+    {
+      "path": "AI_GO/child_cores/contractor_builder_v1/delivery/email_runtime.py",
+      "relative_path": "child_cores/contractor_builder_v1/delivery/email_runtime.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "clean_or_low_risk"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 210,
+          "line_text": "def send_email("
+        }
+      ],
+      "directory_mutation_hits": []
+    },
+    {
+      "path": "AI_GO/child_cores/contractor_builder_v1/phase_closeout/phase_closeout_executor.py",
+      "relative_path": "child_cores/contractor_builder_v1/phase_closeout/phase_closeout_executor.py",
+      "is_test": false,
+      "runtime_excluded": false,
+      "central_mutation_authority": false,
+      "requires_fix": false,
+      "reasons": [
+        "clean_or_low_risk"
+      ],
+      "has_governed_terms": true,
+      "has_required_mutation_terms": true,
+      "has_canonical_path_import": false,
+      "mutation_classes": [
+        "contractor_phase_closeout_persistence"
+      ],
+      "path_drift_hit_count": 0,
+      "runtime_path_drift_hit_count": 0,
+      "direct_mutation_hit_count": 1,
+      "directory_mutation_hit_count": 0,
+      "path_drift_hits": [],
+      "direct_mutation_hits": [
+        {
+          "category": "external_effect",
+          "pattern": "send_email(",
+          "line": 335,
+          "line_text": "email_result = send_email("
+        }
+      ],
+      "directory_mutation_hits": []
+    }
+  ],
+  "certification": {
+    "canonical_project_root_used": true,
+    "relative_root_scan_used": false,
+    "cwd_dependent_root_used": false,
+    "runtime_path_drift_allowed": false,
+    "direct_mutation_bypass_allowed": false
+  }
+}

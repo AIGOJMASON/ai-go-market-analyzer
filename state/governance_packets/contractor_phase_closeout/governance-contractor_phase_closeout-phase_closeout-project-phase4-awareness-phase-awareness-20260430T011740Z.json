@@ -1,0 +1,42 @@
+{
+  "action": "phase_closeout",
+  "allowed": false,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "canon": {
+    "status": "passed",
+    "valid": true
+  },
+  "created_at": "2026-04-29T00:00:00+00:00",
+  "execution_gate": {
+    "allowed": false,
+    "status": "blocked",
+    "valid": false
+  },
+  "governance_packet_id": "governance-contractor_phase_closeout-phase_closeout-project-phase4-awareness-phase-awareness-20260430T011740Z",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "188c11e5f891c32ef901c29accc3163b29d6b972f0d1cc106d1f72f035d36a40"
+  },
+  "phase_id": "phase-awareness",
+  "profile": "contractor_phase_closeout",
+  "project_id": "project-phase4-awareness",
+  "request": {
+    "phase_id": "phase-awareness",
+    "project_id": "project-phase4-awareness",
+    "request_id": "request-phase4-awareness-duplicate",
+    "route": "/contractor-builder/phase-closeout/run"
+  },
+  "sealed": true,
+  "state": {
+    "status": "passed",
+    "valid": true
+  },
+  "status": "blocked",
+  "watcher": {
+    "status": "blocked",
+    "valid": false
+  }
+}

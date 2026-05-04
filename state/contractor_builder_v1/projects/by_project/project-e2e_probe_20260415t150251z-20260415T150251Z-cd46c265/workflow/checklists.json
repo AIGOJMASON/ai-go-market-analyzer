@@ -1,0 +1,22 @@
+{
+  "phase-project_e2e_probe_20260415t150251z_20260415t150251z_cd46c265_demo-20260415T150251Z-377a5e63": [
+    {
+      "item_id": "item-1",
+      "phase_id": "phase-project_e2e_probe_20260415t150251z_20260415t150251z_cd46c265_demo-20260415T150251Z-377a5e63",
+      "label": "Inspection scheduled",
+      "required": true,
+      "completed": true,
+      "status": "complete",
+      "completed_at": "2026-04-28T14:00:00Z"
+    },
+    {
+      "item_id": "item-2",
+      "phase_id": "phase-project_e2e_probe_20260415t150251z_20260415t150251z_cd46c265_demo-20260415T150251Z-377a5e63",
+      "label": "Inspection complete",
+      "required": true,
+      "completed": true,
+      "status": "complete",
+      "completed_at": "2026-04-28T14:00:00Z"
+    }
+  ]
+}

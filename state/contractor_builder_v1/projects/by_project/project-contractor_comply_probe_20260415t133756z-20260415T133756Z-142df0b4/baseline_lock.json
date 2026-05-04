@@ -1,0 +1,16 @@
+{
+  "project_id": "project-contractor_comply_probe_20260415t133756z-20260415T133756Z-142df0b4",
+  "locked_at": "2026-04-15T13:37:56.778725+00:00",
+  "baseline_refs": {
+    "schedule_baseline_id": "schedule-baseline-20260415T133756Z",
+    "budget_baseline_id": "budget-baseline-20260415T133756Z",
+    "compliance_snapshot_id": "compliance-snapshot-20260415T133756Z",
+    "oracle_snapshot_id": "",
+    "exposure_profile_id": ""
+  },
+  "lock_status": "locked",
+  "integrity": {
+    "entry_hash": "502360544599b099f5fd418180158067432b6b4b218cdb6cb41bedbed61e2265",
+    "linked_receipts": []
+  }
+}

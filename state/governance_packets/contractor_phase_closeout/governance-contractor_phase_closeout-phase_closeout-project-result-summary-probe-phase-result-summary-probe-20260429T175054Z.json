@@ -1,0 +1,96 @@
+{
+  "action": "phase_closeout",
+  "allowed": true,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "canon": {
+    "status": "passed",
+    "valid": true
+  },
+  "created_at": "2026-04-29T00:00:00+00:00",
+  "execution_gate": {
+    "allowed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "governance_packet_id": "governance-contractor_phase_closeout-phase_closeout-project-result-summary-probe-phase-result-summary-probe-20260429T175054Z",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "df9d79b9355e0fc5dbc279913abfce9d2d916213eeb1c5fdd3f41c9caf573939"
+  },
+  "phase_id": "phase-result-summary-probe",
+  "post_execution_result_summary_attached": true,
+  "profile": "contractor_phase_closeout",
+  "project_id": "project-result-summary-probe",
+  "request": {
+    "phase_id": "phase-result-summary-probe",
+    "project_id": "project-result-summary-probe",
+    "request_id": "request-result-summary-probe",
+    "route": "/contractor-builder/phase-closeout/run"
+  },
+  "result_summary": {
+    "action": "phase_closeout",
+    "artifact_type": "post_execution_result_summary",
+    "artifact_version": "v1",
+    "artifacts_created": [
+      {
+        "artifact_type": "phase_closeout_pdf_artifact_record",
+        "path": "state/demo/pdf.artifact.json"
+      },
+      {
+        "artifact_type": "pdf_receipt_global",
+        "path": "receipts/demo/pdf.json"
+      },
+      {
+        "artifact_type": "pdf_receipt_project",
+        "path": "state/demo/project_pdf_receipt.json"
+      },
+      {
+        "artifact_type": "email_delivery_record",
+        "path": "state/demo/email.json"
+      },
+      {
+        "artifact_type": "delivery_receipt_global",
+        "path": "receipts/demo/delivery.json"
+      },
+      {
+        "artifact_type": "delivery_receipt_project",
+        "path": "state/demo/project_delivery_receipt.json"
+      }
+    ],
+    "counts": {
+      "artifacts_created": 6,
+      "external_actions": 1,
+      "state_mutations": 0
+    },
+    "created_at": "2026-04-29T17:50:54.268475+00:00",
+    "effect": "execution_partial_delivery_failed",
+    "external_actions": [
+      {
+        "action_type": "send_email",
+        "delivery_id": "email_probe",
+        "execution_gate_allowed": true,
+        "provider": "smtp",
+        "recipient": "client@example.com",
+        "status": "failed"
+      }
+    ],
+    "phase_id": "phase-result-summary-probe",
+    "project_id": "project-result-summary-probe",
+    "sealed": true,
+    "state_mutations": [],
+    "status": "delivery_failed"
+  },
+  "sealed": true,
+  "state": {
+    "status": "passed",
+    "valid": true
+  },
+  "status": "allowed",
+  "watcher": {
+    "status": "passed",
+    "valid": true
+  }
+}

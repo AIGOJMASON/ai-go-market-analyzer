@@ -1,0 +1,18 @@
+{
+  "record_id": "pm_refinement_intake_2026-03-30T17-45-00Z",
+  "timestamp": "2026-03-30T17:45:00Z",
+  "source_packet_path": "state/refinement/current/continuity_weighting_refinement_packet.json",
+  "annotation_only": true,
+  "pm_surface": "refinement_intake",
+  "source_surface": null,
+  "top_pattern_key": null,
+  "top_pattern_status": null,
+  "top_pattern_weight": 0.0,
+  "recurrence_count": 0,
+  "confidence_posture": "none",
+  "advisory_note": "No continuity pattern available",
+  "event_class": null,
+  "symbol": null,
+  "event_theme": null,
+  "signal_class": "low_signal"
+}

@@ -1,0 +1,20 @@
+{
+  "artifact_type": "historical_intake_event",
+  "asset_class": "etf",
+  "event_id": "seed-cont-003",
+  "headline": "Seeded historical case for seed-cont-003",
+  "intake_timestamp": "2026-03-03T00:00:00+00:00",
+  "normalized_signal": {
+    "case_id": "seed-cont-003",
+    "seeded": true
+  },
+  "raw_signal": {
+    "case_id": "seed-cont-003",
+    "seeded": true
+  },
+  "signal_seed": "seed_curated_store",
+  "source_ref": "seed:seed-cont-003",
+  "symbol": "XLE",
+  "timeframe": "1d",
+  "written_at": "2026-04-06T19:38:07.053836+00:00"
+}

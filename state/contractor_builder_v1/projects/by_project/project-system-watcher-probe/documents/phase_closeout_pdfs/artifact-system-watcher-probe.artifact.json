@@ -1,0 +1,6 @@
+{
+  "artifact_id": "artifact-system-watcher-probe",
+  "project_id": "project-system-watcher-probe",
+  "phase_id": "phase-system-watcher-probe",
+  "pdf_path": "state/demo/system_watcher_probe.txt"
+}

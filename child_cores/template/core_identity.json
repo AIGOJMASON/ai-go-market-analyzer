@@ -1,0 +1,33 @@
+{
+  "core_name": "_template",
+  "classification": "child_execution_core_template",
+  "status": "template",
+  "origin_layer": "child_cores",
+  "inherits_from": [
+    "PM_CORE"
+  ],
+  "required_local_surfaces": [
+    "inheritance_state",
+    "execution",
+    "outputs",
+    "constraints"
+  ],
+  "required_governance_files": [
+    "core_identity.json"
+  ],
+  "authority_boundaries": {
+    "allowed": [
+      "bounded_domain_execution",
+      "inherited_planning_consumption",
+      "local_output_generation"
+    ],
+    "disallowed": [
+      "root_pm_strategy_ownership",
+      "raw_research_intake",
+      "research_screening",
+      "runtime_boot_control",
+      "continuity_ownership",
+      "root_monitoring_ownership"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "engine": "curved_mirror",
+  "classification": "reasoning_refinement_engine",
+  "status": "active",
+  "governing_documents": [
+    "_CURVED_MIRROR_LAYER.md",
+    "REASONING_REFINEMENT_POLICY.md",
+    "INPUT_OUTPUT_CONTRACT.md"
+  ],
+  "runtime_modules": [
+    "engine.py",
+    "prompts.py",
+    "policies.py"
+  ],
+  "declared_outputs": [
+    "reasoning_refinement_bundle"
+  ],
+  "authority_boundaries": {
+    "allowed": [
+      "governed_input_processing",
+      "reasoning_refinement",
+      "provenance_preservation",
+      "bounded_bundle_emission"
+    ],
+    "disallowed": [
+      "raw_research_intake",
+      "research_screening",
+      "research_trust_classification",
+      "pm_strategy_ownership",
+      "direct_child_core_execution",
+      "canon_authorship"
+    ]
+  },
+  "upstream_contract": "REFINEMENT_GATE_CONTRACT.md",
+  "local_contract": "INPUT_OUTPUT_CONTRACT.md",
+  "local_policy": "REASONING_REFINEMENT_POLICY.md"
+}

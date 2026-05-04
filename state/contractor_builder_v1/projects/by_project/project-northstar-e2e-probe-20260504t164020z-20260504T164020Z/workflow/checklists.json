@@ -1,0 +1,62 @@
+{
+  "artifact_type": "governed_persistence_envelope",
+  "artifact_version": "northstar_6a_governed_persistence_v1",
+  "authority_metadata": {
+    "actor": "system",
+    "append_only_memory": false,
+    "authority_id": "northstar_stage_6a",
+    "can_execute": false,
+    "can_mutate_pm_authority": false,
+    "can_mutate_recommendations": false,
+    "can_mutate_runtime": false,
+    "can_override_execution_gate": false,
+    "can_override_governance": false,
+    "can_override_watcher": false,
+    "child_core_id": "contractor_builder_v1",
+    "governance_stage": "northstar_6a",
+    "layer": "workflow.workflow_runtime",
+    "operation": "initialize_checklists",
+    "phase_id": "",
+    "project_id": "project-northstar-e2e-probe-20260504t164020z-20260504T164020Z",
+    "request_id": "",
+    "source": ""
+  },
+  "classification": {
+    "advisory_only": false,
+    "execution_allowed": false,
+    "governed_persistence": true,
+    "mutation_class": "contractor_workflow_persistence",
+    "persistence_type": "contractor_workflow_checklists",
+    "pm_authority_mutation_allowed": false,
+    "recommendation_mutation_allowed": false,
+    "runtime_mutation_allowed": false,
+    "workflow_mutation_allowed": false
+  },
+  "payload": {
+    "artifact_type": "contractor_workflow_checklists",
+    "authority_metadata": {
+      "authority_id": "northstar_stage_6a",
+      "child_core_id": "contractor_builder_v1",
+      "layer": "workflow.workflow_runtime",
+      "operation": "initialize_checklists",
+      "phase_id": "",
+      "project_id": "project-northstar-e2e-probe-20260504t164020z-20260504T164020Z"
+    },
+    "checklists": {},
+    "classification": {
+      "advisory_only": false,
+      "authority_mutation_allowed": false,
+      "execution_allowed": false,
+      "mutation_class": "contractor_workflow_persistence",
+      "persistence_type": "contractor_workflow_checklists",
+      "project_truth_mutation_allowed": false,
+      "runtime_mutation_allowed": false,
+      "state_mutation_allowed": true,
+      "workflow_mutation_allowed": true
+    },
+    "project_id": "project-northstar-e2e-probe-20260504t164020z-20260504T164020Z",
+    "sealed": true
+  },
+  "persisted_at": "2026-05-04T16:40:20Z",
+  "sealed": true
+}

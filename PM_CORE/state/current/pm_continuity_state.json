@@ -1,0 +1,13 @@
+{
+  "state_id": "PM_CONTINUITY_STATE",
+  "status": "active",
+  "total_pm_intake_records": 0,
+  "total_continuity_updates": 0,
+  "recommended_action_counts": {},
+  "target_child_core_counts": {},
+  "recent_pm_intake_ids": [],
+  "recent_source_arbitration_ids": [],
+  "recent_source_packet_ids": [],
+  "unresolved_count": 0,
+  "last_updated": ""
+}

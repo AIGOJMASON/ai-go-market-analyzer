@@ -1,0 +1,49 @@
+{
+  "core_id": "market_analyzer_v1",
+  "display_name": "Market Analyzer V1",
+  "domain_focus": "necessity-driven rebound market intelligence",
+  "template_version": "child_core_template_v1",
+  "domain_version": "1.0",
+  "status": "active",
+  "allowed_actions": [
+    "consume_validated_pm_inheritance",
+    "classify_market_regime",
+    "classify_event_propagation",
+    "filter_necessity_candidates",
+    "validate_rebound_candidates",
+    "build_trade_recommendation_packet",
+    "build_receipt_trace_packet",
+    "build_approval_request_packet",
+    "render_dashboard_views",
+    "verify_local_output",
+    "record_local_continuity_after_watcher_success"
+  ],
+  "forbidden_actions": [
+    "ingest_raw_research_directly",
+    "bypass_pm_core",
+    "self_activate",
+    "execute_trades_autonomously",
+    "learn_at_runtime",
+    "reweight_upstream_truth",
+    "mutate_registry_truth",
+    "emit_unreceipted_output"
+  ],
+  "required_artifacts": [
+    "market_regime_record",
+    "event_propagation_record",
+    "necessity_filtered_candidate_set",
+    "rebound_validation_record",
+    "trade_recommendation_packet",
+    "receipt_trace_packet",
+    "approval_request_packet"
+  ],
+  "approval_gate": "human_trade_approval_record",
+  "notes": [
+    "Governed recommendation surface only.",
+    "Advisory activation only.",
+    "No execution authority resides in the child core.",
+    "PM_CORE remains the parent authority.",
+    "Watcher validation is mandatory on successful outputs.",
+    "Human approval remains required before any trade execution."
+  ]
+}

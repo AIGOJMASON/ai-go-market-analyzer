@@ -1,0 +1,14 @@
+{
+  "recorded_at": "2026-03-31T20:46:37Z",
+  "status": "recorded",
+  "annotation_only": true,
+  "core_id": "market_analyzer_v1",
+  "closeout_id": "closeout_market_analyzer_v1_20260401T010500Z_probe_latest",
+  "closeout_status": "accepted",
+  "expected_behavior": "energy rebound",
+  "actual_outcome": "confirmed energy rebound via price increase from 100.00 to 105.00 (+5.00%)",
+  "outcome_class": "confirmed",
+  "confidence_delta": "up",
+  "notes": "symbol=XLE; reference_price=100.00; current_price=105.00; delta_pct=+5.00",
+  "source": "market_feed"
+}

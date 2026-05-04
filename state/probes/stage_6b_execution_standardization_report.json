@@ -1,0 +1,1455 @@
+{
+  "status": "passed",
+  "phase": "STAGE_6B_EXECUTION_STANDARDIZATION",
+  "probe_version": "stage_6b_execution_standardization_probe_v2_route_scan",
+  "files_scanned": 79,
+  "api_route_file_count": 31,
+  "mutation_capable_route_count": 0,
+  "routes_requiring_6b_conversion_count": 0,
+  "routes_requiring_6b_conversion": [],
+  "report_path": "AI_GO\\state\\probes\\stage_6b_execution_standardization_report.json",
+  "api_route_files": [
+    {
+      "path": "AI_GO\\api\\ai_go_governance_explainer_api.py",
+      "module": "AI_GO.api.ai_go_governance_explainer_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.ai_go_governance_explainer_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "explain_governance",
+          "line": 31,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/explain-governance"
+            }
+          ]
+        },
+        {
+          "name": "explain_governance_by_id",
+          "line": 39,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/explain-governance/by-id"
+            }
+          ]
+        },
+        {
+          "name": "get_governance_packet",
+          "line": 79,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/governance-packet/{profile}/{governance_packet_id}"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\canon_runtime_api.py",
+      "module": "AI_GO.api.canon_runtime_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.canon_runtime_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "canon_runtime_health",
+          "line": 37,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "canon_runtime_index",
+          "line": 50,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/index"
+            }
+          ]
+        },
+        {
+          "name": "canon_runtime_validate",
+          "line": 55,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/validate"
+            }
+          ]
+        },
+        {
+          "name": "canon_runtime_enforce",
+          "line": 60,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/enforce"
+            }
+          ]
+        },
+        {
+          "name": "canon_runtime_domain_context",
+          "line": 74,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/context/domain/{domain}"
+            }
+          ]
+        },
+        {
+          "name": "canon_runtime_layer_context",
+          "line": 82,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/context/layer/{layer_name}"
+            }
+          ]
+        },
+        {
+          "name": "canon_runtime_full_context",
+          "line": 90,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/context/full"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_assumption_api.py",
+      "module": "AI_GO.api.contractor_assumption_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_assumption_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "create_assumption_entry",
+          "line": 115,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/create"
+            }
+          ]
+        },
+        {
+          "name": "transition_assumption_entry",
+          "line": 147,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/transition"
+            }
+          ]
+        },
+        {
+          "name": "invalidate_assumption_entry",
+          "line": 179,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/invalidate"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": true,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "require_governed_mutation(",
+          "line": 86,
+          "line_text": "return require_governed_mutation("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_builder_api.py",
+      "module": "AI_GO.api.contractor_builder_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_builder_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "contractor_builder_health",
+          "line": 254,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_change_api.py",
+      "module": "AI_GO.api.contractor_change_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_change_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "create_change_packet_route",
+          "line": 129,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/create"
+            }
+          ]
+        },
+        {
+          "name": "sign_change_packet_route",
+          "line": 165,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/sign"
+            }
+          ]
+        },
+        {
+          "name": "transition_change_packet_route",
+          "line": 201,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/transition"
+            }
+          ]
+        },
+        {
+          "name": "append_change_approval_route",
+          "line": 237,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/approval-event"
+            }
+          ]
+        },
+        {
+          "name": "get_latest_change_route",
+          "line": 267,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/latest"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": true,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "require_governed_mutation(",
+          "line": 100,
+          "line_text": "return require_governed_mutation("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_change_signoff_api.py",
+      "module": "AI_GO.api.contractor_change_signoff_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_change_signoff_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "send_change_signoff_route",
+          "line": 34,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/send"
+            }
+          ]
+        },
+        {
+          "name": "complete_change_signoff_route",
+          "line": 48,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/complete"
+            }
+          ]
+        },
+        {
+          "name": "decline_change_signoff_route",
+          "line": 62,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/decline"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_comply_api.py",
+      "module": "AI_GO.api.contractor_comply_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_comply_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "run_comply",
+          "line": 27,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/run"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_dashboard_read_api.py",
+      "module": "AI_GO.api.contractor_dashboard_read_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_dashboard_read_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "contractor_dashboard_read_health",
+          "line": 29,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "run_dashboard_read",
+          "line": 40,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/run"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_dashboard_ui.py",
+      "module": "AI_GO.api.contractor_dashboard_ui",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_dashboard_ui",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "contractor_dashboard_ui",
+          "line": 688,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/contractor-dashboard"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_decision_api.py",
+      "module": "AI_GO.api.contractor_decision_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_decision_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "create_decision_entry",
+          "line": 118,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/create"
+            }
+          ]
+        },
+        {
+          "name": "sign_decision_entry",
+          "line": 148,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/sign"
+            }
+          ]
+        },
+        {
+          "name": "transition_decision_entry",
+          "line": 180,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/transition"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": true,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "require_governed_mutation(",
+          "line": 89,
+          "line_text": "return require_governed_mutation("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_external_pressure_api.py",
+      "module": "AI_GO.api.contractor_external_pressure_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_external_pressure_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "run_contractor_curated_external_pressure",
+          "line": 65,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/curated"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_intake_api.py",
+      "module": "AI_GO.api.contractor_intake_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_intake_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "contractor_new_project_ui",
+          "line": 499,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/new-project"
+            }
+          ]
+        },
+        {
+          "name": "create_project_from_form_api",
+          "line": 509,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/create-form"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": true,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "govern_request_from_dict(",
+          "line": 449,
+          "line_text": "governance_decision = govern_request_from_dict("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_live_dashboard_api.py",
+      "module": "AI_GO.api.contractor_live_dashboard_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_live_dashboard_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "contractor_live_dashboard_health",
+          "line": 32,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "run_live_dashboard",
+          "line": 43,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/run"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_oracle_api.py",
+      "module": "AI_GO.api.contractor_oracle_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_oracle_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "list_oracle_snapshots",
+          "line": 31,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/snapshots"
+            }
+          ]
+        },
+        {
+          "name": "build_project_external_pressure",
+          "line": 39,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/project-external-pressure"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_phase_closeout_api.py",
+      "module": "AI_GO.api.contractor_phase_closeout_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_phase_closeout_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "run_phase_closeout",
+          "line": 81,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/run"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": true,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "execute_governed_action(",
+          "line": 95,
+          "line_text": "result = execute_governed_action("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_pre_interface_watcher.py",
+      "module": "AI_GO.api.contractor_pre_interface_watcher",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_pre_interface_watcher",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "validate_pre_interface_payload",
+          "line": 69,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/validate"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_project_record_api.py",
+      "module": "AI_GO.api.contractor_project_record_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_project_record_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "contractor_project_record_health",
+          "line": 26,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "read_project_record",
+          "line": 38,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/read"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_projects_api.py",
+      "module": "AI_GO.api.contractor_projects_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_projects_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "create_contractor_project",
+          "line": 67,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/create"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": true,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "require_governed_mutation(",
+          "line": 108,
+          "line_text": "guard = require_governed_mutation("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_report_api.py",
+      "module": "AI_GO.api.contractor_report_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_report_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "generate_project_weekly_report",
+          "line": 54,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/project-weekly"
+            }
+          ]
+        },
+        {
+          "name": "generate_portfolio_weekly_report",
+          "line": 66,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/portfolio-weekly"
+            }
+          ]
+        },
+        {
+          "name": "approve_report_route",
+          "line": 78,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/approve"
+            }
+          ]
+        },
+        {
+          "name": "archive_report_route",
+          "line": 90,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/archive"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_risk_api.py",
+      "module": "AI_GO.api.contractor_risk_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_risk_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "create_risk_entry",
+          "line": 42,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/create"
+            }
+          ]
+        },
+        {
+          "name": "review_risk_entry",
+          "line": 52,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/review"
+            }
+          ]
+        },
+        {
+          "name": "transition_risk_entry",
+          "line": 62,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/transition"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_root_spine_api.py",
+      "module": "AI_GO.api.contractor_root_spine_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_root_spine_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "get_root_spine_health",
+          "line": 18,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "get_root_spine_index",
+          "line": 23,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/index"
+            }
+          ]
+        },
+        {
+          "name": "get_root_spine_components",
+          "line": 36,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/components"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_router_api.py",
+      "module": "AI_GO.api.contractor_router_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_router_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "persist_schedule_blocks",
+          "line": 42,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/blocks"
+            }
+          ]
+        },
+        {
+          "name": "analyze_router",
+          "line": 52,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/analyze"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_signoff_api.py",
+      "module": "AI_GO.api.contractor_signoff_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_signoff_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "check_complete_signoff_route",
+          "line": 26,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/complete/check"
+            }
+          ]
+        },
+        {
+          "name": "complete_signoff_route",
+          "line": 36,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/complete"
+            }
+          ]
+        },
+        {
+          "name": "check_decline_signoff_route",
+          "line": 46,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/decline/check"
+            }
+          ]
+        },
+        {
+          "name": "decline_signoff_route",
+          "line": 56,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/decline"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_state_authority_api.py",
+      "module": "AI_GO.api.contractor_state_authority_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_state_authority_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "check_state_authority",
+          "line": 27,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/check"
+            }
+          ]
+        },
+        {
+          "name": "summarize_state_authority_check",
+          "line": 43,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/summary"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_system_brain_api.py",
+      "module": "AI_GO.api.contractor_system_brain_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_system_brain_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "get_operator_system_brain_surface",
+          "line": 16,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/surface"
+            }
+          ]
+        },
+        {
+          "name": "get_operator_system_brain_summary",
+          "line": 34,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/summary"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_system_watcher_api.py",
+      "module": "AI_GO.api.contractor_system_watcher_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_system_watcher_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "check_contractor_system",
+          "line": 21,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/check"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_weekly_cycle_api.py",
+      "module": "AI_GO.api.contractor_weekly_cycle_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_weekly_cycle_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "run_contractor_weekly_cycle",
+          "line": 24,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/run"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\contractor_workflow_api.py",
+      "module": "AI_GO.api.contractor_workflow_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.contractor_workflow_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "initialize_contractor_workflow",
+          "line": 122,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/initialize"
+            }
+          ]
+        },
+        {
+          "name": "upsert_contractor_workflow_checklist",
+          "line": 152,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/checklist/upsert"
+            }
+          ]
+        },
+        {
+          "name": "record_contractor_workflow_signoff",
+          "line": 188,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/signoff"
+            }
+          ]
+        },
+        {
+          "name": "update_contractor_workflow_signoff_status",
+          "line": 219,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/signoff/status"
+            }
+          ]
+        },
+        {
+          "name": "reconcile_contractor_workflow",
+          "line": 252,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/reconcile"
+            }
+          ]
+        },
+        {
+          "name": "repair_upsert_contractor_workflow",
+          "line": 287,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/repair/upsert"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": true,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [
+        {
+          "pattern": "require_governed_mutation(",
+          "line": 93,
+          "line_text": "return require_governed_mutation("
+        }
+      ],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\market_analyzer_api.py",
+      "module": "AI_GO.api.market_analyzer_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.market_analyzer_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "health",
+          "line": 580,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "latest_operator_payload",
+          "line": 593,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/operator/latest"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\source_signal_desk.py",
+      "module": "AI_GO.api.source_signal_desk",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.source_signal_desk",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "source_signal_desk_health",
+          "line": 45,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "ingest_source_item",
+          "line": 55,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/ingest"
+            }
+          ]
+        },
+        {
+          "name": "list_signals",
+          "line": 68,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/signals"
+            }
+          ]
+        },
+        {
+          "name": "list_candidates",
+          "line": 79,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/candidates"
+            }
+          ]
+        },
+        {
+          "name": "get_inbox",
+          "line": 103,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/inbox"
+            }
+          ]
+        },
+        {
+          "name": "analyze_candidate_bridge",
+          "line": 142,
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/analyze-candidate"
+            }
+          ]
+        },
+        {
+          "name": "reset_signal_store",
+          "line": 159,
+          "routes": [
+            {
+              "method": "DELETE",
+              "path": "/reset"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    },
+    {
+      "path": "AI_GO\\api\\system_state_api.py",
+      "module": "AI_GO.api.system_state_api",
+      "module_import": {
+        "status": "ok",
+        "module": "AI_GO.api.system_state_api",
+        "error": null
+      },
+      "route_functions": [
+        {
+          "name": "system_health",
+          "line": 166,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/health"
+            }
+          ]
+        },
+        {
+          "name": "system_summary",
+          "line": 175,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/summary"
+            }
+          ]
+        },
+        {
+          "name": "system_state",
+          "line": 180,
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/state"
+            }
+          ]
+        }
+      ],
+      "mutation_capable": false,
+      "uses_execute_governed_action": false,
+      "uses_mutation_guard": false,
+      "uses_request_governor": false,
+      "direct_execution_hits": [],
+      "safe_hits": [],
+      "requires_6b_conversion": false,
+      "reason": "not_mutation_capable_or_read_only"
+    }
+  ],
+  "mutation_capable_routes": []
+}

@@ -1,0 +1,34 @@
+{
+  "root_authorities": [
+    "CORE",
+    "SMI",
+    "WATCHER",
+    "SENTINEL",
+    "RESEARCH_CORE",
+    "PM_CORE",
+    "ENGINES",
+    "LIB",
+    "CHILD_CORES"
+  ],
+  "required_boot_files": [
+    "_SYSTEM_IDENTITY.md",
+    "_ROOT_AUTHORITY_MAP.md",
+    "_BOOT_PROTOCOL.md",
+    "_NAMING_CANON.md",
+    "IMPLEMENTATION_MAPPING.md",
+    "STATE_ARTIFACT_BOUNDARIES.md",
+    "boot/AI_OS.boot.json",
+    "boot/registry.json",
+    "boot/registry.lock.json",
+    "boot/plugin_map.json",
+    "boot/LOADER_POLICY.md"
+  ],
+  "required_runtime_boot_modules": [
+    "core/runtime/loader.py",
+    "core/runtime/lifecycle.py",
+    "core/runtime/router.py",
+    "core/runtime/cli.py",
+    "core/runtime/status.py",
+    "core/runtime/runtime_registry.py"
+  ]
+}

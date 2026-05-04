@@ -1,0 +1,42 @@
+{
+  "action": "phase_closeout",
+  "allowed": true,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "canon": {
+    "status": "passed",
+    "valid": true
+  },
+  "created_at": "2026-04-29T00:00:00+00:00",
+  "execution_gate": {
+    "allowed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "governance_packet_id": "governance-contractor_phase_closeout-phase_closeout-project-governance-index-probe-phase-index-probe-20260429T173921Z",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "4380fba9a9581098f682dd7e363671a110829d58da4e86e647d37bf922820bb2"
+  },
+  "phase_id": "phase-index-probe",
+  "profile": "contractor_phase_closeout",
+  "project_id": "project-governance-index-probe",
+  "request": {
+    "phase_id": "phase-index-probe",
+    "project_id": "project-governance-index-probe",
+    "request_id": "request-governance-index-probe",
+    "route": "/contractor-builder/phase-closeout/run"
+  },
+  "sealed": true,
+  "state": {
+    "status": "passed",
+    "valid": true
+  },
+  "status": "allowed",
+  "watcher": {
+    "status": "passed",
+    "valid": true
+  }
+}

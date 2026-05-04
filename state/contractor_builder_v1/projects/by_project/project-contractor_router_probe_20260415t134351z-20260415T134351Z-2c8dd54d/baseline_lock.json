@@ -1,0 +1,16 @@
+{
+  "project_id": "project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d",
+  "locked_at": "2026-04-15T13:43:51.115596+00:00",
+  "baseline_refs": {
+    "schedule_baseline_id": "schedule-baseline-20260415T134351Z",
+    "budget_baseline_id": "budget-baseline-20260415T134351Z",
+    "compliance_snapshot_id": "compliance-snapshot-20260415T134351Z",
+    "oracle_snapshot_id": "",
+    "exposure_profile_id": ""
+  },
+  "lock_status": "locked",
+  "integrity": {
+    "entry_hash": "be1ba97abb4cb6f8001ad4a1fcebbc57b46c0e5ef7c6f7b73d0fb673c8288de4",
+    "linked_receipts": []
+  }
+}

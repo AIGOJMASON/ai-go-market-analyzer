@@ -1,0 +1,10 @@
+{
+  "phase-stage_5e2_closeout": [
+    {
+      "item_id": "inspection-complete",
+      "label": "Inspection complete",
+      "required": true,
+      "completed": true
+    }
+  ]
+}

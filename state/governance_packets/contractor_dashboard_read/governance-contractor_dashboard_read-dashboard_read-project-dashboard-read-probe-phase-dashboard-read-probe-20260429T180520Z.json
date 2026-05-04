@@ -1,0 +1,162 @@
+{
+  "action": "dashboard_read",
+  "allowed": false,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "authority_boundary": {
+    "ai_may_execute": false,
+    "ai_may_override": false,
+    "bypass_allowed": false,
+    "child_core_may_execute": false,
+    "root_governor": true
+  },
+  "canon": {
+    "action": "dashboard_read",
+    "approval_required": true,
+    "approved": false,
+    "artifact_type": "canon_permission",
+    "artifact_version": "v2",
+    "errors": [
+      "unknown_governed_profile"
+    ],
+    "execution_allowed": false,
+    "mode": "blocked",
+    "profile": "contractor_dashboard_read",
+    "registry_enabled": false,
+    "registry_known": false,
+    "request": {
+      "action": "dashboard_read",
+      "actor": "stage_contractor_dashboard_read_context_probe",
+      "phase_id": "phase-dashboard-read-probe",
+      "project_id": "project-dashboard-read-probe",
+      "read_only": true,
+      "read_scope": "contractor_dashboard",
+      "route": "/contractor-builder/live/dashboard"
+    },
+    "sealed": true,
+    "status": "failed",
+    "valid": false
+  },
+  "created_at": "2026-04-29T18:05:20.685814+00:00",
+  "execution_gate": {
+    "allowed": false,
+    "artifact_type": "execution_gate_decision",
+    "artifact_version": "v1",
+    "authority": {
+      "bypass_allowed": false,
+      "side_effects_allowed_after_pass": [
+        "file_write",
+        "receipt_write",
+        "artifact_creation",
+        "email_delivery",
+        "workflow_mutation"
+      ],
+      "side_effects_allowed_before_pass": []
+    },
+    "evaluated_at": "2026-04-29T18:05:20.685793+00:00",
+    "inputs": {
+      "approval_present": false,
+      "approval_required": true,
+      "canon_status": "failed",
+      "canon_valid": false,
+      "execution_allowed": false,
+      "state_status": "passed",
+      "state_valid": true,
+      "watcher_status": "passed",
+      "watcher_valid": true
+    },
+    "reasons": [
+      "canon_not_passed",
+      "execution_not_permitted_by_canon",
+      "required_approval_missing"
+    ],
+    "request": {
+      "action": "dashboard_read",
+      "phase_id": "phase-dashboard-read-probe",
+      "project_id": "project-dashboard-read-probe",
+      "request_id": null,
+      "route": "/contractor-builder/live/dashboard"
+    },
+    "sealed": true,
+    "status": "blocked"
+  },
+  "governance_packet_id": "governance-contractor_dashboard_read-dashboard_read-project-dashboard-read-probe-phase-dashboard-read-probe-20260429T180520Z",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "fdcfc3029d17fc08e04c9407c55843580e6141e52457081642bfb220900d7eb7"
+  },
+  "phase_id": "phase-dashboard-read-probe",
+  "profile": "contractor_dashboard_read",
+  "project_id": "project-dashboard-read-probe",
+  "request": {
+    "action": "dashboard_read",
+    "actor": "stage_contractor_dashboard_read_context_probe",
+    "phase_id": "phase-dashboard-read-probe",
+    "project_id": "project-dashboard-read-probe",
+    "read_only": true,
+    "read_scope": "contractor_dashboard",
+    "route": "/contractor-builder/live/dashboard"
+  },
+  "sealed": true,
+  "state": {
+    "artifact_type": "state_validation",
+    "artifact_version": "v1",
+    "checks": {
+      "baseline_lock_present": true,
+      "effective_phase_id": "phase-dashboard-read-probe",
+      "matched_phase_present": true,
+      "phase_instances_present": true,
+      "project_profile_present": true,
+      "project_root_exists": true,
+      "workflow_current_phase_id": "phase-dashboard-read-probe",
+      "workflow_state_present": true
+    },
+    "errors": [],
+    "matched_phase": {
+      "phase_id": "phase-dashboard-read-probe",
+      "phase_name": "Dashboard Read Phase",
+      "phase_status": "awaiting_signoff",
+      "project_id": "project-dashboard-read-probe"
+    },
+    "mutation_allowed": false,
+    "phase_id": "phase-dashboard-read-probe",
+    "profile": "contractor_dashboard_read",
+    "project_id": "project-dashboard-read-probe",
+    "read_only": true,
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "status": "blocked",
+  "summary": {
+    "canon_valid": false,
+    "execution_gate_allowed": false,
+    "state_valid": true,
+    "watcher_valid": true
+  },
+  "watcher": {
+    "artifact_type": "watcher_validation",
+    "artifact_version": "v1",
+    "checks": {
+      "execution_allowed": false,
+      "mutation_allowed": false,
+      "read_only": true,
+      "state_valid": true
+    },
+    "errors": [],
+    "phase_id": "phase-dashboard-read-probe",
+    "policy": {
+      "dashboard_read_context_only": true,
+      "execution_allowed": false,
+      "mutation_allowed": false,
+      "read_only": true
+    },
+    "profile": "contractor_dashboard_read",
+    "project_id": "project-dashboard-read-probe",
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  }
+}

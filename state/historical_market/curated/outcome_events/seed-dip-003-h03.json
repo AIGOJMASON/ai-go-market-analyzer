@@ -1,0 +1,20 @@
+{
+  "artifact_type": "historical_outcome_event",
+  "close_return_pct": 0.313,
+  "event_id": "seed-dip-003",
+  "horizon_bars": 3,
+  "max_adverse_excursion_pct": -0.418,
+  "max_favorable_excursion_pct": 0.626,
+  "notes": "Seeded by seed_curated_store.py",
+  "outcome_id": "seed-dip-003-h03",
+  "outcome_label": "stall",
+  "outcome_timestamp": "2026-02-06T00:00:00+00:00",
+  "supporting_features": {
+    "bars_evaluated": 3,
+    "failure_threshold_pct": -1.0,
+    "follow_through_threshold_pct": 1.5,
+    "highest_high": 96.4,
+    "lowest_low": 95.4
+  },
+  "written_at": "2026-04-06T19:38:06.997584+00:00"
+}

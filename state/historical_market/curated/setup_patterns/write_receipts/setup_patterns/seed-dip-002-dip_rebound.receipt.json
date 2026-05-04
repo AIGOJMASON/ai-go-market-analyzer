@@ -1,0 +1,14 @@
+{
+  "artifact_id": "seed-dip-002-dip_rebound",
+  "artifact_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\setup_patterns\\seed-dip-002-dip_rebound.json",
+  "artifact_type": "historical_setup_pattern",
+  "event_id": "seed-dip-002",
+  "index_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\indexes\\setup_patterns\\2026-04.jsonl",
+  "payload_summary": {
+    "event_id": "seed-dip-002",
+    "setup_type": "dip_rebound"
+  },
+  "receipt_type": "historical_market_curated_write_receipt",
+  "status": "written",
+  "written_at": "2026-04-06T19:38:06.974861+00:00"
+}

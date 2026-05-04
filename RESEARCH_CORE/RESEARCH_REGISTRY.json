@@ -1,0 +1,40 @@
+{
+  "layer": "RESEARCH_CORE",
+  "classification": "root_research_authority",
+  "status": "active",
+  "governing_documents": [
+    "_RESEARCH_CORE_LAYER.md",
+    "RESEARCH_CORE_IDENTITY.md",
+    "RESEARCH_PACKET_CONTRACT.md",
+    "TRUST_CLASSIFICATION_POLICY.md",
+    "SCREENING_POLICY.md"
+  ],
+  "declared_outputs": [
+    "research_packet"
+  ],
+  "authority_boundaries": {
+    "allowed": [
+      "intake",
+      "screening",
+      "trust_classification",
+      "packet_emission",
+      "research_state_management"
+    ],
+    "disallowed": [
+      "pm_strategy",
+      "child_core_execution",
+      "runtime_boot_control",
+      "continuity_ownership",
+      "monitoring_ownership",
+      "canon_authorship"
+    ]
+  },
+  "downstream_interfaces": [
+    "refinement",
+    "PM_CORE",
+    "lib"
+  ],
+  "packet_contract": "RESEARCH_PACKET_CONTRACT.md",
+  "trust_policy": "TRUST_CLASSIFICATION_POLICY.md",
+  "screening_policy": "SCREENING_POLICY.md"
+}

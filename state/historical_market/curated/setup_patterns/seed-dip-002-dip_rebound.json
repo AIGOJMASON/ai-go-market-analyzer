@@ -1,0 +1,19 @@
+{
+  "artifact_type": "historical_setup_pattern",
+  "confidence": 0.79,
+  "detected_at": "2026-04-06T19:38:06.974755+00:00",
+  "event_id": "seed-dip-002",
+  "pattern_id": "seed-dip-002-dip_rebound",
+  "setup_type": "dip_rebound",
+  "supporting_features": {
+    "drawdown_pct": -3.689,
+    "prior_high": 103.9,
+    "prior_high_close": 103.0,
+    "rebound_pct": 1.294,
+    "window_close_max": 103.0,
+    "window_close_min": 100.5
+  },
+  "window_end": "2026-02-03T00:00:00+00:00",
+  "window_start": "2026-02-01T00:00:00+00:00",
+  "written_at": "2026-04-06T19:38:06.974861+00:00"
+}

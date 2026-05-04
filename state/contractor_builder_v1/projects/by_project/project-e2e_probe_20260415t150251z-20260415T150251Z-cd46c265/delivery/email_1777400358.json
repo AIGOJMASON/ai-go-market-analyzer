@@ -1,0 +1,25 @@
+{
+  "schema_version": "v1",
+  "delivery_id": "email_1777400358",
+  "project_id": "project-e2e_probe_20260415t150251z-20260415T150251Z-cd46c265",
+  "phase_id": "phase-project_e2e_probe_20260415t150251z_20260415t150251z_cd46c265_demo-20260415T150251Z-377a5e63",
+  "recipient_email": "test@test.com",
+  "subject": "Action Required: E2E Probe 20260415T150251Z - Demo Signoff",
+  "artifact_id": "phase_closeout_1777400358.txt",
+  "attachment_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\contractor_builder_v1\\projects\\by_project\\project-e2e_probe_20260415t150251z-20260415T150251Z-cd46c265\\documents\\phase_closeout_pdfs\\phase_closeout_1777400358.txt",
+  "delivery_status": "failed",
+  "provider_message_id": "",
+  "sent_at": "2026-04-28T18:19:18.804948+00:00",
+  "read_receipt_status": "not_requested",
+  "allowed_read_receipt_statuses": [
+    "not_requested",
+    "sent",
+    "opened",
+    "signed",
+    "declined",
+    "expired"
+  ],
+  "error": "SMTP configuration is incomplete. Required: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, FROM_EMAIL.",
+  "error_type": "RuntimeError",
+  "provider": "smtp"
+}

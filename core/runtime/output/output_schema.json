@@ -1,0 +1,16 @@
+{
+  "required_fields": [
+    "artifact_id",
+    "artifact_type",
+    "originating_core",
+    "validation_receipt_ref",
+    "lifecycle_state",
+    "timestamp",
+    "summary"
+  ],
+  "constraints": {
+    "lifecycle_state": "CLOSED",
+    "validation_required": true,
+    "receipt_required": true
+  }
+}

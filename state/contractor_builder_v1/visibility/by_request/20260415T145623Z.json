@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-04-15T14:56:23.640627+00:00",
+  "request_id": "20260415T145623Z",
+  "child_core_id": "contractor_builder_v1",
+  "mode": "advisory",
+  "approval_required": true,
+  "execution_allowed": false,
+  "summary_panel": {
+    "project_id": "project-projection-20260415T145623Z",
+    "project_name": "Projection Probe",
+    "current_phase_id": "",
+    "compliance_blocking": false,
+    "open_or_monitoring_risks": 0,
+    "approved_change_count": 0
+  },
+  "project_panel": {
+    "project_id": "project-projection-20260415T145623Z",
+    "project_name": "Projection Probe",
+    "project_type": "Kitchen Remodel",
+    "status": "active",
+    "client_name": "Client",
+    "pm_name": "PM",
+    "jurisdiction": {
+      "jurisdiction_id": "scottsburg-in",
+      "authority_name": "Scottsburg Building Department",
+      "city": "Scottsburg",
+      "county": "Scott",
+      "state": "IN"
+    },
+    "baseline_refs": {
+      "schedule_baseline_id": "schedule-probe",
+      "budget_baseline_id": "budget-probe",
+      "compliance_snapshot_id": "compliance-probe"
+    },
+    "workflow": {
+      "workflow_status": "initialized",
+      "phase_count": 1,
+      "current_phase_id": ""
+    },
+    "latest_report": {
+      "report_id": "report-20260415T145623Z",
+      "report_status": "pm_review",
+      "reporting_period_label": "2026-W16",
+      "headline": "Projection probe weekly report",
+      "bullets": []
+    },
+    "report_metrics": {
+      "approved_change_total_amount": 0.0,
+      "compliance_blocking": false,
+      "conflict_count": 0,
+      "open_or_monitoring_risks": 0
+    }
+  },
+  "portfolio_panel": {
+    "portfolio_id": "portfolio-projection-probe",
+    "report_id": "portfolio-20260415T145623Z",
+    "report_status": "pm_review",
+    "reporting_period_label": "2026-W16",
+    "headline": "Projection probe portfolio report",
+    "bullets": [],
+    "portfolio_metrics": {
+      "project_count": 1,
+      "blocking_project_count": 0,
+      "total_conflict_count": 0,
+      "total_open_or_monitoring_risks": 0,
+      "approved_change_total_amount": 0.0
+    }
+  },
+  "decisions_panel": {
+    "decision_count": 0,
+    "approved_count": 0,
+    "submitted_count": 0,
+    "review_count": 0,
+    "latest_items": []
+  },
+  "changes_panel": {
+    "change_count": 0,
+    "approved_change_count": 0,
+    "pending_approval_count": 0,
+    "approved_change_total_amount": 0,
+    "latest_items": []
+  },
+  "compliance_panel": {
+    "blocking": false,
+    "blocking_count": 0,
+    "permit_count": 0,
+    "inspection_count": 0,
+    "blocking_permits": [],
+    "blocking_inspections": []
+  },
+  "risks_panel": {
+    "risk_count": 0,
+    "open_or_monitoring_count": 0,
+    "occurred_count": 0,
+    "latest_items": []
+  },
+  "explanation_panel": {
+    "operator_read": "Projection Probe is the active project. no active compliance block is shown. approved changes on record: 0. open or monitoring risks: 0.",
+    "change_read": "Change posture shows 0 approved changes, 0 awaiting approval, and approved change total amount of 0.",
+    "compliance_read": "Compliance posture is not currently blocked. Tracked permits: 0. Tracked inspections: 0.",
+    "risk_read": "Risk posture shows 0 total risks, 0 open or monitoring, and 0 occurred.",
+    "portfolio_read": "Portfolio view covers 1 projects, with 0 blocking and 0 total routing conflicts.",
+    "operator_should_notice": [
+      "Compliance blocking should be treated as a stop condition for forward progress when active.",
+      "Approved change totals and pending approvals should be reviewed together, not separately.",
+      "Open and monitoring risks should be read alongside current phase and compliance posture."
+    ],
+    "uncertainty_flags": [
+      "Explanation is bounded to structured payload fields only.",
+      "No execution authority is implied by this explanation layer."
+    ]
+  }
+}

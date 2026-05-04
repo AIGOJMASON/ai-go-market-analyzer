@@ -1,0 +1,66 @@
+PM_WORKFLOW_DISPATCH_REGISTRY = {
+    "core_id": "pm_workflow_dispatch_v1",
+    "layer_status": "active",
+    "accepted_queue_artifact_type": "pm_queue_record",
+    "accepted_queue_artifact_version": "v1",
+    "accepted_index_artifact_type": "pm_queue_index",
+    "accepted_index_artifact_version": "v1",
+    "emitted_dispatch_artifact_type": "pm_workflow_dispatch_record",
+    "emitted_dispatch_artifact_version": "v1",
+    "approved_dispatch_classes": [
+        "dispatch_hold",
+        "dispatch_review",
+        "dispatch_planning",
+        "dispatch_escalation",
+    ],
+    "approved_dispatch_targets": [
+        "pm_hold_handler",
+        "pm_review_handler",
+        "pm_planning_handler",
+        "pm_escalation_handler",
+    ],
+    "approved_dispatch_status_values": [
+        "ready",
+    ],
+    "approved_queue_lanes": [
+        "pm_hold_queue",
+        "pm_review_queue",
+        "pm_planning_queue",
+        "pm_escalation_queue",
+    ],
+    "approved_queue_status_values": [
+        "held",
+        "queued",
+    ],
+    "approved_queue_target_values": [
+        "observe",
+        "review",
+        "planning",
+        "escalation",
+    ],
+    "approved_queue_priority_values": [
+        "low",
+        "medium",
+        "high",
+    ],
+    "required_input_flags": {
+        "memory_only": True,
+        "runtime_mutation_allowed": False,
+        "execution_influence": False,
+        "recommendation_mutation_allowed": False,
+    },
+    "required_output_flags": {
+        "memory_only": True,
+        "runtime_mutation_allowed": False,
+        "execution_influence": False,
+        "recommendation_mutation_allowed": False,
+    },
+    "dispatch_scope": "pm_workflow_dispatch_only",
+    "forbidden_internal_fields": [
+        "_internal",
+        "_debug",
+        "_trace",
+        "_raw_runtime_state",
+        "_unsealed_source",
+    ],
+}

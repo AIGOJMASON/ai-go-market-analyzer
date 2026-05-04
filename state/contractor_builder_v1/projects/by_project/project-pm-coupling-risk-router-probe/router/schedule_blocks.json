@@ -1,0 +1,18 @@
+{
+  "project_id": "project-pm-coupling-risk-router-probe",
+  "block_count": 1,
+  "blocks": [
+    {
+      "block_id": "block-pm-coupling-risk-router-probe-001",
+      "project_id": "project-pm-coupling-risk-router-probe",
+      "phase_id": "phase-pm-coupling-risk-router-probe",
+      "block_type": "Crew_Assignment",
+      "start_date": "2026-04-30",
+      "end_date": "2026-05-01",
+      "resource_name": "Shared Crew Alpha",
+      "resource_type": "crew",
+      "dependency_phase_ids": [],
+      "notes": "Phase 2G.3 probe. Router received risk influence through pm_context only. Schedule block still written by router governed execution."
+    }
+  ]
+}

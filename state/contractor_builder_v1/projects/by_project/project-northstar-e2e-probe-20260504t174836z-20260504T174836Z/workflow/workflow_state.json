@@ -1,0 +1,71 @@
+{
+  "artifact_type": "governed_persistence_envelope",
+  "artifact_version": "northstar_6a_governed_persistence_v1",
+  "authority_metadata": {
+    "actor": "system",
+    "append_only_memory": false,
+    "authority_id": "northstar_stage_6a",
+    "can_execute": false,
+    "can_mutate_pm_authority": false,
+    "can_mutate_recommendations": false,
+    "can_mutate_runtime": false,
+    "can_override_execution_gate": false,
+    "can_override_governance": false,
+    "can_override_watcher": false,
+    "child_core_id": "contractor_builder_v1",
+    "governance_stage": "northstar_6a",
+    "layer": "workflow.workflow_runtime",
+    "operation": "initialize_workflow_state",
+    "phase_id": "phase-project_northstar_e2e_probe_20260504t174836z_20260504t174836z_e2e_certification_phase-20260504T174836Z-93f0eac5",
+    "project_id": "project-northstar-e2e-probe-20260504t174836z-20260504T174836Z",
+    "request_id": "",
+    "source": ""
+  },
+  "classification": {
+    "advisory_only": false,
+    "execution_allowed": false,
+    "governed_persistence": true,
+    "mutation_class": "contractor_workflow_persistence",
+    "persistence_type": "contractor_workflow_state",
+    "pm_authority_mutation_allowed": false,
+    "recommendation_mutation_allowed": false,
+    "runtime_mutation_allowed": false,
+    "workflow_mutation_allowed": false
+  },
+  "payload": {
+    "authority_metadata": {
+      "authority_id": "northstar_stage_6a",
+      "child_core_id": "contractor_builder_v1",
+      "layer": "workflow.workflow_runtime",
+      "operation": "build_workflow_state_record",
+      "phase_id": "",
+      "project_id": "project-northstar-e2e-probe-20260504t174836z-20260504T174836Z"
+    },
+    "classification": {
+      "advisory_only": false,
+      "authority_mutation_allowed": false,
+      "execution_allowed": false,
+      "mutation_class": "contractor_workflow_persistence",
+      "persistence_type": "contractor_workflow_state",
+      "project_truth_mutation_allowed": false,
+      "runtime_mutation_allowed": false,
+      "state_mutation_allowed": true,
+      "workflow_mutation_allowed": true
+    },
+    "created_at": "2026-05-04T17:48:36.093695+00:00",
+    "current_phase_id": "phase-project_northstar_e2e_probe_20260504t174836z_20260504t174836z_e2e_certification_phase-20260504T174836Z-93f0eac5",
+    "integrity": {
+      "entry_hash": "8308e914d3d95ff705a1150d7b2bcd682c48d0428b4e4cd86e10089e42127cdc",
+      "linked_receipts": []
+    },
+    "notes": "",
+    "phase_count": 1,
+    "project_id": "project-northstar-e2e-probe-20260504t174836z-20260504T174836Z",
+    "schema_version": "v1",
+    "sealed": true,
+    "updated_at": "2026-05-04T17:48:36.093760+00:00",
+    "workflow_status": "active"
+  },
+  "persisted_at": "2026-05-04T17:48:36Z",
+  "sealed": true
+}

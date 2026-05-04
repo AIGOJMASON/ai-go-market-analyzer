@@ -1,0 +1,14 @@
+{
+  "receipt_id": "eyes_rcpt_2026-03-30T16-25-20Z",
+  "timestamp": "2026-03-30T16:25:20Z",
+  "status": "generated",
+  "collector_version": "1.0.0",
+  "normalizer_version": "1.0.0",
+  "source_windows": {
+    "receipts": 10,
+    "watcher": 10,
+    "smi": 10,
+    "external_memory": 10
+  },
+  "warnings": []
+}

@@ -1,0 +1,16 @@
+{
+  "project_id": "project-e2e_probe_20260415t150251z-20260415T150251Z-cd46c265",
+  "locked_at": "2026-04-15T15:02:51.786674+00:00",
+  "baseline_refs": {
+    "schedule_baseline_id": "s-20260415T150251Z",
+    "budget_baseline_id": "b-20260415T150251Z",
+    "compliance_snapshot_id": "c-20260415T150251Z",
+    "oracle_snapshot_id": "",
+    "exposure_profile_id": ""
+  },
+  "lock_status": "locked",
+  "integrity": {
+    "entry_hash": "76e38cd08c7491dc1713dda4da6a26357e7a71495a663678af2da114a2b9e0f2",
+    "linked_receipts": []
+  }
+}

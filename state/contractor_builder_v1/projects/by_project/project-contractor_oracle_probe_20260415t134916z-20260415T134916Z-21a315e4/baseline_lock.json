@@ -1,0 +1,16 @@
+{
+  "project_id": "project-contractor_oracle_probe_20260415t134916z-20260415T134916Z-21a315e4",
+  "locked_at": "2026-04-15T13:49:16.060914+00:00",
+  "baseline_refs": {
+    "schedule_baseline_id": "schedule-baseline-20260415T134916Z",
+    "budget_baseline_id": "budget-baseline-20260415T134916Z",
+    "compliance_snapshot_id": "compliance-snapshot-20260415T134916Z",
+    "oracle_snapshot_id": "snapshot-lumber-watch",
+    "exposure_profile_id": "exposure-profile-20260415T134916Z"
+  },
+  "lock_status": "locked",
+  "integrity": {
+    "entry_hash": "82c55e2546caeb7059a414ecfab4e294171fa9e097e24a44867e928dc383ab01",
+    "linked_receipts": []
+  }
+}

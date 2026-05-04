@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "project_id": "project-contractor_workflow_probe_20260414t202242z-20260414T202242Z-40a6fea2",
+  "workflow_status": "active",
+  "phase_count": 2,
+  "current_phase_id": "phase-project_contractor_workflow_probe_20260414t202242z_20260414t202242z_40a6fea2_demolition-20260414T202242Z-a8dc5cc6",
+  "created_at": "2026-04-28T23:57:38.947560+00:00",
+  "updated_at": "2026-04-29T14:48:56.944747+00:00",
+  "notes": "",
+  "integrity": {
+    "entry_hash": "d4b6009a27ad07bcd2010383ee97a0ccf3848b4e0d693211aa5ad2f5c50ee142",
+    "linked_receipts": [
+      "C:\\Users\\J\\Desktop\\AI_GO\\receipts\\contractor_builder_v1\\workflow\\workflow-update_phase_state-20260428T235738Z-2c5e3b11.json"
+    ]
+  }
+}

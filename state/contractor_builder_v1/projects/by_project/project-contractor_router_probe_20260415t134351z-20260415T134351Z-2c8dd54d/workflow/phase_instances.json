@@ -1,0 +1,94 @@
+[
+  {
+    "schema_version": "v1",
+    "phase_id": "phase-project_contractor_router_probe_20260415t134351z_20260415t134351z_2c8dd54d_demolition-20260415T134351Z-38d50665",
+    "project_id": "project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d",
+    "template_id": "template-router-demolition",
+    "phase_name": "Demolition",
+    "phase_status": "not_started",
+    "expected_duration_days": 3,
+    "actual_duration_days": null,
+    "dependencies": [],
+    "planned_start_date": "",
+    "planned_end_date": "",
+    "actual_start_date": "",
+    "actual_end_date": "",
+    "role_expectations": {
+      "crew": [
+        "demo crew"
+      ],
+      "management": [
+        "pm oversight"
+      ]
+    },
+    "management_checkpoints": [
+      "site protection verified"
+    ],
+    "client_gate_requirement": {
+      "required": false,
+      "checklist": [],
+      "status": "not_required"
+    },
+    "drift": {
+      "schedule_drift_days": 0,
+      "dead_time_hours_estimate": 0.0,
+      "dead_time_risk_label": ""
+    },
+    "notes": "Initial demolition phase.",
+    "allowed_phase_statuses": [
+      "not_started",
+      "in_progress",
+      "blocked",
+      "awaiting_signoff",
+      "complete",
+      "closed"
+    ]
+  },
+  {
+    "schema_version": "v1",
+    "phase_id": "phase-project_contractor_router_probe_20260415t134351z_20260415t134351z_2c8dd54d_framing-20260415T134351Z-52d012a9",
+    "project_id": "project-contractor_router_probe_20260415t134351z-20260415T134351Z-2c8dd54d",
+    "template_id": "template-router-framing",
+    "phase_name": "Framing",
+    "phase_status": "not_started",
+    "expected_duration_days": 5,
+    "actual_duration_days": null,
+    "dependencies": [
+      "Demolition"
+    ],
+    "planned_start_date": "",
+    "planned_end_date": "",
+    "actual_start_date": "",
+    "actual_end_date": "",
+    "role_expectations": {
+      "crew": [
+        "carpentry crew"
+      ],
+      "management": [
+        "pm walkthrough"
+      ]
+    },
+    "management_checkpoints": [
+      "framing layout reviewed"
+    ],
+    "client_gate_requirement": {
+      "required": false,
+      "checklist": [],
+      "status": "not_required"
+    },
+    "drift": {
+      "schedule_drift_days": 0,
+      "dead_time_hours_estimate": 0.0,
+      "dead_time_risk_label": ""
+    },
+    "notes": "Framing follows demolition.",
+    "allowed_phase_statuses": [
+      "not_started",
+      "in_progress",
+      "blocked",
+      "awaiting_signoff",
+      "complete",
+      "closed"
+    ]
+  }
+]

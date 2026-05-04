@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-03-31T20:46:37Z",
+  "status": "ok",
+  "total_runs": 1,
+  "successes": 1,
+  "failures": 0,
+  "last_closeout_id": "closeout_market_analyzer_v1_20260401T010500Z_probe_latest",
+  "last_status": "ok",
+  "last_reason": null,
+  "processed_closeout_ids": [
+    "closeout_market_analyzer_v1_20260401T010500Z_probe_latest"
+  ]
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "project_id": "project-dashboard-read-probe",
+    "phase_id": "phase-dashboard-read-probe",
+    "phase_name": "Dashboard Read Phase",
+    "phase_status": "awaiting_signoff"
+  }
+]

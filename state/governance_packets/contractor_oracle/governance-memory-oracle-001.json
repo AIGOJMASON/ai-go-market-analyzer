@@ -1,0 +1,42 @@
+{
+  "action": "oracle_projection",
+  "allowed": true,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "created_at": "2026-04-29T00:00:00+00:00",
+  "execution_gate": {
+    "allowed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "governance_packet_id": "governance-memory-oracle-001",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "981c05f6abb1b93a2848758174e452eb3bf7c23c4c7c81aa8d4af631087a53b4"
+  },
+  "phase_id": "phase-memory",
+  "profile": "contractor_oracle",
+  "project_id": "project-memory-integration-probe",
+  "request": {
+    "phase_id": "phase-memory",
+    "project_id": "project-memory-integration-probe",
+    "request_id": "request-memory-oracle-001",
+    "route": "/contractor-builder/oracle/project-external-pressure"
+  },
+  "sealed": true,
+  "state": {
+    "status": "passed",
+    "valid": true
+  },
+  "status": "allowed",
+  "watcher": {
+    "status": "passed",
+    "valid": true
+  },
+  "watcher_enforcement": {
+    "allowed": true,
+    "status": "passed",
+    "valid": true
+  }
+}

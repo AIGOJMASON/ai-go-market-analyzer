@@ -1,0 +1,320 @@
+{
+  "action": "oracle_projection_create",
+  "allowed": true,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "authority_boundary": {
+    "ai_may_execute": false,
+    "ai_may_override": false,
+    "bypass_allowed": false,
+    "child_core_may_execute": true,
+    "root_governor": true
+  },
+  "canon": {
+    "action": "oracle_projection_create",
+    "allowed_actions": [
+      "oracle_projection_create"
+    ],
+    "approval_required": true,
+    "approved": true,
+    "artifact_type": "canon_permission",
+    "artifact_version": "v2",
+    "errors": [],
+    "execution_allowed": true,
+    "metadata": {},
+    "mode": "governed_execution",
+    "notes": "Phase 2F migrated contractor oracle advisory mutation profile.",
+    "profile": "contractor_oracle",
+    "registry_enabled": true,
+    "registry_known": true,
+    "request": {
+      "action": "oracle_projection_create",
+      "action_class": "write_state",
+      "action_type": "write_state",
+      "actor": "stage_contractor_oracle_governed_probe",
+      "approval_granted": true,
+      "bounded_context": true,
+      "child_core_id": "contractor_builder_v1",
+      "declared_intent": "governed contractor oracle projection and advisory generation",
+      "domain_exposure": {
+        "Lumber": "High"
+      },
+      "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+      "mutation_declared": true,
+      "operator_approved": true,
+      "project_id": "project-oracle-governed-probe",
+      "receipt_planned": true,
+      "route": "/contractor-builder/oracle/project-external-pressure",
+      "snapshot_id": "snapshot-lumber-watch",
+      "state": {
+        "allowed": true,
+        "artifact_type": "state_validation",
+        "checks": {
+          "exposure_profile_id_present": true,
+          "project_id_present": true,
+          "snapshot_id_present": true,
+          "state_mutation_declared": true
+        },
+        "errors": [],
+        "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+        "mutation_allowed": true,
+        "profile": "contractor_oracle",
+        "project_id": "project-oracle-governed-probe",
+        "read_only": false,
+        "sealed": true,
+        "snapshot_id": "snapshot-lumber-watch",
+        "status": "passed",
+        "valid": true
+      },
+      "state_decision": {
+        "allowed": true,
+        "artifact_type": "state_validation",
+        "checks": {
+          "exposure_profile_id_present": true,
+          "project_id_present": true,
+          "snapshot_id_present": true,
+          "state_mutation_declared": true
+        },
+        "errors": [],
+        "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+        "mutation_allowed": true,
+        "profile": "contractor_oracle",
+        "project_id": "project-oracle-governed-probe",
+        "read_only": false,
+        "sealed": true,
+        "snapshot_id": "snapshot-lumber-watch",
+        "status": "passed",
+        "valid": true
+      },
+      "state_mutation_declared": true,
+      "state_passed": true,
+      "target": "contractor_oracle",
+      "watcher_passed": true,
+      "watcher_result": {
+        "artifact_type": "watcher_validation",
+        "checks": {
+          "domain_exposure_is_dict": true,
+          "execution_required": true,
+          "mutation_declared": true,
+          "operator_approved": true,
+          "receipt_planned": true,
+          "state_valid": true
+        },
+        "errors": [],
+        "policy": {
+          "execution_allowed": false,
+          "mutation_allowed": true,
+          "operator_approval_required": true,
+          "oracle_advisory_only": true,
+          "read_only": false,
+          "receipt_required": true,
+          "requires_execution_gate": true
+        },
+        "profile": "contractor_oracle",
+        "project_id": "project-oracle-governed-probe",
+        "sealed": true,
+        "snapshot_id": "snapshot-lumber-watch",
+        "status": "passed",
+        "valid": true
+      }
+    },
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "created_at": "2026-04-29T20:16:39.431170+00:00",
+  "execution_gate": {
+    "allowed": true,
+    "artifact_type": "execution_gate_decision",
+    "artifact_version": "v1",
+    "authority": {
+      "bypass_allowed": false,
+      "side_effects_allowed_after_pass": [
+        "file_write",
+        "receipt_write",
+        "artifact_creation",
+        "email_delivery",
+        "workflow_mutation"
+      ],
+      "side_effects_allowed_before_pass": []
+    },
+    "evaluated_at": "2026-04-29T20:16:39.431153+00:00",
+    "inputs": {
+      "approval_present": true,
+      "approval_required": true,
+      "canon_status": "passed",
+      "canon_valid": true,
+      "execution_allowed": true,
+      "state_status": "passed",
+      "state_valid": true,
+      "watcher_status": "passed",
+      "watcher_valid": true
+    },
+    "reasons": [],
+    "request": {
+      "action": "oracle_projection_create",
+      "phase_id": null,
+      "project_id": "project-oracle-governed-probe",
+      "request_id": null,
+      "route": "/contractor-builder/oracle/project-external-pressure"
+    },
+    "sealed": true,
+    "status": "pass"
+  },
+  "governance_packet_id": "governance-contractor_oracle-oracle_projection_create-project-oracle-governed-probe-None-20260429T201639Z",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "c46236e00bbb5aef6a87fce9c9da5e0449770bc630410050649c64f11093c039"
+  },
+  "phase_id": null,
+  "profile": "contractor_oracle",
+  "project_id": "project-oracle-governed-probe",
+  "request": {
+    "action": "oracle_projection_create",
+    "action_class": "write_state",
+    "action_type": "write_state",
+    "actor": "stage_contractor_oracle_governed_probe",
+    "approval_granted": true,
+    "bounded_context": true,
+    "child_core_id": "contractor_builder_v1",
+    "declared_intent": "governed contractor oracle projection and advisory generation",
+    "domain_exposure": {
+      "Lumber": "High"
+    },
+    "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+    "mutation_declared": true,
+    "operator_approved": true,
+    "project_id": "project-oracle-governed-probe",
+    "receipt_planned": true,
+    "route": "/contractor-builder/oracle/project-external-pressure",
+    "snapshot_id": "snapshot-lumber-watch",
+    "state": {
+      "allowed": true,
+      "artifact_type": "state_validation",
+      "checks": {
+        "exposure_profile_id_present": true,
+        "project_id_present": true,
+        "snapshot_id_present": true,
+        "state_mutation_declared": true
+      },
+      "errors": [],
+      "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+      "mutation_allowed": true,
+      "profile": "contractor_oracle",
+      "project_id": "project-oracle-governed-probe",
+      "read_only": false,
+      "sealed": true,
+      "snapshot_id": "snapshot-lumber-watch",
+      "status": "passed",
+      "valid": true
+    },
+    "state_decision": {
+      "allowed": true,
+      "artifact_type": "state_validation",
+      "checks": {
+        "exposure_profile_id_present": true,
+        "project_id_present": true,
+        "snapshot_id_present": true,
+        "state_mutation_declared": true
+      },
+      "errors": [],
+      "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+      "mutation_allowed": true,
+      "profile": "contractor_oracle",
+      "project_id": "project-oracle-governed-probe",
+      "read_only": false,
+      "sealed": true,
+      "snapshot_id": "snapshot-lumber-watch",
+      "status": "passed",
+      "valid": true
+    },
+    "state_mutation_declared": true,
+    "state_passed": true,
+    "target": "contractor_oracle",
+    "watcher_passed": true,
+    "watcher_result": {
+      "artifact_type": "watcher_validation",
+      "checks": {
+        "domain_exposure_is_dict": true,
+        "execution_required": true,
+        "mutation_declared": true,
+        "operator_approved": true,
+        "receipt_planned": true,
+        "state_valid": true
+      },
+      "errors": [],
+      "policy": {
+        "execution_allowed": false,
+        "mutation_allowed": true,
+        "operator_approval_required": true,
+        "oracle_advisory_only": true,
+        "read_only": false,
+        "receipt_required": true,
+        "requires_execution_gate": true
+      },
+      "profile": "contractor_oracle",
+      "project_id": "project-oracle-governed-probe",
+      "sealed": true,
+      "snapshot_id": "snapshot-lumber-watch",
+      "status": "passed",
+      "valid": true
+    }
+  },
+  "sealed": true,
+  "state": {
+    "allowed": true,
+    "artifact_type": "state_validation",
+    "checks": {
+      "exposure_profile_id_present": true,
+      "project_id_present": true,
+      "snapshot_id_present": true,
+      "state_mutation_declared": true
+    },
+    "errors": [],
+    "exposure_profile_id": "exposure-profile-oracle-governed-probe",
+    "mutation_allowed": true,
+    "profile": "contractor_oracle",
+    "project_id": "project-oracle-governed-probe",
+    "read_only": false,
+    "sealed": true,
+    "snapshot_id": "snapshot-lumber-watch",
+    "status": "passed",
+    "valid": true
+  },
+  "status": "allowed",
+  "summary": {
+    "canon_valid": true,
+    "execution_gate_allowed": true,
+    "state_valid": true,
+    "watcher_valid": true
+  },
+  "watcher": {
+    "artifact_type": "watcher_validation",
+    "checks": {
+      "domain_exposure_is_dict": true,
+      "execution_required": true,
+      "mutation_declared": true,
+      "operator_approved": true,
+      "receipt_planned": true,
+      "state_valid": true
+    },
+    "errors": [],
+    "policy": {
+      "execution_allowed": false,
+      "mutation_allowed": true,
+      "operator_approval_required": true,
+      "oracle_advisory_only": true,
+      "read_only": false,
+      "receipt_required": true,
+      "requires_execution_gate": true
+    },
+    "profile": "contractor_oracle",
+    "project_id": "project-oracle-governed-probe",
+    "sealed": true,
+    "snapshot_id": "snapshot-lumber-watch",
+    "status": "passed",
+    "valid": true
+  }
+}

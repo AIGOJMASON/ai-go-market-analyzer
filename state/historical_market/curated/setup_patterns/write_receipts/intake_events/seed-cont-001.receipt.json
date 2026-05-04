@@ -1,0 +1,16 @@
+{
+  "artifact_id": "seed-cont-001",
+  "artifact_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\intake_events\\seed-cont-001.json",
+  "artifact_type": "historical_intake_event",
+  "event_id": "seed-cont-001",
+  "index_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\indexes\\intake_events\\2026-03.jsonl",
+  "payload_summary": {
+    "asset_class": "etf",
+    "event_id": "seed-cont-001",
+    "symbol": "XLE",
+    "timeframe": "1d"
+  },
+  "receipt_type": "historical_market_curated_write_receipt",
+  "status": "written",
+  "written_at": "2026-04-06T19:38:07.020253+00:00"
+}

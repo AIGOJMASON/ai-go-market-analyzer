@@ -1,0 +1,45 @@
+PM_PLANNING_REGISTRY = {
+    "core_id": "pm_planning_v1",
+    "layer_status": "active",
+    "accepted_review_artifact_type": "pm_review_record",
+    "accepted_review_artifact_version": "v1",
+    "emitted_planning_artifact_type": "pm_planning_record",
+    "emitted_planning_artifact_version": "v1",
+    "approved_plan_classes": [
+        "hold_observe",
+        "prepare_review",
+        "prepare_plan",
+        "prepare_escalation",
+    ],
+    "approved_next_step_classes": [
+        "no_action",
+        "queue_for_pm_review",
+        "queue_for_pm_planning",
+        "queue_for_pm_escalation",
+    ],
+    "approved_plan_priority_values": [
+        "low",
+        "medium",
+        "high",
+    ],
+    "required_input_flags": {
+        "memory_only": True,
+        "runtime_mutation_allowed": False,
+        "execution_influence": False,
+        "recommendation_mutation_allowed": False,
+    },
+    "required_output_flags": {
+        "memory_only": True,
+        "runtime_mutation_allowed": False,
+        "execution_influence": False,
+        "recommendation_mutation_allowed": False,
+    },
+    "planning_scope": "pm_planning_only",
+    "forbidden_internal_fields": [
+        "_internal",
+        "_debug",
+        "_trace",
+        "_raw_runtime_state",
+        "_unsealed_source",
+    ],
+}

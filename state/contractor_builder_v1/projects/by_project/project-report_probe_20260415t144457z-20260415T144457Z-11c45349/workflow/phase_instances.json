@@ -1,0 +1,45 @@
+[
+  {
+    "schema_version": "v1",
+    "phase_id": "phase-project_report_probe_20260415t144457z_20260415t144457z_11c45349_demo-20260415T144457Z-a6844a59",
+    "project_id": "project-report_probe_20260415t144457z-20260415T144457Z-11c45349",
+    "template_id": "t1",
+    "phase_name": "Demo",
+    "phase_status": "not_started",
+    "expected_duration_days": 3,
+    "actual_duration_days": null,
+    "dependencies": [],
+    "planned_start_date": "",
+    "planned_end_date": "",
+    "actual_start_date": "",
+    "actual_end_date": "",
+    "role_expectations": {
+      "crew": [
+        "demo crew"
+      ],
+      "management": [
+        "pm"
+      ]
+    },
+    "management_checkpoints": [],
+    "client_gate_requirement": {
+      "required": false,
+      "checklist": [],
+      "status": "not_required"
+    },
+    "drift": {
+      "schedule_drift_days": 0,
+      "dead_time_hours_estimate": 0.0,
+      "dead_time_risk_label": ""
+    },
+    "notes": "Demo phase",
+    "allowed_phase_statuses": [
+      "not_started",
+      "in_progress",
+      "blocked",
+      "awaiting_signoff",
+      "complete",
+      "closed"
+    ]
+  }
+]

@@ -1,0 +1,160 @@
+{
+  "action": "report_project_weekly",
+  "allowed": true,
+  "artifact_type": "governed_request_packet",
+  "artifact_version": "v2",
+  "authority_boundary": {
+    "ai_may_execute": false,
+    "ai_may_override": false,
+    "bypass_allowed": false,
+    "child_core_may_execute": true,
+    "root_governor": true
+  },
+  "canon": {
+    "action": "report_project_weekly",
+    "allowed_actions": [
+      "report_approve",
+      "report_archive",
+      "report_portfolio_weekly",
+      "report_project_weekly"
+    ],
+    "approval_required": true,
+    "approved": true,
+    "artifact_type": "canon_permission",
+    "artifact_version": "v2",
+    "errors": [],
+    "execution_allowed": true,
+    "metadata": {},
+    "mode": "governed_execution",
+    "notes": "Phase 1 migrated report mutation profile.",
+    "profile": "contractor_report",
+    "registry_enabled": true,
+    "registry_known": true,
+    "request": {
+      "action": "report_project_weekly",
+      "actor": "track1_final_report_probe",
+      "assumption_records": [],
+      "change_records": [],
+      "compliance_snapshot": {},
+      "decision_records": [],
+      "oracle_snapshot": {},
+      "project_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2",
+      "reporting_period_label": "Track 1 Final Report Test",
+      "risk_records": [],
+      "route": "/contractor-builder/report",
+      "router_snapshot": {},
+      "workflow_snapshot": {}
+    },
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  },
+  "created_at": "2026-04-29T14:48:36.734817+00:00",
+  "execution_gate": {
+    "allowed": true,
+    "artifact_type": "execution_gate_decision",
+    "artifact_version": "v1",
+    "authority": {
+      "bypass_allowed": false,
+      "side_effects_allowed_after_pass": [
+        "file_write",
+        "receipt_write",
+        "artifact_creation",
+        "email_delivery",
+        "workflow_mutation"
+      ],
+      "side_effects_allowed_before_pass": []
+    },
+    "evaluated_at": "2026-04-29T14:48:36.734803+00:00",
+    "inputs": {
+      "approval_present": true,
+      "approval_required": true,
+      "canon_status": "passed",
+      "canon_valid": true,
+      "execution_allowed": true,
+      "state_status": "passed",
+      "state_valid": true,
+      "watcher_status": "passed",
+      "watcher_valid": true
+    },
+    "reasons": [],
+    "request": {
+      "action": "report_project_weekly",
+      "phase_id": null,
+      "project_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2",
+      "request_id": null,
+      "route": "/contractor-builder/report"
+    },
+    "sealed": true,
+    "status": "pass"
+  },
+  "governance_packet_id": "governance-contractor_report-report_project_weekly-project-contractor_report_probe_20260415t142348z-20260415t142348z-7897e7e2-none-20260429T144836Z-bc83eb6e",
+  "governor_version": "v2.0",
+  "integrity": {
+    "hash_algorithm": "sha256",
+    "hash_scope": "governance_packet_without_integrity",
+    "payload_hash": "ac969cccd8c8f771f4af675a3c61cb4f87256f429714e70efdcf02121390aa33"
+  },
+  "phase_id": null,
+  "profile": "contractor_report",
+  "project_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2",
+  "request": {
+    "action": "report_project_weekly",
+    "actor": "track1_final_report_probe",
+    "assumption_records": [],
+    "change_records": [],
+    "compliance_snapshot": {},
+    "decision_records": [],
+    "oracle_snapshot": {},
+    "project_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2",
+    "reporting_period_label": "Track 1 Final Report Test",
+    "risk_records": [],
+    "route": "/contractor-builder/report",
+    "router_snapshot": {},
+    "workflow_snapshot": {}
+  },
+  "sealed": true,
+  "state": {
+    "action": "report_project_weekly",
+    "artifact_type": "state_validation",
+    "checks": {
+      "action": "report_project_weekly",
+      "portfolio_id": "",
+      "project_exists": true,
+      "project_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2",
+      "report_id": "",
+      "report_present": false,
+      "report_status": "",
+      "subject_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2"
+    },
+    "errors": [],
+    "profile": "contractor_report",
+    "report": {},
+    "sealed": true,
+    "status": "passed",
+    "subject_id": "project-contractor_report_probe_20260415t142348z-20260415T142348Z-7897e7e2",
+    "valid": true
+  },
+  "status": "allowed",
+  "summary": {
+    "canon_valid": true,
+    "execution_gate_allowed": true,
+    "state_valid": true,
+    "watcher_valid": true
+  },
+  "watcher": {
+    "action": "report_project_weekly",
+    "artifact_type": "watcher_validation",
+    "checks": {
+      "action": "report_project_weekly",
+      "report_id": "",
+      "report_present": false,
+      "report_status": ""
+    },
+    "errors": [],
+    "profile": "contractor_report",
+    "sealed": true,
+    "status": "passed",
+    "valid": true
+  }
+}

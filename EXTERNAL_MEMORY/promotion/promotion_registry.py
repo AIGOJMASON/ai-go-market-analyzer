@@ -1,0 +1,62 @@
+from __future__ import annotations
+
+PROMOTION_REGISTRY: dict = {
+    "layer_id": "external_memory.promotion",
+    "layer_version": "v5F.3",
+    "accepted_artifact_type": "external_memory_retrieval_artifact",
+    "accepted_receipt_type": "external_memory_retrieval_receipt",
+    "blocked_trust_classes": [
+        "blocked",
+        "disallowed",
+        "unverifiable",
+    ],
+    "policy_constants": {
+        "promote_threshold": 95.0,
+        "hold_threshold": 75.0,
+    },
+    "allowed_decisions": [
+        "promoted",
+        "hold",
+        "reject",
+    ],
+    "rejection_reasons": [
+        "invalid_input",
+        "invalid_artifact_type",
+        "invalid_receipt_type",
+        "artifact_receipt_misalignment",
+        "blocked_trust_class_present",
+        "promotion_score_below_threshold",
+        "empty_record_set",
+        "authority_guard_blocked",
+    ],
+    "authority": {
+        "memory_is_truth": False,
+        "memory_is_candidate_signal": True,
+        "advisory_only": True,
+        "read_only_to_authority_chain": True,
+        "can_override_state_authority": False,
+        "can_override_canon": False,
+        "can_override_watcher": False,
+        "can_override_execution_gate": False,
+        "can_execute": False,
+        "can_mutate_runtime": False,
+        "can_mutate_state": False,
+        "can_mutate_operational_state": False,
+        "can_mutate_child_core_state": False,
+    },
+    "promotion_use_limits": {
+        "may_feed_pattern_context": True,
+        "may_feed_system_brain": True,
+        "may_feed_operator_visibility": True,
+        "may_feed_pm_influence_directly": False,
+        "may_change_recommendation": False,
+        "may_change_runtime": False,
+        "may_change_state": False,
+        "may_execute": False,
+    },
+    "emitted_artifacts": [
+        "external_memory_promotion_artifact",
+        "external_memory_promotion_receipt",
+        "external_memory_promotion_rejection_receipt",
+    ],
+}

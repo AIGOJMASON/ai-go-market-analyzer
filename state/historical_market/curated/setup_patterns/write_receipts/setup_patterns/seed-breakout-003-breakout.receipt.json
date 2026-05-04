@@ -1,0 +1,14 @@
+{
+  "artifact_id": "seed-breakout-003-breakout",
+  "artifact_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\setup_patterns\\seed-breakout-003-breakout.json",
+  "artifact_type": "historical_setup_pattern",
+  "event_id": "seed-breakout-003",
+  "index_path": "C:\\Users\\J\\Desktop\\AI_GO\\state\\historical_market\\curated\\indexes\\setup_patterns\\2026-04.jsonl",
+  "payload_summary": {
+    "event_id": "seed-breakout-003",
+    "setup_type": "breakout"
+  },
+  "receipt_type": "historical_market_curated_write_receipt",
+  "status": "written",
+  "written_at": "2026-04-06T19:38:06.907920+00:00"
+}
