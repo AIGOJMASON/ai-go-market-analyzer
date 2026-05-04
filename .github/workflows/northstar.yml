@@ -1,0 +1,35 @@
+name: Northstar Certification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validation probe
+        run: |
+          source .venv/bin/activate
+          PYTHONPATH=$PWD python -m AI_GO.tests.stage_e2e_contractor_validation_probe
+
+      - name: Execution probe
+        run: |
+          source .venv/bin/activate
+          PYTHONPATH=$PWD python -m AI_GO.tests.stage_e2e_contractor_execution_probe
