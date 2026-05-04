@@ -27,9 +27,9 @@ jobs:
       - name: Validation probe
         run: |
           source .venv/bin/activate
-          PYTHONPATH=$PWD/.. python -m AI_GO.tests.stage_e2e_contractor_validation_probe
+          python tests/stage_e2e_contractor_validation_probe.py
 
       - name: Execution probe
         run: |
           source .venv/bin/activate
-          PYTHONPATH=$PWD/.. python -m AI_GO.tests.stage_e2e_contractor_execution_probe
+          python tests/stage_e2e_contractor_execution_probe.py
