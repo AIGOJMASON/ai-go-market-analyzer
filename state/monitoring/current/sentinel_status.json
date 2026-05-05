@@ -1,8 +1,0 @@
-{
-  "packet_id": null,
-  "health": "ok",
-  "recent_transition_count": 0,
-  "unresolved_count": 0,
-  "ambiguous_routing_count": 0,
-  "evaluated_at": "2026-03-17T00:00:00+00:00"
-}
